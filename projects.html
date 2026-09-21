@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Projects | Spark Labs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper: #fffdf7;
+      --ink: #171717;
+      --muted: #6b6b6b;
+      --purple: #7c4dff;
+      --yellow: #ffd84d;
+      --pink: #ff8fab;
+      --green: #9be28f;
+      --blue: #8fd8ff;
+      --white: #fff;
+      --shadow: 5px 5px 0 var(--ink);
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,216,77,.22), transparent 22%),
+        radial-gradient(circle at 90% 20%, rgba(124,77,255,.12), transparent 22%),
+        var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      height: 76px;
+      padding: 0 6%;
+      border-bottom: 3px solid var(--ink);
+      background: rgba(255,253,247,.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 39px;
+      height: 39px;
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      background: var(--yellow);
+      display: grid;
+      place-items: center;
+      transform: rotate(-5deg);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .brand-mark::after {
+      content: "✦";
+      font-size: 19px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover {
+      color: var(--purple);
+    }
+
+    .logout-btn {
+      border: 2px solid var(--ink);
+      border-radius: 11px;
+      background: var(--pink);
+      padding: 9px 14px;
+      font-weight: 800;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    /* MAIN */
+
+    .container {
+      width: min(1150px, 92%);
+      margin: auto;
+      padding: 55px 0 90px;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .scribble {
+      font-family: "Patrick Hand", cursive;
+      color: var(--purple);
+      font-size: 25px;
+      transform: rotate(-3deg);
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 7vw, 75px);
+      line-height: .95;
+      letter-spacing: -3px;
+      margin-top: 8px;
+    }
+
+    .hero h1 span {
+      color: var(--purple);
+    }
+
+    .hero p {
+      margin-top: 18px;
+      max-width: 650px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    /* TOP BAR */
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .topbar h2 {
+      font-size: 27px;
+    }
+
+    .topbar p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .new-project-btn {
+      border: 3px solid var(--ink);
+      border-radius: 13px;
+      background: var(--purple);
+      color: white;
+      padding: 12px 18px;
+      font-weight: 800;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .new-project-btn:active {
+      transform: translate(3px,3px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+
+    /* PROJECT GRID */
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      background: white;
+      border: 3px solid var(--ink);
+      border-radius: 21px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transition: .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px) rotate(-.5deg);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+
+    .project-card:nth-child(3n+1) {
+      background: #fffdf2;
+    }
+
+    .project-card:nth-child(3n+2) {
+      background: #fdf9ff;
+    }
+
+    .project-card:nth-child(3n+3) {
+      background: #f5fcff;
+    }
+
+    .project-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 15px;
+      background: var(--yellow);
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .project-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .project-description {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 67px;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: white;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-tag {
+      background: var(--green);
+    }
+
+    .type-tag {
+      background: var(--blue);
+    }
+
+    /* BUILD TAG */
+
+    .build-tag {
+      margin-top: 16px;
+      width: 100%;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 11px 12px;
+      background: var(--yellow);
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: .15s;
+    }
+
+    .build-tag:hover {
+      background: var(--purple);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .build-tag span:last-child {
+      font-size: 18px;
+    }
+
+    .delete-project {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 31px;
+      height: 31px;
+      border: 2px solid var(--ink);
+      border-radius: 9px;
+      background: var(--pink);
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      grid-column: 1 / -1;
+      border: 3px dashed #aaa;
+      border-radius: 20px;
+      padding: 55px 20px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,.55);
+    }
+
+    .empty-icon {
+      font-size: 45px;
+      margin-bottom: 12px;
+    }
+
+    .empty h3 {
+      color: var(--ink);
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 500;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(600px, 100%);
+      background: var(--paper);
+      border: 3px solid var(--ink);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 8px 8px 0 var(--ink);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-card h2 {
+      font-size: 29px;
+      margin-bottom: 5px;
+    }
+
+    .modal-card > p {
+      color: var(--muted);
+      margin-bottom: 23px;
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      border: 2px solid var(--ink);
+      border-radius: 11px;
+      padding: 12px 13px;
+      background: white;
+      outline: none;
+    }
+
+    .form-group textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      box-shadow: 3px 3px 0 var(--purple);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .cancel-btn {
+      border: 2px solid var(--ink);
+      background: white;
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-weight: 800;
+    }
+
+    .submit-btn {
+      border: 2px solid var(--ink);
+      background: var(--purple);
+      color: white;
+      padding: 11px 18px;
+      border-radius: 11px;
+      font-weight: 800;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    /* TOAST */
+
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      max-width: 350px;
+      padding: 14px 17px;
+      background: var(--ink);
+      color: white;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: .25s;
+      z-index: 1000;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* LOADING */
+
+    #loading {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 46px;
+      height: 46px;
+      border: 4px solid #ddd;
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 14px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .navbar {
+        height: 70px;
+        padding: 0 4%;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .container {
+        width: 92%;
+        padding-top: 38px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        letter-spacing: -2px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .new-project-btn {
+        width: 100%;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .modal-card {
+        padding: 21px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING -->
+
+  <div id="loading">
+
+    <div class="loader">
+
+      <div class="spinner"></div>
+
+      <strong>
+        Loading your projects...
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- APP -->
+
+  <div id="app" style="display:none;">
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+      <a href="index.html" class="brand">
+
+        <div class="brand-mark"></div>
+
+        <span>
+          Spark Labs
+        </span>
+
+      </a>
+
+
+      <div class="nav-links">
+
+        <a href="dashboard.html">
+          Dashboard
+        </a>
+
+        <a href="projects.html">
+          Projects
+        </a>
+
+        <a href="builder.html">
+          Spark Builder
+        </a>
+
+        <a href="events.html">
+          Events
+        </a>
+
+        <a href="challenges.html">
+          Challenges
+        </a>
+
+      </div>
+
+
+      <button
+        class="logout-btn"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+      <section class="hero">
+
+        <div class="scribble">
+          ideas live here ✎
+        </div>
+
+        <h1>
+          Your <span>Projects.</span>
+        </h1>
+
+        <p>
+          Keep your ideas organized, build them with Spark,
+          and turn them into something real.
+        </p>
+
+      </section>
+
+
+      <section>
+
+        <div class="topbar">
+
+          <div>
+
+            <h2>
+              My Projects
+            </h2>
+
+            <p>
+              Everything you're building with Spark Labs.
+            </p>
+
+          </div>
+
+
+          <button
+            class="new-project-btn"
+            id="newProjectBtn"
+          >
+            + New Project
+          </button>
+
+        </div>
+
+
+        <div
+          class="projects-grid"
+          id="projectsGrid"
+        >
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              💡
+            </div>
+
+            <h3>
+              Loading projects...
+            </h3>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- CREATE PROJECT MODAL -->
+
+  <div
+    class="modal"
+    id="projectModal"
+  >
+
+    <div class="modal-card">
+
+      <h2>
+        New Project ✦
+      </h2>
+
+      <p>
+        Start with the idea. We'll help you take it further.
+      </p>
+
+
+      <form id="projectForm">
+
+
+        <div class="form-group">
+
+          <label>
+            Project Name
+          </label>
+
+          <input
+            type="text"
+            id="projectTitle"
+            placeholder="e.g. MediCube"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            What is it about?
+          </label>
+
+          <textarea
+            id="projectDescription"
+            placeholder="Describe your project..."
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="form-row">
+
+
+          <div class="form-group">
+
+            <label>
+              Project Type
+            </label>
+
+            <select id="projectType">
+
+              <option value="App">
+                📱 App
+              </option>
+
+              <option value="Web">
+                🌐 Web
+              </option>
+
+              <option value="AI">
+                🤖 AI
+              </option>
+
+              <option value="Hardware">
+                🔧 Hardware
+              </option>
+
+              <option value="Research">
+                🔬 Research
+              </option>
+
+              <option value="Startup">
+                🚀 Startup
+              </option>
+
+              <option value="Other">
+                ✦ Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Current Status
+            </label>
+
+            <select id="projectStatus">
+
+              <option value="Idea">
+                Idea
+              </option>
+
+              <option value="Planning">
+                Planning
+              </option>
+
+              <option value="Building">
+                Building
+              </option>
+
+              <option value="Testing">
+                Testing
+              </option>
+
+              <option value="Launched">
+                Launched
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="cancel-btn"
+            id="cancelBtn"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="submit-btn"
+            id="submitBtn"
+          >
+            Create Project
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div id="toast"></div>
+
+
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      where,
+      deleteDoc,
+      doc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* FIREBASE CONFIG */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+      authDomain:
+        "spark-labs-b726e.firebaseapp.com",
+
+      projectId:
+        "spark-labs-b726e",
+
+      storageBucket:
+        "spark-labs-b726e.firebasestorage.app",
+
+      messagingSenderId:
+        "185422979084",
+
+      appId:
+        "1:185422979084:web:9d11d83ac7650533c48e29",
+
+      measurementId:
+        "G-28KBFT44VE"
+
+    };
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getFirestore(app);
+
+
+    let currentUser = null;
+
+
+    /* ELEMENTS */
+
+    const loading =
+      document.getElementById("loading");
+
+    const appElement =
+      document.getElementById("app");
+
+    const modal =
+      document.getElementById("projectModal");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /* TOAST */
+
+    function showToast(message) {
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 3000);
+
+    }
+
+
+    /* AUTH */
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        if (!user) {
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        currentUser = user;
+
+
+        loading.style.display =
+          "none";
+
+        appElement.style.display =
+          "block";
+
+
+        await loadProjects();
+
+      }
+    );
+
+
+    /* LOAD PROJECTS */
+
+    async function loadProjects() {
+
+      const grid =
+        document.getElementById(
+          "projectsGrid"
+        );
+
+
+      try {
+
+        const projectsQuery =
+          query(
+            collection(db, "projects"),
+            where(
+              "ownerId",
+              "==",
+              currentUser.uid
+            )
+          );
+
+
+        const snapshot =
+          await getDocs(
+            projectsQuery
+          );
+
+
+        if (snapshot.empty) {
+
+          grid.innerHTML = `
+
+            <div class="empty">
+
+              <div class="empty-icon">
+                💡
+              </div>
+
+              <h3>
+                No projects yet
+              </h3>
+
+              <p>
+                Your next big idea starts with one click.
+              </p>
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        grid.innerHTML = "";
+
+
+        snapshot.forEach(
+          projectDoc => {
+
+            const project =
+              projectDoc.data();
+
+
+            const card =
+              document.createElement(
+                "article"
+              );
+
+            card.className =
+              "project-card";
+
+
+            /* ICON */
+
+            const icon =
+              document.createElement(
+                "div"
+              );
+
+            icon.className =
+              "project-icon";
+
+
+            const icons = {
+
+              App: "📱",
+
+              Web: "🌐",
+
+              AI: "🤖",
+
+              Hardware: "🔧",
+
+              Research: "🔬",
+
+              Startup: "🚀",
+
+              Other: "✦"
+
+            };
+
+
+            icon.textContent =
+              icons[
+                project.type
+              ] || "💡";
+
+
+            /* TITLE */
+
+            const title =
+              document.createElement(
+                "h3"
+              );
+
+            title.textContent =
+              project.title ||
+              "Untitled Project";
+
+
+            /* DESCRIPTION */
+
+            const description =
+              document.createElement(
+                "p"
+              );
+
+            description.className =
+              "project-description";
+
+            description.textContent =
+              project.description ||
+              "No description added yet.";
+
+
+            /* META */
+
+            const meta =
+              document.createElement(
+                "div"
+              );
+
+            meta.className =
+              "project-meta";
+
+
+            const typeTag =
+              document.createElement(
+                "span"
+              );
+
+            typeTag.className =
+              "tag type-tag";
+
+            typeTag.textContent =
+              project.type ||
+              "Project";
+
+
+            const statusTag =
+              document.createElement(
+                "span"
+              );
+
+            statusTag.className =
+              "tag status-tag";
+
+            statusTag.textContent =
+              project.status ||
+              "Idea";
+
+
+            meta.appendChild(
+              typeTag
+            );
+
+            meta.appendChild(
+              statusTag
+            );
+
+
+            /* BUILD WITH SPARK */
+
+            const buildLink =
+              document.createElement(
+                "a"
+              );
+
+
+            buildLink.className =
+              "build-tag";
+
+
+            const encodedTitle =
+              encodeURIComponent(
+                project.title ||
+                "Untitled Project"
+              );
+
+
+            buildLink.href =
+              `builder.html?project=${encodedTitle}`;
+
+
+            buildLink.innerHTML = `
+
+              <span>
+                🛠 Build with Spark
+              </span>
+
+              <span>
+                →
+              </span>
+
+            `;
+
+
+            /* DELETE */
+
+            const deleteButton =
+              document.createElement(
+                "button"
+              );
+
+
+            deleteButton.className =
+              "delete-project";
+
+
+            deleteButton.textContent =
+              "×";
+
+
+            deleteButton.title =
+              "Delete project";
+
+
+            deleteButton.addEventListener(
+              "click",
+              async (event) => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                const confirmed =
+                  confirm(
+                    "Delete this project?"
+                  );
+
+
+                if (!confirmed)
+                  return;
+
+
+                try {
+
+                  await deleteDoc(
+                    doc(
+                      db,
+                      "projects",
+                      projectDoc.id
+                    )
+                  );
+
+
+                  showToast(
+                    "Project deleted."
+                  );
+
+
+                  await loadProjects();
+
+
+                } catch (error) {
+
+                  console.error(
+                    error
+                  );
+
+
+                  showToast(
+                    "Could not delete project."
+                  );
+
+                }
+
+              }
+            );
+
+
+            card.appendChild(
+              icon
+            );
+
+            card.appendChild(
+              title
+            );
+
+            card.appendChild(
+              description
+            );
+
+            card.appendChild(
+              meta
+            );
+
+            card.appendChild(
+              buildLink
+            );
+
+            card.appendChild(
+              deleteButton
+            );
+
+
+            grid.appendChild(
+              card
+            );
+
+          }
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Load projects error:",
+          error
+        );
+
+
+        grid.innerHTML = `
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              ⚠️
+            </div>
+
+            <h3>
+              Couldn't load projects
+            </h3>
+
+            <p>
+              Check your Firebase connection and Firestore rules.
+            </p>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /* OPEN MODAL */
+
+    document.getElementById(
+      "newProjectBtn"
+    ).addEventListener(
+      "click",
+      () => {
+
+        modal.classList.add(
+          "active"
+        );
+
+      }
+    );
+
+
+    /* CLOSE MODAL */
+
+    document.getElementById(
+      "cancelBtn"
+    ).addEventListener(
+      "click",
+      () => {
+
+        modal.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target === modal
+        ) {
+
+          modal.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* CREATE PROJECT */
+
+    document.getElementById(
+      "projectForm"
+    ).addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const button =
+          document.getElementById(
+            "submitBtn"
+          );
+
+
+        const title =
+          document.getElementById(
+            "projectTitle"
+          ).value.trim();
+
+
+        const description =
+          document.getElementById(
+            "projectDescription"
+          ).value.trim();
+
+
+        const type =
+          document.getElementById(
+            "projectType"
+          ).value;
+
+
+        const status =
+          document.getElementById(
+            "projectStatus"
+          ).value;
+
+
+        if (
+          !title ||
+          !description
+        ) {
+
+          showToast(
+            "Please fill all required fields."
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Creating...";
+
+
+          await addDoc(
+            collection(
+              db,
+              "projects"
+            ),
+            {
+
+              ownerId:
+                currentUser.uid,
+
+              ownerEmail:
+                currentUser.email || "",
+
+              title:
+                title,
+
+              description:
+                description,
+
+              type:
+                type,
+
+              status:
+                status,
+
+              createdAt:
+                serverTimestamp()
+
+            }
+          );
+
+
+          document.getElementById(
+            "projectForm"
+          ).reset();
+
+
+          modal.classList.remove(
+            "active"
+          );
+
+
+          showToast(
+            "Project created! 🚀"
+          );
+
+
+          await loadProjects();
+
+
+        } catch (error) {
+
+          console.error(
+            "Create project error:",
+            error
+          );
+
+
+          showToast(
+            "Couldn't create the project. Check your Firestore rules."
+          );
+
+
+        } finally {
+
+          button.disabled =
+            false;
+
+          button.textContent =
+            "Create Project";
+
+        }
+
+      }
+    );
+
+
+    /* LOGOUT */
+
+    document.getElementById(
+      "logoutBtn"
+    ).addEventListener(
+      "click",
+      async () => {
+
+        await signOut(auth);
+
+        window.location.href =
+          "login.html";
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

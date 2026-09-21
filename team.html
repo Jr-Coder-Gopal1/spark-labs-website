@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Find Your Team | Spark Labs</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:#f8f6ef;
+  color:#202020;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.14;
+  background-image:radial-gradient(#777 .6px,transparent .6px);
+  background-size:18px 18px;
+}
+
+.nav{
+  height:72px;
+  background:#fffdf8;
+  border-bottom:2px solid #222;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.logo span{
+  display:inline-block;
+  transform:rotate(-3deg);
+}
+
+.navlinks{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.navlinks a{
+  color:#222;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+}
+
+.navlinks a:hover{
+  text-decoration:underline;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border:2px solid #222;
+  border-radius:50%;
+  background:#ffd85a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.page{
+  width:min(1180px,94%);
+  margin:42px auto;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.hero h1{
+  font-size:48px;
+  letter-spacing:-2.5px;
+  line-height:1;
+}
+
+.hero h1 span{
+  position:relative;
+}
+
+.hero h1 span:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-7px;
+  height:4px;
+  background:#222;
+  transform:rotate(-1deg);
+  border-radius:50%;
+}
+
+.hero p{
+  max-width:650px;
+  margin:18px auto 0;
+  color:#666;
+  line-height:1.6;
+  font-size:15px;
+}
+
+/* CONTROLS */
+
+.controls{
+  background:#fffdf8;
+  border:2px solid #222;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:5px 5px 0 #222;
+  margin-bottom:30px;
+}
+
+.searchrow{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.search{
+  flex:1;
+  min-width:230px;
+  padding:13px 15px;
+  border:2px solid #222;
+  border-radius:11px;
+  background:white;
+  outline:none;
+  font-size:14px;
+}
+
+.search:focus{
+  box-shadow:3px 3px 0 #222;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.filter{
+  border:2px solid #222;
+  background:#fff;
+  padding:8px 13px;
+  border-radius:20px;
+  font-weight:800;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.filter:hover{
+  transform:translateY(-1px);
+}
+
+.filter.active{
+  background:#222;
+  color:white;
+}
+
+/* GRID */
+
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+  background:#fffdf8;
+  border:2px solid #222;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:5px 5px 0 #222;
+  transition:.18s;
+}
+
+.card:hover{
+  transform:translate(-2px,-3px);
+  box-shadow:8px 8px 0 #222;
+}
+
+.profile-top{
+  display:flex;
+  gap:13px;
+  align-items:center;
+}
+
+.bigavatar{
+  width:58px;
+  height:58px;
+  border:2px solid #222;
+  border-radius:50%;
+  background:#ffe16b;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:900;
+  font-size:18px;
+  flex:none;
+}
+
+.name{
+  font-size:18px;
+  font-weight:900;
+}
+
+.role{
+  color:#777;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.bio{
+  color:#555;
+  font-size:13px;
+  line-height:1.5;
+  margin:17px 0;
+  min-height:40px;
+}
+
+.label{
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin-bottom:7px;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:15px;
+}
+
+.tag{
+  background:#f0eee5;
+  border:1px solid #aaa;
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.interests{
+  font-size:12px;
+  color:#666;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.btn{
+  padding:10px;
+  border:2px solid #222;
+  border-radius:10px;
+  font-weight:900;
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.btn:hover{
+  transform:translate(-1px,-1px);
+  box-shadow:3px 3px 0 #222;
+}
+
+.btn.profile{
+  background:white;
+}
+
+.btn.team{
+  background:#222;
+  color:white;
+}
+
+.btn.message{
+  background:#ffd85a;
+  color:#222;
+}
+
+.btn.full{
+  grid-column:1/-1;
+}
+
+.loading,
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:60px 20px;
+  color:#777;
+}
+
+.empty-icon{
+  font-size:45px;
+  margin-bottom:12px;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:100;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalbox{
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fffdf8;
+  border:2px solid #222;
+  border-radius:20px;
+  box-shadow:8px 8px 0 #222;
+  padding:25px;
+}
+
+.modalhead{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:flex-start;
+  margin-bottom:20px;
+}
+
+.close{
+  width:35px;
+  height:35px;
+  border:2px solid #222;
+  border-radius:9px;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.modalprofile{
+  text-align:center;
+}
+
+.modalavatar{
+  width:85px;
+  height:85px;
+  border:2px solid #222;
+  border-radius:50%;
+  background:#ffe16b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:25px;
+  margin:0 auto 12px;
+}
+
+.modalprofile h2{
+  font-size:25px;
+}
+
+.modalprofile p{
+  color:#666;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:8px;
+}
+
+.modal-section{
+  margin-top:20px;
+}
+
+.modal-section h4{
+  font-size:12px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.modal-section p{
+  font-size:13px;
+  line-height:1.5;
+  color:#555;
+}
+
+.modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:25px;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#222;
+  color:#fff;
+  padding:13px 18px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  transform:translateY(100px);
+  opacity:0;
+  transition:.25s;
+  z-index:200;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+@media(max-width:950px){
+  .team-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:650px){
+
+  .nav{
+    padding:0 4%;
+  }
+
+  .navlinks{
+    display:none;
+  }
+
+  .page{
+    margin:30px auto;
+  }
+
+  .hero h1{
+    font-size:38px;
+  }
+
+  .team-grid{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    grid-template-columns:1fr 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+
+  <div class="logo">
+    <span>⚡ Spark Labs</span>
+  </div>
+
+  <div class="navlinks">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="projects.html">Projects</a>
+    <a href="events.html">Events</a>
+    <a href="challenges.html">Challenges</a>
+    <a href="messages.html">Messages</a>
+    <a href="kits.html">Kits</a>
+  </div>
+
+  <div class="avatar" id="avatar">?</div>
+
+</nav>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <h1>
+      Find Your <span>Team</span> 🤝
+    </h1>
+
+    <p>
+      Find students who share your interests, skills and
+      obsession with building cool things instead of merely
+      submitting another PowerPoint.
+    </p>
+
+  </section>
+
+
+  <section class="controls">
+
+    <div class="searchrow">
+
+      <input
+        id="searchInput"
+        class="search"
+        placeholder="Search by name, skill or interest..."
+        autocomplete="off"
+      >
+
+    </div>
+
+    <div class="filters">
+
+      <button class="filter active" data-filter="all">
+        All
+      </button>
+
+      <button class="filter" data-filter="Coding">
+        💻 Coding
+      </button>
+
+      <button class="filter" data-filter="AI">
+        🤖 AI
+      </button>
+
+      <button class="filter" data-filter="Hardware">
+        🔧 Hardware
+      </button>
+
+      <button class="filter" data-filter="Design">
+        🎨 Design
+      </button>
+
+      <button class="filter" data-filter="Research">
+        🔬 Research
+      </button>
+
+      <button class="filter" data-filter="Business">
+        📈 Business
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section
+    class="team-grid"
+    id="teamGrid"
+  >
+
+    <div class="loading">
+      Loading students...
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- PROFILE MODAL -->
+
+<div class="modal" id="profileModal">
+
+  <div class="modalbox">
+
+    <div class="modalhead">
+
+      <strong>Student Profile</strong>
+
+      <button
+        class="close"
+        id="closeModal"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      class="modalprofile"
+      id="modalContent"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  query,
+  where,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* =========================
+   FIREBASE
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+  authDomain: "spark-labs-b726e.firebaseapp.com",
+  projectId: "spark-labs-b726e",
+  storageBucket: "spark-labs-b726e.firebasestorage.app",
+  messagingSenderId: "185422979084",
+  appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+  measurementId: "G-28KBFT44VE"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* =========================
+   STATE
+========================= */
+
+let currentUser = null;
+let currentUserData = null;
+
+let allUsers = [];
+let activeFilter = "all";
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const teamGrid =
+  document.getElementById("teamGrid");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const avatar =
+  document.getElementById("avatar");
+
+const profileModal =
+  document.getElementById("profileModal");
+
+const modalContent =
+  document.getElementById("modalContent");
+
+const closeModal =
+  document.getElementById("closeModal");
+
+const toast =
+  document.getElementById("toast");
+
+
+/* =========================
+   AUTH
+========================= */
+
+async function init(){
+
+  await setPersistence(
+    auth,
+    browserLocalPersistence
+  );
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      try{
+
+        const snap =
+          await getDoc(
+            doc(db,"users",user.uid)
+          );
+
+        if(snap.exists()){
+
+          currentUserData =
+            snap.data();
+
+          avatar.textContent =
+            initials(
+              currentUserData.name ||
+              user.email
+            );
+
+        }else{
+
+          avatar.textContent =
+            initials(user.email);
+
+        }
+
+      }catch(error){
+
+        console.error(error);
+
+        avatar.textContent =
+          initials(user.email);
+
+      }
+
+      await loadUsers();
+
+    }
+  );
+
+}
+
+init();
+
+
+/* =========================
+   LOAD USERS
+========================= */
+
+async function loadUsers(){
+
+  teamGrid.innerHTML = `
+    <div class="loading">
+      Loading students...
+    </div>
+  `;
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"users")
+      );
+
+    allUsers = [];
+
+    snap.forEach(item => {
+
+      const data = item.data();
+
+      /*
+        Don't show yourself.
+      */
+
+      if(item.id === currentUser.uid)
+        return;
+
+      /*
+        Students looking for teams.
+        If the field doesn't exist, we assume
+        they are visible.
+      */
+
+      if(data.lookingForTeam === false)
+        return;
+
+      allUsers.push({
+        uid:item.id,
+        ...data
+      });
+
+    });
+
+    renderUsers();
+
+  }catch(error){
+
+    console.error(error);
+
+    teamGrid.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠️</div>
+        <h3>Couldn't load students</h3>
+        <p style="margin-top:7px;">
+          ${escapeHTML(error.message)}
+        </p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   FILTER + SEARCH
+========================= */
+
+document.querySelectorAll(".filter")
+.forEach(button => {
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(".filter")
+        .forEach(x =>
+          x.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      activeFilter =
+        button.dataset.filter;
+
+      renderUsers();
+
+    }
+  );
+
+});
+
+
+searchInput.addEventListener(
+  "input",
+  renderUsers
+);
+
+
+/* =========================
+   RENDER USERS
+========================= */
+
+function renderUsers(){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  let filtered =
+    allUsers.filter(user => {
+
+      const name =
+        String(user.name || "")
+        .toLowerCase();
+
+      const bio =
+        String(user.bio || "")
+        .toLowerCase();
+
+      const skills =
+        String(user.skills || "")
+        .toLowerCase();
+
+      const interests =
+        String(user.interests || "")
+        .toLowerCase();
+
+      const combined =
+        `${name} ${bio} ${skills} ${interests}`;
+
+      const searchMatch =
+        !search ||
+        combined.includes(search);
+
+      if(activeFilter === "all")
+        return searchMatch;
+
+      const skillText =
+        `${skills} ${interests} ${bio}`;
+
+      const filterMatch =
+        skillText.includes(
+          activeFilter.toLowerCase()
+        );
+
+      return searchMatch && filterMatch;
+
+    });
+
+
+  teamGrid.innerHTML = "";
+
+
+  if(!filtered.length){
+
+    teamGrid.innerHTML = `
+      <div class="empty">
+
+        <div class="empty-icon">🔎</div>
+
+        <h3>
+          No students found
+        </h3>
+
+        <p style="margin-top:7px;">
+          Try another search or skill.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  filtered.forEach(user => {
+
+    teamGrid.appendChild(
+      createUserCard(user)
+    );
+
+  });
+
+}
+
+
+/* =========================
+   USER CARD
+========================= */
+
+function createUserCard(user){
+
+  const card =
+    document.createElement("article");
+
+  card.className = "card";
+
+  const skills =
+    normalizeList(user.skills);
+
+  const interests =
+    normalizeList(user.interests);
+
+  const visibleSkills =
+    skills.slice(0,4);
+
+  card.innerHTML = `
+
+    <div class="profile-top">
+
+      <div class="bigavatar">
+        ${initials(user.name)}
+      </div>
+
+      <div>
+
+        <div class="name">
+          ${escapeHTML(user.name || "Student")}
+        </div>
+
+        <div class="role">
+          ${escapeHTML(
+            user.role === "admin"
+              ? "Spark Labs Admin"
+              : "Student Builder"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="bio">
+
+      ${escapeHTML(
+        user.bio ||
+        "Ready to build something awesome."
+      )}
+
+    </div>
+
+
+    <div class="label">
+      Skills
+    </div>
+
+    <div class="tags">
+
+      ${
+        visibleSkills.length
+        ? visibleSkills.map(skill =>
+            `<span class="tag">
+              ${escapeHTML(skill)}
+            </span>`
+          ).join("")
+        : `<span class="tag">
+             Add skills
+           </span>`
+      }
+
+    </div>
+
+
+    <div class="label">
+      Interests
+    </div>
+
+    <div class="interests">
+
+      ${
+        interests.length
+        ? escapeHTML(
+            interests.slice(0,3).join(" • ")
+          )
+        : "No interests added yet."
+      }
+
+    </div>
+
+
+    <div class="actions">
+
+      <button
+        class="btn profile"
+        data-action="profile"
+      >
+        View Profile
+      </button>
+
+      <button
+        class="btn message"
+        data-action="message"
+      >
+        💬 Message
+      </button>
+
+      <button
+        class="btn team full"
+        data-action="team"
+      >
+        🤝 Team Up
+      </button>
+
+    </div>
+
+  `;
+
+
+  card
+    .querySelector('[data-action="profile"]')
+    .onclick = () => {
+
+      window.location.href =
+        `profile.html?uid=${encodeURIComponent(user.uid)}`;
+
+    };
+
+
+  card
+    .querySelector('[data-action="message"]')
+    .onclick = () => {
+
+      openMessages(user.uid);
+
+    };
+
+
+  card
+    .querySelector('[data-action="team"]')
+    .onclick = () => {
+
+      sendTeamRequest(user);
+
+    };
+
+
+  /*
+    Card itself opens preview only if user clicks
+    the non-button area.
+  */
+
+  return card;
+
+}
+
+
+/* =========================
+   PROFILE PREVIEW
+========================= */
+
+function showProfile(user){
+
+  const skills =
+    normalizeList(user.skills);
+
+  const interests =
+    normalizeList(user.interests);
+
+  modalContent.innerHTML = `
+
+    <div class="modalavatar">
+      ${initials(user.name)}
+    </div>
+
+    <h2>
+      ${escapeHTML(user.name || "Student")}
+    </h2>
+
+    <p>
+      ${escapeHTML(
+        user.bio ||
+        "No bio added yet."
+      )}
+    </p>
+
+
+    <div class="modal-section">
+
+      <h4>Skills</h4>
+
+      <div class="tags">
+
+        ${
+          skills.length
+          ? skills.map(x =>
+              `<span class="tag">
+                ${escapeHTML(x)}
+              </span>`
+            ).join("")
+          : `<span class="tag">
+               No skills added
+             </span>`
+        }
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-section">
+
+      <h4>Interests</h4>
+
+      <p>
+        ${
+          interests.length
+          ? escapeHTML(interests.join(" • "))
+          : "No interests added."
+        }
+      </p>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn message"
+        id="modalMessage"
+      >
+        💬 Message
+      </button>
+
+      <button
+        class="btn team"
+        id="modalTeam"
+      >
+        🤝 Team Up
+      </button>
+
+    </div>
+
+  `;
+
+
+  document.getElementById("modalMessage")
+    .onclick = () => {
+
+      openMessages(user.uid);
+
+    };
+
+
+  document.getElementById("modalTeam")
+    .onclick = () => {
+
+      sendTeamRequest(user);
+
+    };
+
+
+  profileModal.classList.add("show");
+
+}
+
+
+/* =========================
+   TEAM REQUEST
+========================= */
+
+async function sendTeamRequest(user){
+
+  if(!currentUser)
+    return;
+
+  if(user.uid === currentUser.uid){
+
+    showToast(
+      "You can't team up with yourself 😭"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    /*
+      Prevent duplicate pending requests.
+    */
+
+    const q1 =
+      query(
+        collection(db,"teamRequests"),
+        where(
+          "fromUserId",
+          "==",
+          currentUser.uid
+        ),
+        where(
+          "toUserId",
+          "==",
+          user.uid
+        ),
+        where(
+          "status",
+          "==",
+          "pending"
+        )
+      );
+
+    const q2 =
+      query(
+        collection(db,"teamRequests"),
+        where(
+          "fromUserId",
+          "==",
+          user.uid
+        ),
+        where(
+          "toUserId",
+          "==",
+          currentUser.uid
+        ),
+        where(
+          "status",
+          "==",
+          "pending"
+        )
+      );
+
+    const [
+      outgoing,
+      incoming
+    ] = await Promise.all([
+      getDocs(q1),
+      getDocs(q2)
+    ]);
+
+
+    if(
+      !outgoing.empty ||
+      !incoming.empty
+    ){
+
+      showToast(
+        "A team request is already pending."
+      );
+
+      return;
+
+    }
+
+
+    await addDoc(
+      collection(db,"teamRequests"),
+      {
+
+        fromUserId:
+          currentUser.uid,
+
+        fromUserName:
+          currentUserData?.name ||
+          currentUser.email,
+
+        toUserId:
+          user.uid,
+
+        toUserName:
+          user.name || "Student",
+
+        status:"pending",
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    showToast(
+      "Team request sent! 🚀"
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Couldn't send request."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   OPEN MESSAGES
+========================= */
+
+function openMessages(uid){
+
+  window.location.href =
+    `messages.html?uid=${encodeURIComponent(uid)}`;
+
+}
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+closeModal.onclick = () => {
+
+  profileModal.classList.remove("show");
+
+};
+
+
+profileModal.addEventListener(
+  "click",
+  e => {
+
+    if(e.target === profileModal){
+
+      profileModal.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   AVATAR
+========================= */
+
+avatar.onclick = () => {
+
+  if(currentUser){
+
+    window.location.href =
+      `profile.html?uid=${encodeURIComponent(currentUser.uid)}`;
+
+  }
+
+};
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function normalizeList(value){
+
+  if(Array.isArray(value))
+    return value.filter(Boolean);
+
+  if(!value)
+    return [];
+
+  return String(value)
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+function initials(name){
+
+  if(!name)
+    return "?";
+
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x => x[0])
+    .join("")
+    .toUpperCase();
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

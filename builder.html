@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Spark Builder | Spark Labs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper: #fffdf7;
+      --ink: #171717;
+      --muted: #686868;
+      --purple: #7c4dff;
+      --yellow: #ffd84d;
+      --pink: #ff8fab;
+      --green: #9be28f;
+      --blue: #8fd8ff;
+      --white: #ffffff;
+      --shadow: 5px 5px 0 var(--ink);
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,216,77,.22), transparent 22%),
+        radial-gradient(circle at 90% 25%, rgba(124,77,255,.12), transparent 22%),
+        var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       NAVBAR
+    ========================== */
+
+    .navbar {
+      height: 76px;
+      padding: 0 6%;
+      border-bottom: 3px solid var(--ink);
+      background: rgba(255,253,247,.94);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 39px;
+      height: 39px;
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      background: var(--yellow);
+      display: grid;
+      place-items: center;
+      transform: rotate(-5deg);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .brand-mark::after {
+      content: "✦";
+      font-size: 19px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover {
+      color: var(--purple);
+    }
+
+    .profile-btn {
+      border: 2px solid var(--ink);
+      background: white;
+      border-radius: 12px;
+      padding: 9px 13px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       PAGE
+    ========================== */
+
+    .container {
+      width: min(1150px, 92%);
+      margin: auto;
+      padding: 55px 0 90px;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 45px;
+    }
+
+    .scribble {
+      font-family: "Patrick Hand", cursive;
+      font-size: 25px;
+      color: var(--purple);
+      transform: rotate(-3deg);
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      font-size: clamp(43px, 7vw, 75px);
+      line-height: .95;
+      letter-spacing: -3px;
+    }
+
+    .hero h1 span {
+      color: var(--purple);
+    }
+
+    .hero p {
+      margin: 20px auto 0;
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       SERVICES
+    ========================== */
+
+    .services-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .services-title h2 {
+      font-size: 25px;
+    }
+
+    .services-title p {
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 45px;
+    }
+
+    .service-card {
+      border: 3px solid var(--ink);
+      border-radius: 21px;
+      padding: 24px;
+      background: white;
+      box-shadow: var(--shadow);
+      transition: .2s ease;
+      position: relative;
+      text-align: left;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+
+    .service-card.selected {
+      background: var(--yellow);
+      transform: translateY(-4px) rotate(-1deg);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+
+    .service-icon {
+      width: 53px;
+      height: 53px;
+      border: 2px solid var(--ink);
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      margin-bottom: 16px;
+    }
+
+    .service-card:nth-child(1) .service-icon {
+      background: var(--pink);
+    }
+
+    .service-card:nth-child(2) .service-icon {
+      background: var(--blue);
+    }
+
+    .service-card:nth-child(3) .service-icon {
+      background: var(--green);
+    }
+
+    .service-card:nth-child(4) .service-icon {
+      background: var(--yellow);
+    }
+
+    .service-card:nth-child(5) .service-icon {
+      background: var(--purple);
+      color: white;
+    }
+
+    .service-card:nth-child(6) .service-icon {
+      background: #ffb86b;
+    }
+
+    .service-card:nth-child(7) .service-icon {
+      background: #d8b4fe;
+    }
+
+    .service-card h3 {
+      font-size: 19px;
+      margin-bottom: 7px;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .service-card.selected p {
+      color: #333;
+    }
+
+    .check {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: white;
+      display: none;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .service-card.selected .check {
+      display: grid;
+    }
+
+    /* =========================
+       FORM
+    ========================== */
+
+    .builder-form {
+      width: min(850px, 100%);
+      margin: auto;
+      background: white;
+      border: 3px solid var(--ink);
+      border-radius: 27px;
+      padding: 32px;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .form-heading {
+      margin-bottom: 25px;
+    }
+
+    .form-heading h2 {
+      font-size: 29px;
+    }
+
+    .form-heading p {
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 19px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .required {
+      color: #e5484d;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 13px 14px;
+      outline: none;
+      background: #fffdf9;
+    }
+
+    .form-group textarea {
+      min-height: 135px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      box-shadow: 3px 3px 0 var(--purple);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .hint {
+      color: #888;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .submit-area {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 2px dashed #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .selected-service {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .selected-service strong {
+      color: var(--ink);
+    }
+
+    .submit-btn {
+      border: 3px solid var(--ink);
+      background: var(--purple);
+      color: white;
+      padding: 14px 23px;
+      border-radius: 13px;
+      font-weight: 800;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: .15s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .submit-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+
+    .submit-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* =========================
+       REQUESTS
+    ========================== */
+
+    .requests-section {
+      width: min(850px, 100%);
+      margin: 65px auto 0;
+    }
+
+    .requests-heading {
+      margin-bottom: 18px;
+    }
+
+    .requests-heading h2 {
+      font-size: 28px;
+    }
+
+    .requests-heading p {
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .request-card {
+      background: white;
+      border: 2px solid var(--ink);
+      border-radius: 17px;
+      padding: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .request-title {
+      font-weight: 800;
+    }
+
+    .request-info {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .status {
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status.pending {
+      background: var(--yellow);
+    }
+
+    .status.reviewing {
+      background: var(--blue);
+    }
+
+    .status.building {
+      background: var(--purple);
+      color: white;
+    }
+
+    .status.completed {
+      background: var(--green);
+    }
+
+    .status.rejected {
+      background: var(--pink);
+    }
+
+    .empty {
+      padding: 25px;
+      border: 2px dashed #aaa;
+      border-radius: 16px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,.6);
+    }
+
+    /* =========================
+       SUCCESS
+    ========================== */
+
+    .success-box {
+      display: none;
+      text-align: center;
+      background: var(--green);
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .success-box.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 35px;
+      margin-bottom: 8px;
+    }
+
+    .success-box h3 {
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
+
+    .success-box p {
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* =========================
+       TOAST
+    ========================== */
+
+    #toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--ink);
+      color: white;
+      padding: 14px 17px;
+      border-radius: 12px;
+      border: 2px solid var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: .25s;
+      z-index: 500;
+      max-width: 360px;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================
+       LOADING
+    ========================== */
+
+    #loading {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid #ddd;
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: auto auto 14px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 800px) {
+
+      .navbar {
+        padding: 0 4%;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .services {
+        grid-template-columns: 1fr 1fr;
+      }
+
+    }
+
+    @media (max-width: 580px) {
+
+      .navbar {
+        height: 70px;
+      }
+
+      .profile-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .container {
+        width: 92%;
+        padding-top: 38px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        letter-spacing: -2px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .services {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card {
+        padding: 20px;
+      }
+
+      .builder-form {
+        padding: 21px;
+        border-radius: 21px;
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .submit-area {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .submit-btn {
+        width: 100%;
+      }
+
+      .request-card {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING -->
+
+  <div id="loading">
+
+    <div class="loader">
+
+      <div class="spinner"></div>
+
+      <strong>
+        Loading Spark Builder...
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- APP -->
+
+  <div id="app" style="display:none;">
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+      <a href="index.html" class="brand">
+
+        <div class="brand-mark"></div>
+
+        <span>
+          Spark Labs
+        </span>
+
+      </a>
+
+
+      <div class="nav-links">
+
+        <a href="dashboard.html">
+          Dashboard
+        </a>
+
+        <a href="projects.html">
+          Projects
+        </a>
+
+        <a href="events.html">
+          Events
+        </a>
+
+        <a href="challenges.html">
+          Challenges
+        </a>
+
+      </div>
+
+
+      <button
+        class="profile-btn"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <div class="scribble">
+          let's build something real ✎
+        </div>
+
+        <h1>
+          Welcome to <span>Spark Builder.</span>
+        </h1>
+
+        <p>
+          You bring the idea.
+          We help turn it into something real.
+          Choose what you want to build and tell us what you have in mind.
+        </p>
+
+      </section>
+
+
+      <!-- SUCCESS -->
+
+      <div
+        class="success-box"
+        id="successBox"
+      >
+
+        <div class="success-icon">
+          🚀
+        </div>
+
+        <h3>
+          Request sent!
+        </h3>
+
+        <p>
+          The Spark team has received your request.
+          You can track its progress below.
+        </p>
+
+      </div>
+
+
+      <!-- SERVICES -->
+
+      <section>
+
+        <div class="services-title">
+
+          <h2>
+            What do you want to build?
+          </h2>
+
+          <p>
+            Pick the path that fits your idea.
+          </p>
+
+        </div>
+
+
+        <div class="services">
+
+
+          <div
+            class="service-card"
+            data-service="Mobile App"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              📱
+            </div>
+
+            <h3>
+              Mobile App
+            </h3>
+
+            <p>
+              Turn your idea into an Android or mobile application.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="Web App"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              🌐
+            </div>
+
+            <h3>
+              Web App
+            </h3>
+
+            <p>
+              Build an interactive website or full web application.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="Software"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              💻
+            </div>
+
+            <h3>
+              Software
+            </h3>
+
+            <p>
+              Create desktop tools, platforms or custom software.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="AI"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              🤖
+            </div>
+
+            <h3>
+              AI Project
+            </h3>
+
+            <p>
+              Explore AI-powered tools, models and intelligent systems.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="Hardware"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              🔧
+            </div>
+
+            <h3>
+              Hardware
+            </h3>
+
+            <p>
+              Build electronics, IoT devices, robotics and prototypes.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="Research"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              🔬
+            </div>
+
+            <h3>
+              Research
+            </h3>
+
+            <p>
+              Get support developing a research idea or prototype.
+            </p>
+
+          </div>
+
+
+          <div
+            class="service-card"
+            data-service="Workshop"
+          >
+
+            <div class="check">
+              ✓
+            </div>
+
+            <div class="service-icon">
+              🎓
+            </div>
+
+            <h3>
+              Workshop
+            </h3>
+
+            <p>
+              Need guidance first? Request a workshop for your topic.
+            </p>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- FORM -->
+
+      <section class="builder-form">
+
+        <div class="form-heading">
+
+          <h2>
+            Tell us about it ✦
+          </h2>
+
+          <p>
+            Give us enough information to understand what you're trying to build.
+          </p>
+
+        </div>
+
+
+        <form id="builderForm">
+
+
+          <div class="form-group">
+
+            <label>
+              Project / Idea Name
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="projectTitle"
+              placeholder="e.g. MediCube"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              What are you trying to build?
+              <span class="required">*</span>
+            </label>
+
+            <textarea
+              id="requirements"
+              placeholder="Explain your idea, what it should do, who it is for, and anything else we should know..."
+              required
+            ></textarea>
+
+            <div class="hint">
+              Don't worry if your idea isn't fully figured out yet.
+            </div>
+
+          </div>
+
+
+          <div class="form-row">
+
+
+            <div class="form-group">
+
+              <label>
+                Current Stage
+              </label>
+
+              <select id="stage">
+
+                <option value="Just an idea">
+                  Just an idea
+                </option>
+
+                <option value="Planning">
+                  Planning
+                </option>
+
+                <option value="Prototype">
+                  Prototype
+                </option>
+
+                <option value="Working prototype">
+                  Working prototype
+                </option>
+
+                <option value="Already launched">
+                  Already launched
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label>
+                Team Size
+              </label>
+
+              <select id="teamSize">
+
+                <option value="1">
+                  Just me
+                </option>
+
+                <option value="2-3">
+                  2–3 people
+                </option>
+
+                <option value="4-5">
+                  4–5 people
+                </option>
+
+                <option value="6+">
+                  6+ people
+                </option>
+
+              </select>
+
+            </div>
+
+
+          </div>
+
+
+          <div class="form-row">
+
+
+            <div class="form-group">
+
+              <label>
+                Preferred Timeline
+              </label>
+
+              <select id="timeline">
+
+                <option value="No fixed timeline">
+                  No fixed timeline
+                </option>
+
+                <option value="Within 1 month">
+                  Within 1 month
+                </option>
+
+                <option value="1-3 months">
+                  1–3 months
+                </option>
+
+                <option value="3-6 months">
+                  3–6 months
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label>
+                Anything else?
+              </label>
+
+              <input
+                type="text"
+                id="extra"
+                placeholder="Optional"
+              >
+
+            </div>
+
+
+          </div>
+
+
+          <div class="submit-area">
+
+            <div class="selected-service">
+              Selected:
+              <strong id="selectedService">
+                Nothing yet
+              </strong>
+            </div>
+
+
+            <button
+              type="submit"
+              class="submit-btn"
+              id="submitBtn"
+            >
+              Send Build Request →
+            </button>
+
+          </div>
+
+
+        </form>
+
+      </section>
+
+
+      <!-- REQUESTS -->
+
+      <section class="requests-section">
+
+        <div class="requests-heading">
+
+          <h2>
+            Your Build Requests
+          </h2>
+
+          <p>
+            Track what is happening with your requests.
+          </p>
+
+        </div>
+
+
+        <div id="requestsList">
+
+          <div class="empty">
+            Loading your requests...
+          </div>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div id="toast"></div>
+
+
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      where,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* =========================
+       FIREBASE CONFIG
+    ========================== */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+      authDomain:
+        "spark-labs-b726e.firebaseapp.com",
+
+      projectId:
+        "spark-labs-b726e",
+
+      storageBucket:
+        "spark-labs-b726e.firebasestorage.app",
+
+      messagingSenderId:
+        "185422979084",
+
+      appId:
+        "1:185422979084:web:9d11d83ac7650533c48e29",
+
+      measurementId:
+        "G-28KBFT44VE"
+
+    };
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+
+    const auth =
+      getAuth(app);
+
+
+    const db =
+      getFirestore(app);
+
+
+    let currentUser = null;
+
+    let selectedService = "";
+
+
+    /* =========================
+       ELEMENTS
+    ========================== */
+
+    const loading =
+      document.getElementById("loading");
+
+    const appElement =
+      document.getElementById("app");
+
+    const toast =
+      document.getElementById("toast");
+
+    const successBox =
+      document.getElementById("successBox");
+
+
+    /* =========================
+       TOAST
+    ========================== */
+
+    function showToast(message) {
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 3000);
+
+    }
+
+
+    /* =========================
+       AUTH
+    ========================== */
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        if (!user) {
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        currentUser = user;
+
+
+        loading.style.display =
+          "none";
+
+
+        appElement.style.display =
+          "block";
+
+
+        await loadRequests();
+
+      }
+    );
+
+
+    /* =========================
+       SERVICE SELECTION
+    ========================== */
+
+    const serviceCards =
+      document.querySelectorAll(
+        ".service-card"
+      );
+
+
+    serviceCards.forEach(card => {
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          serviceCards.forEach(
+            other => {
+
+              other.classList.remove(
+                "selected"
+              );
+
+            }
+          );
+
+
+          card.classList.add(
+            "selected"
+          );
+
+
+          selectedService =
+            card.dataset.service;
+
+
+          document.getElementById(
+            "selectedService"
+          ).textContent =
+            selectedService;
+
+        }
+      );
+
+    });
+
+
+    /* =========================
+       SUBMIT REQUEST
+    ========================== */
+
+    document.getElementById(
+      "builderForm"
+    ).addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        if (!selectedService) {
+
+          showToast(
+            "Please choose what you want to build first."
+          );
+
+          return;
+
+        }
+
+
+        if (!currentUser) {
+
+          showToast(
+            "Please login first."
+          );
+
+          return;
+
+        }
+
+
+        const button =
+          document.getElementById(
+            "submitBtn"
+          );
+
+
+        const projectTitle =
+          document.getElementById(
+            "projectTitle"
+          ).value.trim();
+
+
+        const requirements =
+          document.getElementById(
+            "requirements"
+          ).value.trim();
+
+
+        const stage =
+          document.getElementById(
+            "stage"
+          ).value;
+
+
+        const teamSize =
+          document.getElementById(
+            "teamSize"
+          ).value;
+
+
+        const timeline =
+          document.getElementById(
+            "timeline"
+          ).value;
+
+
+        const extra =
+          document.getElementById(
+            "extra"
+          ).value.trim();
+
+
+        if (
+          !projectTitle ||
+          !requirements
+        ) {
+
+          showToast(
+            "Please fill the required fields."
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          button.disabled = true;
+
+          button.textContent =
+            "Sending...";
+
+
+          await addDoc(
+            collection(
+              db,
+              "buildRequests"
+            ),
+            {
+
+              userId:
+                currentUser.uid,
+
+              userEmail:
+                currentUser.email || "",
+
+              projectTitle:
+                projectTitle,
+
+              serviceType:
+                selectedService,
+
+              requirements:
+                requirements,
+
+              stage:
+                stage,
+
+              teamSize:
+                teamSize,
+
+              timeline:
+                timeline,
+
+              extra:
+                extra,
+
+              status:
+                "pending",
+
+              createdAt:
+                serverTimestamp()
+
+            }
+          );
+
+
+          document.getElementById(
+            "builderForm"
+          ).reset();
+
+
+          serviceCards.forEach(
+            card => {
+
+              card.classList.remove(
+                "selected"
+              );
+
+            }
+          );
+
+
+          selectedService = "";
+
+
+          document.getElementById(
+            "selectedService"
+          ).textContent =
+            "Nothing yet";
+
+
+          successBox.classList.add(
+            "show"
+          );
+
+
+          showToast(
+            "Build request submitted! 🚀"
+          );
+
+
+          await loadRequests();
+
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+
+        } catch (error) {
+
+          console.error(
+            "Build request error:",
+            error
+          );
+
+
+          showToast(
+            "Could not submit request. Check Firestore rules."
+          );
+
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            "Send Build Request →";
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       LOAD REQUESTS
+    ========================== */
+
+    async function loadRequests() {
+
+      const list =
+        document.getElementById(
+          "requestsList"
+        );
+
+
+      try {
+
+        const requestsQuery =
+          query(
+            collection(
+              db,
+              "buildRequests"
+            ),
+            where(
+              "userId",
+              "==",
+              currentUser.uid
+            )
+          );
+
+
+        const snapshot =
+          await getDocs(
+            requestsQuery
+          );
+
+
+        if (snapshot.empty) {
+
+          list.innerHTML = `
+            <div class="empty">
+              You haven't submitted a build request yet.
+            </div>
+          `;
+
+          return;
+
+        }
+
+
+        list.innerHTML = "";
+
+
+        const requests =
+          [];
+
+
+        snapshot.forEach(
+          docSnap => {
+
+            requests.push({
+              id: docSnap.id,
+              ...docSnap.data()
+            });
+
+          }
+        );
+
+
+        requests.sort(
+          (a, b) => {
+
+            const aTime =
+              a.createdAt?.seconds || 0;
+
+            const bTime =
+              b.createdAt?.seconds || 0;
+
+            return bTime - aTime;
+
+          }
+        );
+
+
+        requests.forEach(
+          request => {
+
+            const card =
+              document.createElement(
+                "div"
+              );
+
+
+            card.className =
+              "request-card";
+
+
+            const main =
+              document.createElement(
+                "div"
+              );
+
+
+            const title =
+              document.createElement(
+                "div"
+              );
+
+
+            title.className =
+              "request-title";
+
+
+            title.textContent =
+              request.projectTitle ||
+              "Untitled Project";
+
+
+            const info =
+              document.createElement(
+                "div"
+              );
+
+
+            info.className =
+              "request-info";
+
+
+            info.textContent =
+              `${request.serviceType || "Build"} • ${
+                request.stage || "Idea"
+              }`;
+
+
+            main.appendChild(title);
+
+            main.appendChild(info);
+
+
+            const status =
+              document.createElement(
+                "div"
+              );
+
+
+            const statusText =
+              request.status ||
+              "pending";
+
+
+            status.className =
+              "status " +
+              statusText
+                .toLowerCase()
+                .replace(/\s+/g, "-");
+
+
+            status.textContent =
+              formatStatus(
+                statusText
+              );
+
+
+            card.appendChild(main);
+
+            card.appendChild(status);
+
+
+            list.appendChild(card);
+
+          }
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Load requests error:",
+          error
+        );
+
+
+        list.innerHTML = `
+          <div class="empty">
+            Could not load your requests.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================
+       STATUS FORMAT
+    ========================== */
+
+    function formatStatus(status) {
+
+      const map = {
+
+        pending:
+          "Pending",
+
+        reviewing:
+          "Reviewing",
+
+        building:
+          "Building",
+
+        completed:
+          "Completed",
+
+        rejected:
+          "Rejected"
+
+      };
+
+
+      return (
+        map[status] ||
+        status
+      );
+
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    document.getElementById(
+      "logoutBtn"
+    ).addEventListener(
+      "click",
+      async () => {
+
+        try {
+
+          await signOut(auth);
+
+          window.location.href =
+            "login.html";
+
+        } catch (error) {
+
+          console.error(error);
+
+          showToast(
+            "Could not logout."
+          );
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

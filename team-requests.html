@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Requests • Spark Labs</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:"DM Sans",sans-serif;
+  background:#fffdf7;
+  color:#171717;
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.15;
+  background-image:radial-gradient(#000 .7px,transparent .7px);
+  background-size:18px 18px;
+  z-index:-1;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,253,247,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:2px solid #171717;
+}
+
+.nav-inner{
+  max-width:1200px;
+  min-height:76px;
+  margin:auto;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:#7657e8;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.nav-links a:hover{
+  transform:translateY(-2px);
+}
+
+.menu-btn{
+  display:none;
+  border:2px solid #171717;
+  background:#fff;
+  border-radius:10px;
+  padding:8px 11px;
+}
+
+.page{
+  max-width:1100px;
+  margin:auto;
+  padding:65px 22px 100px;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.hand{
+  font-family:"Patrick Hand",cursive;
+}
+
+.eyebrow{
+  font-family:"Patrick Hand",cursive;
+  font-size:23px;
+  transform:rotate(-2deg);
+  display:inline-block;
+}
+
+.hero h1{
+  font-size:clamp(42px,7vw,72px);
+  line-height:.95;
+  letter-spacing:-4px;
+  margin-top:7px;
+}
+
+.hero h1 span{
+  color:#7657e8;
+}
+
+.hero p{
+  max-width:650px;
+  margin:18px auto 0;
+  color:#666;
+  line-height:1.7;
+}
+
+.tabs{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+}
+
+.tab{
+  border:2px solid #171717;
+  background:#fff;
+  padding:11px 18px;
+  border-radius:999px;
+  font-weight:800;
+  box-shadow:3px 3px 0 #171717;
+}
+
+.tab.active{
+  background:#ffd84d;
+}
+
+.requests{
+  display:grid;
+  gap:18px;
+}
+
+.request{
+  background:#fff;
+  border:3px solid #171717;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:6px 6px 0 #171717;
+  animation:rise .45s ease both;
+}
+
+.request:nth-child(even){
+  transform:rotate(.3deg);
+}
+
+.request:nth-child(odd){
+  transform:rotate(-.3deg);
+}
+
+.request-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.person{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.avatar{
+  width:55px;
+  height:55px;
+  border:2px solid #171717;
+  border-radius:50%;
+  background:#e9ddff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:900;
+}
+
+.person h3{
+  font-size:19px;
+}
+
+.person p{
+  font-size:13px;
+  color:#777;
+  margin-top:3px;
+}
+
+.status{
+  border:2px solid #171717;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:12px;
+  font-weight:800;
+  background:#ffd84d;
+  white-space:nowrap;
+}
+
+.status.accepted{
+  background:#c9f7d5;
+}
+
+.status.rejected{
+  background:#ffd2df;
+}
+
+.request-body{
+  margin-top:20px;
+  padding:18px;
+  border:2px dashed #aaa;
+  border-radius:15px;
+  background:#fffdf7;
+}
+
+.request-body strong{
+  font-size:13px;
+}
+
+.request-body p{
+  margin-top:7px;
+  color:#555;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:2px solid #171717;
+  border-radius:12px;
+  padding:10px 16px;
+  font-weight:800;
+  background:#fff;
+  box-shadow:4px 4px 0 #171717;
+  transition:.18s;
+}
+
+.btn:hover{
+  transform:translate(2px,2px);
+  box-shadow:2px 2px 0 #171717;
+}
+
+.btn.accept{
+  background:#c9f7d5;
+}
+
+.btn.reject{
+  background:#ffd2df;
+}
+
+.btn.profile{
+  background:#e9ddff;
+}
+
+.empty{
+  text-align:center;
+  padding:55px 20px;
+  border:2px dashed #777;
+  border-radius:20px;
+  color:#777;
+  background:#fff;
+}
+
+.empty .big{
+  font-size:45px;
+  margin-bottom:10px;
+}
+
+.loader{
+  text-align:center;
+  padding:60px;
+  font-family:"Patrick Hand",cursive;
+  font-size:28px;
+}
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#171717;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:700;
+  transform:translateY(120px);
+  opacity:0;
+  transition:.3s;
+  z-index:500;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.hidden{
+  display:none!important;
+}
+
+@keyframes rise{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+  }
+}
+
+@media(max-width:800px){
+
+  .nav-links{
+    display:none;
+    position:absolute;
+    top:76px;
+    left:12px;
+    right:12px;
+    background:#fffdf7;
+    border:2px solid #171717;
+    border-radius:16px;
+    padding:18px;
+    flex-direction:column;
+    align-items:stretch;
+    box-shadow:5px 5px 0 #171717;
+  }
+
+  .nav-links.open{
+    display:flex;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+}
+
+@media(max-width:600px){
+
+  .page{
+    padding-top:45px;
+  }
+
+  .hero h1{
+    letter-spacing:-2px;
+  }
+
+  .request{
+    padding:18px;
+  }
+
+  .request-top{
+    flex-direction:column;
+  }
+
+  .status{
+    align-self:flex-start;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+
+    <a href="index.html" class="logo">
+      Spark<span>Labs</span> ✦
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="builder.html">Build</a>
+      <a href="events.html">Events</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="community.html">Community</a>
+      <a href="team.html">Find Your Team</a>
+      <a href="profile.html">Profile</a>
+    </div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+
+  </div>
+</nav>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      ✦ people who want to build things
+    </div>
+
+    <h1>
+      Team <span>Requests</span> 🤝
+    </h1>
+
+    <p>
+      Find people who want to build alongside you.
+      Accept the good ones, reject the weird ones.
+      Humanity survives another day.
+    </p>
+
+  </section>
+
+
+  <div class="tabs">
+
+    <button class="tab active" id="receivedTab">
+      📥 Received
+    </button>
+
+    <button class="tab" id="sentTab">
+      📤 Sent
+    </button>
+
+  </div>
+
+
+  <div id="loader" class="loader">
+    Loading requests...
+  </div>
+
+
+  <div id="requests" class="requests hidden"></div>
+
+</main>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+  authDomain: "spark-labs-b726e.firebaseapp.com",
+  projectId: "spark-labs-b726e",
+  storageBucket: "spark-labs-b726e.firebasestorage.app",
+  messagingSenderId: "185422979084",
+  appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+  measurementId: "G-28KBFT44VE"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+const loader =
+  document.getElementById("loader");
+
+const requests =
+  document.getElementById("requests");
+
+const receivedTab =
+  document.getElementById("receivedTab");
+
+const sentTab =
+  document.getElementById("sentTab");
+
+const toast =
+  document.getElementById("toast");
+
+const navLinks =
+  document.getElementById("navLinks");
+
+const menuBtn =
+  document.getElementById("menuBtn");
+
+
+let currentUser = null;
+let currentMode = "received";
+
+
+/* MOBILE MENU */
+
+menuBtn.addEventListener("click", () => {
+
+  navLinks.classList.toggle("open");
+
+});
+
+
+/* TOAST */
+
+function showToast(message){
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  },3000);
+
+}
+
+
+/* AUTH */
+
+onAuthStateChanged(auth, async user => {
+
+  if(!user){
+
+    window.location.href =
+      "login.html?redirect=team-requests.html";
+
+    return;
+  }
+
+  currentUser = user;
+
+  await loadRequests();
+
+});
+
+
+/* LOAD */
+
+async function loadRequests(){
+
+  loader.classList.remove("hidden");
+  requests.classList.add("hidden");
+
+  requests.innerHTML = "";
+
+  try{
+
+    let q;
+
+    if(currentMode === "received"){
+
+      q = query(
+        collection(db,"teamRequests"),
+        where("toUserId","==",currentUser.uid)
+      );
+
+    }else{
+
+      q = query(
+        collection(db,"teamRequests"),
+        where("fromUserId","==",currentUser.uid)
+      );
+
+    }
+
+    const snap =
+      await getDocs(q);
+
+    loader.classList.add("hidden");
+    requests.classList.remove("hidden");
+
+    if(snap.empty){
+
+      requests.innerHTML = `
+        <div class="empty">
+          <div class="big">📭</div>
+          <h2>
+            ${
+              currentMode === "received"
+              ? "No team requests yet"
+              : "You haven't sent any requests"
+            }
+          </h2>
+          <p style="margin-top:8px">
+            Go to Find Your Team and discover some builders.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+    const docs = [];
+
+    snap.forEach(item => {
+
+      docs.push({
+        id:item.id,
+        ...item.data()
+      });
+
+    });
+
+    docs.sort((a,b) => {
+
+      const aTime =
+        a.createdAt?.seconds || 0;
+
+      const bTime =
+        b.createdAt?.seconds || 0;
+
+      return bTime - aTime;
+
+    });
+
+    docs.forEach((request,index) => {
+
+      renderRequest(
+        request,
+        index
+      );
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    loader.classList.add("hidden");
+    requests.classList.remove("hidden");
+
+    requests.innerHTML = `
+      <div class="empty">
+        <div class="big">⚠️</div>
+        <h2>Couldn't load requests</h2>
+        <p style="margin-top:8px">
+          Check your Firestore rules.
+        </p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* RENDER REQUEST */
+
+function renderRequest(request,index){
+
+  const card =
+    document.createElement("div");
+
+  card.className = "request";
+
+  card.style.animationDelay =
+    `${index * .05}s`;
+
+
+  const top =
+    document.createElement("div");
+
+  top.className = "request-top";
+
+
+  const person =
+    document.createElement("div");
+
+  person.className = "person";
+
+
+  const avatar =
+    document.createElement("div");
+
+  avatar.className = "avatar";
+
+
+  const personName =
+    currentMode === "received"
+    ? request.fromUserName
+    : request.toUserName;
+
+
+  avatar.textContent =
+    (personName || "?")
+      .charAt(0)
+      .toUpperCase();
+
+
+  const personInfo =
+    document.createElement("div");
+
+
+  const name =
+    document.createElement("h3");
+
+  name.textContent =
+    personName || "Spark Builder";
+
+
+  const sub =
+    document.createElement("p");
+
+  sub.textContent =
+    currentMode === "received"
+    ? "wants to team up with you"
+    : "team request sent";
+
+
+  personInfo.appendChild(name);
+  personInfo.appendChild(sub);
+
+  person.appendChild(avatar);
+  person.appendChild(personInfo);
+
+
+  const status =
+    document.createElement("div");
+
+  status.className =
+    "status " +
+    (request.status || "pending");
+
+  status.textContent =
+    capitalize(request.status || "pending");
+
+
+  top.appendChild(person);
+  top.appendChild(status);
+
+
+  const body =
+    document.createElement("div");
+
+  body.className = "request-body";
+
+
+  const label =
+    document.createElement("strong");
+
+  label.textContent =
+    "Team request";
+
+
+  const message =
+    document.createElement("p");
+
+  if(currentMode === "received"){
+
+    message.textContent =
+      `${request.fromUserName || "This builder"} wants to collaborate with you on Spark Labs.`;
+
+  }else{
+
+    message.textContent =
+      `You asked ${request.toUserName || "this builder"} to team up with you.`;
+
+  }
+
+
+  body.appendChild(label);
+  body.appendChild(message);
+
+
+  const actions =
+    document.createElement("div");
+
+  actions.className = "actions";
+
+
+  const profileBtn =
+    document.createElement("a");
+
+  profileBtn.className =
+    "btn profile";
+
+  profileBtn.textContent =
+    "👤 View Profile";
+
+
+  profileBtn.href =
+    `profile.html?uid=${
+      currentMode === "received"
+      ? request.fromUserId
+      : request.toUserId
+    }`;
+
+
+  actions.appendChild(profileBtn);
+
+
+  if(
+    currentMode === "received" &&
+    request.status === "pending"
+  ){
+
+    const acceptBtn =
+      document.createElement("button");
+
+    acceptBtn.className =
+      "btn accept";
+
+    acceptBtn.textContent =
+      "✓ Accept";
+
+
+    acceptBtn.addEventListener(
+      "click",
+      () => updateRequest(
+        request.id,
+        "accepted",
+        acceptBtn
+      )
+    );
+
+
+    const rejectBtn =
+      document.createElement("button");
+
+    rejectBtn.className =
+      "btn reject";
+
+    rejectBtn.textContent =
+      "✕ Reject";
+
+
+    rejectBtn.addEventListener(
+      "click",
+      () => updateRequest(
+        request.id,
+        "rejected",
+        rejectBtn
+      )
+    );
+
+
+    actions.appendChild(acceptBtn);
+    actions.appendChild(rejectBtn);
+
+  }
+
+
+  body.appendChild(actions);
+
+  card.appendChild(top);
+  card.appendChild(body);
+
+  requests.appendChild(card);
+
+}
+
+
+/* UPDATE */
+
+async function updateRequest(
+  requestId,
+  newStatus,
+  button
+){
+
+  button.disabled = true;
+  button.textContent =
+    "Updating...";
+
+  try{
+
+    await updateDoc(
+      doc(
+        db,
+        "teamRequests",
+        requestId
+      ),
+      {
+        status:newStatus
+      }
+    );
+
+    showToast(
+      newStatus === "accepted"
+      ? "Team request accepted 🤝"
+      : "Team request rejected."
+    );
+
+    await loadRequests();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Couldn't update request. Check Firestore rules."
+    );
+
+    button.disabled = false;
+
+  }
+
+}
+
+
+/* TABS */
+
+receivedTab.addEventListener(
+  "click",
+  async () => {
+
+    currentMode = "received";
+
+    receivedTab.classList.add("active");
+    sentTab.classList.remove("active");
+
+    await loadRequests();
+
+  }
+);
+
+
+sentTab.addEventListener(
+  "click",
+  async () => {
+
+    currentMode = "sent";
+
+    sentTab.classList.add("active");
+    receivedTab.classList.remove("active");
+
+    await loadRequests();
+
+  }
+);
+
+
+/* CAPITALIZE */
+
+function capitalize(text){
+
+  return String(text)
+    .charAt(0)
+    .toUpperCase() +
+    String(text).slice(1);
+
+}
+
+</script>
+
+</body>
+</html>

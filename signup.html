@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Join Spark Labs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "DM Sans", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 220, 90, 0.25), transparent 25%),
+        radial-gradient(circle at 90% 90%, rgba(182, 145, 255, 0.20), transparent 28%),
+        #faf8f2;
+      color: #171717;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        radial-gradient(#111 0.7px, transparent 0.7px);
+      background-size: 15px 15px;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 35px 20px;
+      position: relative;
+    }
+
+    /* =========================
+       DOODLES
+    ========================= */
+
+    .doodle {
+      position: fixed;
+      font-family: "Patrick Hand", cursive;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .doodle.star {
+      font-size: 55px;
+      top: 9%;
+      left: 7%;
+      transform: rotate(-15deg);
+    }
+
+    .doodle.bulb {
+      font-size: 70px;
+      top: 12%;
+      right: 8%;
+      transform: rotate(12deg);
+    }
+
+    .doodle.arrow {
+      font-size: 75px;
+      bottom: 12%;
+      left: 9%;
+      transform: rotate(15deg);
+    }
+
+    .doodle.spark {
+      font-size: 65px;
+      bottom: 10%;
+      right: 10%;
+      transform: rotate(-15deg);
+    }
+
+    /* =========================
+       MAIN LAYOUT
+    ========================= */
+
+    .signup-wrap {
+      width: 100%;
+      max-width: 1080px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 45px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================
+       LEFT SIDE
+    ========================= */
+
+    .intro {
+      padding: 20px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 55px;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      border: 3px solid #171717;
+      border-radius: 12px;
+      background: #ffe36e;
+      display: grid;
+      place-items: center;
+      font-family: "Patrick Hand", cursive;
+      font-size: 25px;
+      transform: rotate(-5deg);
+      box-shadow: 4px 4px 0 #171717;
+    }
+
+    .intro h1 {
+      font-size: clamp(45px, 6vw, 72px);
+      line-height: 0.98;
+      letter-spacing: -4px;
+      margin-bottom: 25px;
+    }
+
+    .intro h1 span {
+      position: relative;
+      display: inline-block;
+      z-index: 1;
+    }
+
+    .intro h1 span::after {
+      content: "";
+      position: absolute;
+      left: -4px;
+      right: -4px;
+      bottom: 3px;
+      height: 13px;
+      background: #c7b0ff;
+      transform: rotate(-2deg);
+      z-index: -1;
+    }
+
+    .intro p {
+      max-width: 470px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 28px;
+    }
+
+    .mini-points {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .point {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .point-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #171717;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 2px 2px 0 #171717;
+    }
+
+    /* =========================
+       FORM CARD
+    ========================= */
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid #171717;
+      border-radius: 28px;
+      padding: 38px;
+      box-shadow: 9px 9px 0 #171717;
+      position: relative;
+      animation: cardIn 0.65s ease both;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px) rotate(1deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+      }
+    }
+
+    .tape {
+      position: absolute;
+      width: 95px;
+      height: 25px;
+      background: #ffe36e;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      opacity: 0.9;
+    }
+
+    .card-header {
+      margin-bottom: 28px;
+    }
+
+    .card-header h2 {
+      font-size: 34px;
+      letter-spacing: -1.5px;
+      margin-bottom: 7px;
+    }
+
+    .card-header p {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 53px;
+      border: 2px solid #222;
+      border-radius: 13px;
+      padding: 0 15px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+      transition: 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #6d4aff;
+      box-shadow: 4px 4px 0 #c7b0ff;
+      transform: translate(-1px, -1px);
+    }
+
+    input.error {
+      border-color: #e34b4b;
+      box-shadow: 3px 3px 0 #ffc5c5;
+    }
+
+    .password-input {
+      padding-right: 55px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .error-text {
+      color: #d93636;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+      min-height: 15px;
+    }
+
+    /* =========================
+       PASSWORD STRENGTH
+    ========================= */
+
+    .strength {
+      margin-top: 9px;
+    }
+
+    .strength-bars {
+      display: flex;
+      gap: 4px;
+      height: 5px;
+    }
+
+    .strength-bars span {
+      flex: 1;
+      background: #e5e5e5;
+      border-radius: 10px;
+      transition: 0.25s ease;
+    }
+
+    .strength-label {
+      margin-top: 5px;
+      font-size: 11px;
+      color: #777;
+    }
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    .submit-btn {
+      width: 100%;
+      height: 57px;
+      margin-top: 5px;
+      border: 3px solid #171717;
+      border-radius: 14px;
+      background: #171717;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 #ffe36e;
+      transition: 0.18s ease;
+      position: relative;
+    }
+
+    .submit-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 #ffe36e;
+    }
+
+    .submit-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #ffe36e;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      width: 19px;
+      height: 19px;
+      border: 3px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       MESSAGE
+    ========================= */
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 13px 14px;
+      border: 2px solid #222;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #fff0f0;
+      border-color: #e34b4b;
+    }
+
+    .message.success {
+      background: #effff1;
+      border-color: #4ca75a;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    .login-link {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .login-link a {
+      font-weight: 800;
+      color: #171717;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 13px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .back-home a:hover,
+    .login-link a:hover {
+      color: #6d4aff;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+      .page {
+        padding: 25px 16px;
+      }
+
+      .signup-wrap {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        gap: 25px;
+      }
+
+      .intro {
+        text-align: center;
+        padding: 10px;
+      }
+
+      .logo {
+        margin-bottom: 28px;
+      }
+
+      .intro h1 {
+        font-size: 50px;
+        letter-spacing: -3px;
+      }
+
+      .intro p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .mini-points {
+        align-items: center;
+      }
+
+      .doodle {
+        opacity: 0.5;
+      }
+
+      .doodle.star {
+        top: 3%;
+        left: 3%;
+      }
+
+      .doodle.bulb {
+        top: 3%;
+        right: 3%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding: 18px 12px;
+      }
+
+      .intro {
+        padding: 4px;
+      }
+
+      .intro h1 {
+        font-size: 43px;
+        letter-spacing: -2.5px;
+      }
+
+      .intro p {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .mini-points {
+        gap: 9px;
+      }
+
+      .point {
+        font-size: 13px;
+      }
+
+      .point-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .card {
+        padding: 25px 18px;
+        border-radius: 21px;
+        box-shadow: 6px 6px 0 #171717;
+      }
+
+      .card-header h2 {
+        font-size: 28px;
+      }
+
+      .doodle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- DOODLES -->
+
+  <div class="doodle star">✦</div>
+  <div class="doodle bulb">💡</div>
+  <div class="doodle arrow">↗</div>
+  <div class="doodle spark">✦</div>
+
+  <main class="page">
+
+    <div class="signup-wrap">
+
+      <!-- LEFT -->
+
+      <section class="intro">
+
+        <a href="index.html" class="logo">
+          <span class="logo-mark">S</span>
+          Spark Labs
+        </a>
+
+        <h1>
+          Turn your
+          <span>idea</span>
+          into something real.
+        </h1>
+
+        <p>
+          Join Spark Labs and start building projects,
+          learning new skills, meeting people and turning
+          those random “what if…” ideas into actual things.
+        </p>
+
+        <div class="mini-points">
+
+          <div class="point">
+            <span class="point-icon">💡</span>
+            <span>Capture and develop your ideas</span>
+          </div>
+
+          <div class="point">
+            <span class="point-icon">🛠️</span>
+            <span>Build real projects</span>
+          </div>
+
+          <div class="point">
+            <span class="point-icon">🚀</span>
+            <span>Launch and showcase your work</span>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- SIGNUP CARD -->
+
+      <section class="card">
+
+        <div class="tape"></div>
+
+        <div class="card-header">
+          <h2>Create your account ✨</h2>
+          <p>
+            It takes less than a minute. Humanity survived creating
+            accounts before autofill, so you can probably manage this.
+          </p>
+        </div>
+
+
+        <form id="signupForm">
+
+          <!-- NAME -->
+
+          <div class="form-group">
+
+            <label for="name">Your name</label>
+
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="e.g. Gopal Sharma"
+                autocomplete="name"
+                maxlength="60"
+                required
+              >
+            </div>
+
+            <div class="error-text" id="nameError"></div>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="email">Email address</label>
+
+            <div class="input-wrap">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="error-text" id="emailError"></div>
+
+          </div>
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="password">Password</label>
+
+            <div class="input-wrap">
+
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="password-input"
+                placeholder="Create a strong password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+                aria-label="Show password"
+              >
+                👁
+              </button>
+
+            </div>
+
+            <div class="strength">
+
+              <div class="strength-bars">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+
+              <div class="strength-label" id="strengthLabel">
+                Enter a password
+              </div>
+
+            </div>
+
+            <div class="error-text" id="passwordError"></div>
+
+          </div>
+
+
+          <!-- CONFIRM PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="confirmPassword">Confirm password</label>
+
+            <div class="input-wrap">
+
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                class="password-input"
+                placeholder="Type it again"
+                autocomplete="new-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                id="toggleConfirmPassword"
+                aria-label="Show password"
+              >
+                👁
+              </button>
+
+            </div>
+
+            <div class="error-text" id="confirmPasswordError"></div>
+
+          </div>
+
+
+          <!-- SUBMIT -->
+
+          <button
+            type="submit"
+            class="submit-btn"
+            id="submitBtn"
+          >
+            Create my Spark account →
+          </button>
+
+
+          <!-- MESSAGE -->
+
+          <div
+            class="message"
+            id="message"
+          ></div>
+
+        </form>
+
+
+        <div class="login-link">
+          Already have an account?
+          <a href="login.html">Log in</a>
+        </div>
+
+        <div class="back-home">
+          <a href="index.html">← Back to Spark Labs</a>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================
+       FIREBASE
+  ====================================== -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* =====================================
+       FIREBASE CONFIG
+    ====================================== */
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+      authDomain: "spark-labs-b726e.firebaseapp.com",
+
+      projectId: "spark-labs-b726e",
+
+      storageBucket: "spark-labs-b726e.firebasestorage.app",
+
+      messagingSenderId: "185422979084",
+
+      appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+
+      measurementId: "G-28KBFT44VE"
+
+    };
+
+
+    /* =====================================
+       INITIALIZE FIREBASE
+    ====================================== */
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* =====================================
+       ELEMENTS
+    ====================================== */
+
+    const form = document.getElementById("signupForm");
+
+    const nameInput = document.getElementById("name");
+
+    const emailInput = document.getElementById("email");
+
+    const passwordInput = document.getElementById("password");
+
+    const confirmPasswordInput =
+      document.getElementById("confirmPassword");
+
+    const submitBtn =
+      document.getElementById("submitBtn");
+
+    const message =
+      document.getElementById("message");
+
+
+    /* =====================================
+       PASSWORD TOGGLE
+    ====================================== */
+
+    document
+      .getElementById("togglePassword")
+      .addEventListener("click", () => {
+
+        const isPassword =
+          passwordInput.type === "password";
+
+        passwordInput.type =
+          isPassword ? "text" : "password";
+
+        document
+          .getElementById("togglePassword")
+          .textContent =
+          isPassword ? "🙈" : "👁";
+
+      });
+
+
+    document
+      .getElementById("toggleConfirmPassword")
+      .addEventListener("click", () => {
+
+        const isPassword =
+          confirmPasswordInput.type === "password";
+
+        confirmPasswordInput.type =
+          isPassword ? "text" : "password";
+
+        document
+          .getElementById("toggleConfirmPassword")
+          .textContent =
+          isPassword ? "🙈" : "👁";
+
+      });
+
+
+    /* =====================================
+       PASSWORD STRENGTH
+    ====================================== */
+
+    const strengthBars =
+      document.querySelectorAll(".strength-bars span");
+
+    const strengthLabel =
+      document.getElementById("strengthLabel");
+
+
+    passwordInput.addEventListener("input", () => {
+
+      const password = passwordInput.value;
+
+      let score = 0;
+
+      if (password.length >= 6) score++;
+
+      if (password.length >= 10) score++;
+
+      if (/[A-Z]/.test(password)) score++;
+
+      if (/[0-9]/.test(password)) score++;
+
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+
+
+      strengthBars.forEach((bar) => {
+
+        bar.style.background = "#e5e5e5";
+
+      });
+
+
+      if (!password) {
+
+        strengthLabel.textContent =
+          "Enter a password";
+
+        return;
+
+      }
+
+
+      if (score <= 1) {
+
+        strengthLabel.textContent =
+          "Weak password";
+
+        strengthBars[0].style.background =
+          "#ef5350";
+
+      }
+
+      else if (score === 2) {
+
+        strengthLabel.textContent =
+          "Getting there";
+
+        strengthBars[0].style.background =
+          "#f5a623";
+
+        strengthBars[1].style.background =
+          "#f5a623";
+
+      }
+
+      else if (score === 3) {
+
+        strengthLabel.textContent =
+          "Good password";
+
+        strengthBars[0].style.background =
+          "#e6c84f";
+
+        strengthBars[1].style.background =
+          "#e6c84f";
+
+        strengthBars[2].style.background =
+          "#e6c84f";
+
+      }
+
+      else {
+
+        strengthLabel.textContent =
+          "Strong password";
+
+        strengthBars.forEach((bar) => {
+
+          bar.style.background =
+            "#55a866";
+
+        });
+
+      }
+
+    });
+
+
+    /* =====================================
+       HELPERS
+    ====================================== */
+
+    function clearErrors() {
+
+      document
+        .querySelectorAll(".error-text")
+        .forEach((element) => {
+
+          element.textContent = "";
+
+        });
+
+      document
+        .querySelectorAll("input")
+        .forEach((input) => {
+
+          input.classList.remove("error");
+
+        });
+
+    }
+
+
+    function setError(input, errorElement, text) {
+
+      input.classList.add("error");
+
+      errorElement.textContent = text;
+
+    }
+
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className =
+        "message show " + type;
+
+    }
+
+
+    function hideMessage() {
+
+      message.className = "message";
+
+      message.textContent = "";
+
+    }
+
+
+    function firebaseError(errorCode) {
+
+      switch (errorCode) {
+
+        case "auth/email-already-in-use":
+          return "An account with this email already exists.";
+
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+
+        case "auth/weak-password":
+          return "Password is too weak. Use at least 6 characters.";
+
+        case "auth/network-request-failed":
+          return "Network problem. Check your internet connection.";
+
+        case "auth/operation-not-allowed":
+          return "Email/password sign-up is not enabled in Firebase Authentication.";
+
+        case "auth/too-many-requests":
+          return "Too many attempts. Please wait a little and try again.";
+
+        default:
+          return "Something went wrong. Please try again.";
+
+      }
+
+    }
+
+
+    /* =====================================
+       FORM SUBMIT
+    ====================================== */
+
+    form.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      clearErrors();
+
+      hideMessage();
+
+
+      const name =
+        nameInput.value.trim();
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+      const confirmPassword =
+        confirmPasswordInput.value;
+
+
+      let valid = true;
+
+
+      /* NAME */
+
+      if (name.length < 2) {
+
+        setError(
+          nameInput,
+          document.getElementById("nameError"),
+          "Please enter your name."
+        );
+
+        valid = false;
+
+      }
+
+
+      /* EMAIL */
+
+      if (!email) {
+
+        setError(
+          emailInput,
+          document.getElementById("emailError"),
+          "Please enter your email."
+        );
+
+        valid = false;
+
+      }
+
+
+      /* PASSWORD */
+
+      if (password.length < 6) {
+
+        setError(
+          passwordInput,
+          document.getElementById("passwordError"),
+          "Password must contain at least 6 characters."
+        );
+
+        valid = false;
+
+      }
+
+
+      /* CONFIRM PASSWORD */
+
+      if (confirmPassword !== password) {
+
+        setError(
+          confirmPasswordInput,
+          document.getElementById("confirmPasswordError"),
+          "Passwords do not match."
+        );
+
+        valid = false;
+
+      }
+
+
+      if (!valid) {
+
+        return;
+
+      }
+
+
+      /* =================================
+         LOADING
+      ================================= */
+
+      submitBtn.disabled = true;
+
+      submitBtn.innerHTML =
+        '<span class="spinner"></span> Creating your account...';
+
+
+      try {
+
+        /* ===============================
+           CREATE AUTH USER
+        =============================== */
+
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user =
+          userCredential.user;
+
+
+        /* ===============================
+           UPDATE DISPLAY NAME
+        =============================== */
+
+        await updateProfile(user, {
+
+          displayName: name
+
+        });
+
+
+        /* ===============================
+           CREATE FIRESTORE USER
+        =============================== */
+
+        await setDoc(
+
+          doc(db, "users", user.uid),
+
+          {
+
+            uid: user.uid,
+
+            name: name,
+
+            email: email,
+
+            role: "student",
+
+            xp: 0,
+
+            createdAt: serverTimestamp()
+
+          }
+
+        );
+
+
+        /* ===============================
+           SUCCESS
+        =============================== */
+
+        showMessage(
+          "Account created successfully! Taking you to your dashboard...",
+          "success"
+        );
+
+
+        submitBtn.innerHTML =
+          "Account created ✓";
+
+
+        /*
+          Small delay so the success message
+          is actually visible.
+        */
+
+        setTimeout(() => {
+
+          window.location.href =
+            "dashboard.html";
+
+        }, 900);
+
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "SIGNUP ERROR:",
+          error
+        );
+
+
+        showMessage(
+          firebaseError(error.code),
+          "error"
+        );
+
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerHTML =
+          "Create my Spark account →";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

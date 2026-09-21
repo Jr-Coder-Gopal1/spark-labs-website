@@ -1,0 +1,3299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Spark Labs • Messages</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root{
+  --bg:#f7f8fc;
+  --card:#fff;
+  --ink:#17191f;
+  --muted:#737987;
+  --line:#e7e9ef;
+  --yellow:#ffd84d;
+  --blue:#6479f5;
+  --green:#43c98a;
+  --red:#ff6b6b;
+  --shadow:0 18px 55px rgba(25,30,45,.09);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:"DM Sans",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 5%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 95% 10%,rgba(100,121,245,.11),transparent 25%),
+    var(--bg);
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.18;
+  background-image:radial-gradient(rgba(20,25,35,.06) .7px,transparent .7px);
+  background-size:7px 7px;
+}
+
+/* NAV */
+
+.navbar{
+  height:74px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav-inner{
+  max-width:1400px;
+  height:100%;
+  margin:auto;
+  padding:0 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--ink);
+  font-family:"Space Grotesk";
+  font-weight:700;
+  font-size:20px;
+}
+
+.logo-mark{
+  width:38px;
+  height:38px;
+  border-radius:13px;
+  background:var(--yellow);
+  display:grid;
+  place-items:center;
+  box-shadow:4px 4px 0 #17191f;
+  transform:rotate(-5deg);
+}
+
+.nav-links{
+  display:flex;
+  gap:5px;
+}
+
+.nav-links a{
+  color:#656a76;
+  text-decoration:none;
+  padding:9px 12px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  background:#f0f1f5;
+  color:var(--ink);
+}
+
+.nav-user{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.nav-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--yellow);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:900;
+}
+
+.nav-name{
+  font-size:12px;
+  font-weight:800;
+  max-width:100px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.logout{
+  border:0;
+  background:none;
+  cursor:pointer;
+  color:#777d88;
+  font-weight:800;
+  font-size:12px;
+}
+
+/* MAIN */
+
+.main{
+  max-width:1400px;
+  margin:auto;
+  padding:28px 25px 60px;
+}
+
+/* STORIES */
+
+.stories-wrap{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:23px;
+  padding:17px;
+  margin-bottom:18px;
+  box-shadow:0 6px 25px rgba(20,25,40,.04);
+}
+
+.stories-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:13px;
+}
+
+.stories-title{
+  font-family:"Space Grotesk";
+  font-weight:700;
+  font-size:18px;
+}
+
+.story-list{
+  display:flex;
+  gap:13px;
+  overflow-x:auto;
+  padding-bottom:3px;
+}
+
+.story{
+  flex:none;
+  width:72px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.story-ring{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  padding:3px;
+  margin:auto;
+  background:linear-gradient(135deg,#ffd84d,#697cf5);
+}
+
+.story-ring.seen{
+  background:#d9dbe2;
+}
+
+.story-inner{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:white;
+  padding:3px;
+}
+
+.story-inner img,
+.story-inner video{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+.story-avatar{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:var(--yellow);
+  display:grid;
+  place-items:center;
+  font-size:17px;
+  font-weight:900;
+}
+
+.story-name{
+  margin-top:6px;
+  font-size:10px;
+  font-weight:700;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.add-story .story-ring{
+  background:#17191f;
+}
+
+.add-story .story-avatar{
+  background:#f1f2f5;
+  font-size:25px;
+}
+
+/* MESSAGES */
+
+.messages-shell{
+  height:calc(100vh - 140px);
+  min-height:600px;
+  display:grid;
+  grid-template-columns:330px 1fr;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:27px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.sidebar-top{
+  padding:22px;
+  border-bottom:1px solid var(--line);
+}
+
+.sidebar-title{
+  font-family:"Space Grotesk";
+  font-size:25px;
+  font-weight:700;
+}
+
+.sidebar-sub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.user-search{
+  margin-top:15px;
+}
+
+.user-search input{
+  width:100%;
+  height:42px;
+  border:1px solid var(--line);
+  background:#f8f9fb;
+  border-radius:12px;
+  padding:0 13px;
+  outline:none;
+  font-family:inherit;
+  font-size:12px;
+}
+
+.user-search input:focus{
+  border-color:#b9c1f7;
+}
+
+.conversation-list{
+  overflow-y:auto;
+  flex:1;
+}
+
+.conversation{
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  cursor:pointer;
+  border-bottom:1px solid #f2f3f5;
+  transition:.2s;
+}
+
+.conversation:hover{
+  background:#fafbfc;
+}
+
+.conversation.active{
+  background:#f2f4ff;
+}
+
+.conv-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:var(--yellow);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:13px;
+  flex:none;
+}
+
+.conv-info{
+  min-width:0;
+  flex:1;
+}
+
+.conv-name{
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.conv-preview{
+  color:#8b909b;
+  font-size:10px;
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.conv-meta{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+
+.conv-time{
+  color:#9a9ea8;
+  font-size:9px;
+}
+
+.unread{
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  border-radius:20px;
+  background:#667af4;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:9px;
+  font-weight:900;
+}
+
+/* CHAT */
+
+.chat{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.chat-empty{
+  flex:1;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:30px;
+}
+
+.chat-empty-icon{
+  font-size:55px;
+}
+
+.chat-empty h2{
+  font-family:"Space Grotesk";
+  margin-top:10px;
+}
+
+.chat-empty p{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:6px;
+}
+
+.chat-header{
+  min-height:70px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 20px;
+}
+
+.chat-avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--yellow);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.chat-name{
+  font-family:"Space Grotesk";
+  font-weight:700;
+  font-size:15px;
+}
+
+.chat-status{
+  color:#7f8490;
+  font-size:10px;
+  margin-top:2px;
+}
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:22px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,216,77,.06),transparent 25%),
+    #fafbfc;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.message-row{
+  display:flex;
+}
+
+.message-row.mine{
+  justify-content:flex-end;
+}
+
+.bubble{
+  max-width:min(70%,500px);
+  padding:10px 13px;
+  border-radius:17px;
+  background:white;
+  border:1px solid var(--line);
+  box-shadow:0 2px 7px rgba(20,25,40,.025);
+}
+
+.mine .bubble{
+  background:#17191f;
+  color:white;
+  border-color:#17191f;
+  border-bottom-right-radius:5px;
+}
+
+.theirs .bubble{
+  border-bottom-left-radius:5px;
+}
+
+.message-text{
+  font-size:12px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.message-time{
+  color:#a0a4ad;
+  font-size:8px;
+  margin-top:5px;
+  text-align:right;
+}
+
+.mine .message-time{
+  color:#9fa3ad;
+}
+
+.message-media{
+  max-width:300px;
+  max-height:300px;
+  border-radius:12px;
+  display:block;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+.file-label{
+  color:#6f7480;
+  font-size:10px;
+  margin-top:5px;
+}
+
+/* COMPOSER */
+
+.composer{
+  min-height:72px;
+  padding:12px 16px;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:white;
+}
+
+.icon-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:12px;
+  background:#f1f2f5;
+  cursor:pointer;
+  font-size:17px;
+  flex:none;
+}
+
+.icon-btn:hover{
+  background:#e9eaf0;
+}
+
+.message-input{
+  flex:1;
+  min-width:0;
+  min-height:40px;
+  max-height:110px;
+  resize:none;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px 13px;
+  font-family:inherit;
+  font-size:12px;
+  outline:none;
+}
+
+.message-input:focus{
+  border-color:#b7bff5;
+}
+
+.send{
+  width:43px;
+  height:43px;
+  border:0;
+  border-radius:13px;
+  background:var(--yellow);
+  cursor:pointer;
+  font-size:17px;
+  box-shadow:3px 3px 0 #17191f;
+}
+
+.send:active{
+  transform:translate(2px,2px);
+  box-shadow:1px 1px 0 #17191f;
+}
+
+.file-input{
+  display:none;
+}
+
+/* STORY VIEWER */
+
+.story-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(10,11,15,.82);
+  backdrop-filter:blur(10px);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.story-modal.show{
+  display:flex;
+}
+
+.story-view{
+  position:relative;
+  width:min(440px,95vw);
+  height:min(760px,90vh);
+  background:#111319;
+  border-radius:25px;
+  overflow:hidden;
+}
+
+.story-view img,
+.story-view video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.story-view-top{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  padding:15px;
+  background:linear-gradient(rgba(0,0,0,.6),transparent);
+  color:white;
+  z-index:3;
+}
+
+.story-view-name{
+  font-size:12px;
+  font-weight:800;
+}
+
+.story-caption{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:35px 20px 20px;
+  background:linear-gradient(transparent,rgba(0,0,0,.7));
+  color:white;
+  font-size:13px;
+  z-index:3;
+}
+
+.close-story{
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:5;
+  border:0;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+  color:white;
+  cursor:pointer;
+}
+
+/* STORY UPLOAD */
+
+.story-upload{
+  position:fixed;
+  inset:0;
+  z-index:450;
+  background:rgba(10,11,15,.55);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.story-upload.show{
+  display:flex;
+}
+
+.upload-box{
+  width:min(450px,100%);
+  background:white;
+  border-radius:25px;
+  padding:25px;
+}
+
+.upload-box h2{
+  font-family:"Space Grotesk";
+}
+
+.upload-box p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.story-caption-input{
+  width:100%;
+  margin-top:15px;
+  min-height:75px;
+  resize:none;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:11px;
+  outline:none;
+  font-family:inherit;
+}
+
+.upload-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:13px;
+}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:900;
+}
+
+.btn.cancel{
+  background:#f0f1f4;
+}
+
+.btn.primary{
+  background:var(--yellow);
+}
+
+/* EMOJI */
+
+.emoji-panel{
+  position:absolute;
+  bottom:72px;
+  right:100px;
+  width:260px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:12px;
+  box-shadow:var(--shadow);
+  display:none;
+  z-index:20;
+}
+
+.emoji-panel.show{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:5px;
+}
+
+.emoji-panel button{
+  border:0;
+  background:none;
+  font-size:20px;
+  cursor:pointer;
+  border-radius:8px;
+  padding:5px;
+}
+
+.emoji-panel button:hover{
+  background:#f0f1f4;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:700;
+  background:#17191f;
+  color:white;
+  padding:12px 15px;
+  border-radius:13px;
+  font-size:11px;
+  font-weight:700;
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .messages-shell{
+    grid-template-columns:280px 1fr;
+  }
+
+}
+
+@media(max-width:700px){
+
+  .main{
+    padding:15px 10px 30px;
+  }
+
+  .messages-shell{
+    height:calc(100vh - 105px);
+    min-height:550px;
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .chat{
+    display:none;
+  }
+
+  .messages-shell.mobile-chat .sidebar{
+    display:none;
+  }
+
+  .messages-shell.mobile-chat .chat{
+    display:flex;
+  }
+
+  .mobile-back{
+    display:block!important;
+  }
+
+  .bubble{
+    max-width:82%;
+  }
+
+  .story-view{
+    width:100%;
+    height:100%;
+    border-radius:18px;
+  }
+
+}
+
+.mobile-back{
+  display:none;
+  border:0;
+  background:#f1f2f5;
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  cursor:pointer;
+  margin-right:2px;
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+
+    <a href="dashboard.html" class="logo">
+      <div class="logo-mark">⚡</div>
+      Spark Labs
+    </a>
+
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="events.html">Events</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="team.html">Team</a>
+      <a href="community.html">Community</a>
+      <a href="kits.html">Kits</a>
+    </div>
+
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar">?</div>
+      <div class="nav-name" id="navName">Loading...</div>
+      <button class="logout" id="logoutBtn">Log out</button>
+    </div>
+
+  </div>
+</nav>
+
+
+<main class="main">
+
+  <!-- STORIES -->
+
+  <section class="stories-wrap">
+
+    <div class="stories-head">
+      <div class="stories-title">Stories</div>
+      <div style="font-size:10px;color:#9297a1">
+        Disappear after 24h
+      </div>
+    </div>
+
+    <div class="story-list" id="storyList">
+
+      <div class="story add-story" id="addStory">
+        <div class="story-ring">
+          <div class="story-inner">
+            <div class="story-avatar">＋</div>
+          </div>
+        </div>
+        <div class="story-name">Your story</div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- MESSAGES -->
+
+  <section class="messages-shell" id="messagesShell">
+
+    <aside class="sidebar">
+
+      <div class="sidebar-top">
+
+        <div class="sidebar-title">
+          Messages
+        </div>
+
+        <div class="sidebar-sub">
+          Talk to builders across Spark Labs.
+        </div>
+
+        <div class="user-search">
+          <input
+            id="userSearch"
+            placeholder="Find a Spark Builder..."
+          >
+        </div>
+
+      </div>
+
+      <div class="conversation-list" id="conversationList">
+        <div style="
+          padding:30px;
+          text-align:center;
+          color:#888e99;
+          font-size:11px;
+        ">
+          Loading users...
+        </div>
+      </div>
+
+    </aside>
+
+
+    <section class="chat">
+
+      <div class="chat-empty" id="chatEmpty">
+
+        <div>
+
+          <div class="chat-empty-icon">
+            💬
+          </div>
+
+          <h2>
+            Start a conversation
+          </h2>
+
+          <p>
+            Select a builder from the left and start building connections.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div id="chatContent" style="
+        display:none;
+        flex:1;
+        min-height:0;
+        flex-direction:column;
+      ">
+
+        <header class="chat-header">
+
+          <button
+            class="mobile-back"
+            id="mobileBack"
+          >
+            ←
+          </button>
+
+          <div class="chat-avatar" id="chatAvatar">
+            ?
+          </div>
+
+          <div>
+            <div class="chat-name" id="chatName">
+              User
+            </div>
+
+            <div class="chat-status">
+              Spark Labs Builder
+            </div>
+          </div>
+
+        </header>
+
+
+        <div class="messages" id="messageContainer"></div>
+
+
+        <div class="composer">
+
+          <button
+            class="icon-btn"
+            id="emojiBtn"
+          >
+            😊
+          </button>
+
+          <button
+            class="icon-btn"
+            id="fileBtn"
+          >
+            📎
+          </button>
+
+          <input
+            type="file"
+            id="fileInput"
+            class="file-input"
+            accept="image/*,video/*"
+          >
+
+          <textarea
+            id="messageInput"
+            class="message-input"
+            placeholder="Write a message..."
+            rows="1"
+          ></textarea>
+
+          <button
+            class="send"
+            id="sendBtn"
+          >
+            ➤
+          </button>
+
+        </div>
+
+        <div class="emoji-panel" id="emojiPanel"></div>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+
+<!-- STORY UPLOAD -->
+
+<div class="story-upload" id="storyUpload">
+
+  <div class="upload-box">
+
+    <h2>
+      Add to your story
+    </h2>
+
+    <p>
+      Share an image or short video. It will automatically expire after 24 hours.
+    </p>
+
+    <input
+      type="file"
+      id="storyFile"
+      accept="image/*,video/*"
+      style="
+        width:100%;
+        margin-top:18px;
+      "
+    >
+
+    <textarea
+      id="storyCaption"
+      class="story-caption-input"
+      placeholder="Add a caption..."
+    ></textarea>
+
+    <div class="upload-actions">
+
+      <button
+        class="btn cancel"
+        id="cancelStory"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        id="publishStory"
+      >
+        Publish Story
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- STORY VIEWER -->
+
+<div class="story-modal" id="storyModal">
+
+  <div class="story-view">
+
+    <div class="story-view-top">
+      <div class="story-view-name" id="storyViewerName"></div>
+    </div>
+
+    <button
+      class="close-story"
+      id="closeStory"
+    >
+      ×
+    </button>
+
+    <div id="storyViewerMedia"></div>
+
+    <div
+      class="story-caption"
+      id="storyViewerCaption"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  setPersistence,
+  browserLocalPersistence
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  onSnapshot,
+  serverTimestamp,
+  Timestamp
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+
+/* ================= FIREBASE ================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+  authDomain: "spark-labs-b726e.firebaseapp.com",
+  projectId: "spark-labs-b726e",
+  storageBucket: "spark-labs-b726e.firebasestorage.app",
+  messagingSenderId: "185422979084",
+  appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+  measurementId: "G-28KBFT44VE"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+
+/* ================= STATE ================= */
+
+let currentUser = null;
+let currentUserData = {};
+
+let users = [];
+let allMessages = [];
+let unsubscribeMessages = null;
+
+let selectedUser = null;
+
+let stories = [];
+
+
+/* ================= HELPERS ================= */
+
+function escapeHTML(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function initials(name){
+
+  if(!name) return "?";
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x=>x[0])
+    .join("")
+    .toUpperCase();
+
+}
+
+
+function timeText(timestamp){
+
+  if(!timestamp) return "";
+
+  try{
+
+    const date =
+      timestamp.toDate();
+
+    return date.toLocaleTimeString(
+      "en-IN",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  }catch{
+
+    return "";
+
+  }
+
+}
+
+
+function dateValue(timestamp){
+
+  if(!timestamp) return 0;
+
+  try{
+
+    if(typeof timestamp.toMillis === "function"){
+      return timestamp.toMillis();
+    }
+
+  }catch{}
+
+  return 0;
+
+}
+
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2800);
+
+}
+
+
+/* ================= AUTH ================= */
+
+await setPersistence(
+  auth,
+  browserLocalPersistence
+);
+
+
+onAuthStateChanged(
+  auth,
+  async(user)=>{
+
+    if(!user){
+
+      window.location.href =
+        "login.html";
+
+      return;
+
+    }
+
+    currentUser = user;
+
+    await loadCurrentUser();
+
+    await loadUsers();
+
+    await loadStories();
+
+    setupInitialChat();
+
+  }
+);
+
+
+/* ================= CURRENT USER ================= */
+
+async function loadCurrentUser(){
+
+  const snap =
+    await getDoc(
+      doc(
+        db,
+        "users",
+        currentUser.uid
+      )
+    );
+
+
+  if(snap.exists()){
+
+    currentUserData =
+      snap.data();
+
+  }
+
+
+  const name =
+    currentUserData.name ||
+    currentUser.displayName ||
+    "Spark Builder";
+
+
+  document.getElementById(
+    "navName"
+  ).textContent = name;
+
+
+  document.getElementById(
+    "navAvatar"
+  ).textContent =
+    initials(name);
+
+}
+
+
+/* ================= USERS ================= */
+
+async function loadUsers(){
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"users")
+      );
+
+
+    users = [];
+
+
+    snap.forEach(d=>{
+
+      if(d.id === currentUser.uid){
+        return;
+      }
+
+
+      const data =
+        d.data();
+
+
+      users.push({
+
+        uid:d.id,
+
+        ...data
+
+      });
+
+    });
+
+
+    renderConversations();
+
+  }catch(error){
+
+    console.error(
+      "Users error:",
+      error
+    );
+
+    document.getElementById(
+      "conversationList"
+    ).innerHTML = `
+      <div style="
+        padding:25px;
+        text-align:center;
+        color:#c45656;
+        font-size:11px;
+      ">
+        Couldn't load users.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* ================= MESSAGES REALTIME ================= */
+
+function startMessageListener(){
+
+  if(!currentUser){
+    return;
+  }
+
+
+  if(unsubscribeMessages){
+    unsubscribeMessages();
+  }
+
+
+  /*
+    ONE query.
+
+    Every message contains:
+    participants: [senderId, receiverId]
+
+    array-contains current UID gets every
+    conversation involving this user.
+
+    No orderBy.
+    No composite index.
+    No disappearing messages because of query mismatch.
+  */
+
+  const q =
+    query(
+      collection(db,"messages"),
+      where(
+        "participants",
+        "array-contains",
+        currentUser.uid
+      )
+    );
+
+
+  unsubscribeMessages =
+    onSnapshot(
+      q,
+      snapshot=>{
+
+        allMessages = [];
+
+
+        snapshot.forEach(d=>{
+
+          allMessages.push({
+
+            id:d.id,
+
+            ...d.data()
+
+          });
+
+        });
+
+
+        /*
+          Always sort locally.
+          serverTimestamp can temporarily be null.
+        */
+
+        allMessages.sort(
+          (a,b)=>
+            dateValue(a.createdAt) -
+            dateValue(b.createdAt)
+        );
+
+
+        renderConversations();
+
+
+        if(selectedUser){
+
+          renderCurrentConversation();
+
+        }
+
+        updateUnreadCounts();
+
+      },
+
+      error=>{
+
+        console.error(
+          "Message listener:",
+          error
+        );
+
+        showToast(
+          "Couldn't sync messages."
+        );
+
+      }
+    );
+
+}
+
+
+/* ================= CONVERSATIONS ================= */
+
+function renderConversations(){
+
+  const list =
+    document.getElementById(
+      "conversationList"
+    );
+
+
+  const search =
+    document.getElementById(
+      "userSearch"
+    ).value
+    .trim()
+    .toLowerCase();
+
+
+  const visibleUsers =
+    users.filter(user=>{
+
+      if(!search){
+        return true;
+      }
+
+      return String(
+        user.name || ""
+      )
+      .toLowerCase()
+      .includes(search);
+
+    });
+
+
+  if(visibleUsers.length === 0){
+
+    list.innerHTML = `
+      <div style="
+        padding:30px;
+        text-align:center;
+        color:#8b909b;
+        font-size:11px;
+      ">
+        No builders found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  /*
+    Sort users by latest message.
+  */
+
+  visibleUsers.sort((a,b)=>{
+
+    const aLast =
+      getLastMessage(a.uid);
+
+    const bLast =
+      getLastMessage(b.uid);
+
+    return (
+      dateValue(bLast?.createdAt) -
+      dateValue(aLast?.createdAt)
+    );
+
+  });
+
+
+  list.innerHTML = "";
+
+
+  visibleUsers.forEach(user=>{
+
+    const last =
+      getLastMessage(user.uid);
+
+
+    const unread =
+      getUnreadCount(user.uid);
+
+
+    const div =
+      document.createElement("div");
+
+
+    div.className =
+      "conversation" +
+      (
+        selectedUser?.uid === user.uid
+          ? " active"
+          : ""
+      );
+
+
+    div.dataset.uid =
+      user.uid;
+
+
+    div.innerHTML = `
+
+      <div class="conv-avatar">
+        ${escapeHTML(
+          initials(
+            user.name ||
+            "Builder"
+          )
+        )}
+      </div>
+
+      <div class="conv-info">
+
+        <div class="conv-name">
+          ${escapeHTML(
+            user.name ||
+            "Spark Builder"
+          )}
+        </div>
+
+        <div class="conv-preview">
+          ${
+            last
+              ? (
+                  last.type === "image"
+                    ? "📷 Photo"
+                    : last.type === "video"
+                      ? "🎥 Video"
+                      : escapeHTML(
+                          last.text || ""
+                        )
+                )
+              : "Start a conversation"
+          }
+        </div>
+
+      </div>
+
+      <div class="conv-meta">
+
+        <div class="conv-time">
+          ${
+            last
+              ? timeText(last.createdAt)
+              : ""
+          }
+        </div>
+
+        ${
+          unread > 0
+            ? `
+              <div class="unread">
+                ${unread > 99 ? "99+" : unread}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
+
+
+    div.addEventListener(
+      "click",
+      ()=>{
+        openConversation(user);
+      }
+    );
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* ================= LAST MESSAGE ================= */
+
+function getLastMessage(uid){
+
+  const arr =
+    allMessages.filter(m=>
+      m.senderId === uid ||
+      m.receiverId === uid
+    );
+
+
+  if(!arr.length){
+    return null;
+  }
+
+
+  return arr.reduce(
+    (latest,current)=>
+      dateValue(current.createdAt) >
+      dateValue(latest.createdAt)
+        ? current
+        : latest
+  );
+
+}
+
+
+/* ================= UNREAD ================= */
+
+function getUnreadCount(uid){
+
+  return allMessages.filter(m=>
+    m.senderId === uid &&
+    m.receiverId === currentUser.uid &&
+    m.read !== true
+  ).length;
+
+}
+
+
+function updateUnreadCounts(){
+
+  renderConversations();
+
+}
+
+
+/* ================= OPEN CHAT ================= */
+
+function openConversation(user){
+
+  selectedUser =
+    user;
+
+
+  document.getElementById(
+    "chatEmpty"
+  ).style.display =
+    "none";
+
+
+  const content =
+    document.getElementById(
+      "chatContent"
+    );
+
+
+  content.style.display =
+    "flex";
+
+
+  document.getElementById(
+    "chatName"
+  ).textContent =
+    user.name ||
+    "Spark Builder";
+
+
+  document.getElementById(
+    "chatAvatar"
+  ).textContent =
+    initials(
+      user.name ||
+      "Spark Builder"
+    );
+
+
+  document
+    .getElementById(
+      "messagesShell"
+    )
+    .classList.add(
+      "mobile-chat"
+    );
+
+
+  renderConversations();
+
+  renderCurrentConversation();
+
+  markConversationRead();
+
+}
+
+
+/* ================= RENDER CHAT ================= */
+
+function renderCurrentConversation(){
+
+  if(!selectedUser){
+    return;
+  }
+
+
+  const container =
+    document.getElementById(
+      "messageContainer"
+    );
+
+
+  const messages =
+    allMessages.filter(m=>
+
+      (
+        m.senderId === currentUser.uid &&
+        m.receiverId === selectedUser.uid
+      )
+
+      ||
+
+      (
+        m.senderId === selectedUser.uid &&
+        m.receiverId === currentUser.uid
+      )
+
+    );
+
+
+  container.innerHTML = "";
+
+
+  if(messages.length === 0){
+
+    container.innerHTML = `
+      <div style="
+        margin:auto;
+        text-align:center;
+        color:#9297a1;
+        font-size:11px;
+      ">
+        <div style="font-size:35px">👋</div>
+        <div style="margin-top:7px">
+          Start the conversation.
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  messages.forEach(message=>{
+
+    const mine =
+      message.senderId ===
+      currentUser.uid;
+
+
+    const row =
+      document.createElement("div");
+
+
+    row.className =
+      "message-row " +
+      (
+        mine
+          ? "mine"
+          : "theirs"
+      );
+
+
+    const bubble =
+      document.createElement("div");
+
+
+    bubble.className =
+      "bubble";
+
+
+    let content = "";
+
+
+    if(message.type === "image" && message.mediaUrl){
+
+      content += `
+
+        <img
+          class="message-media"
+          src="${escapeHTML(
+            message.mediaUrl
+          )}"
+          alt="Shared image"
+          onclick="
+            window.open(
+              this.src,
+              '_blank'
+            )
+          "
+        >
+
+      `;
+
+    }
+
+
+    if(message.type === "video" && message.mediaUrl){
+
+      content += `
+
+        <video
+          class="message-media"
+          src="${escapeHTML(
+            message.mediaUrl
+          )}"
+          controls
+          preload="metadata"
+        ></video>
+
+      `;
+
+    }
+
+
+    if(message.text){
+
+      content += `
+
+        <div class="message-text">
+          ${escapeHTML(
+            message.text
+          )}
+        </div>
+
+      `;
+
+    }
+
+
+    if(message.fileName){
+
+      content += `
+
+        <div class="file-label">
+          📎 ${escapeHTML(
+            message.fileName
+          )}
+        </div>
+
+      `;
+
+    }
+
+
+    content += `
+
+      <div class="message-time">
+
+        ${timeText(
+          message.createdAt
+        )}
+
+        ${
+          mine
+            ? (
+                message.read
+                  ? " • Read"
+                  : " • Sent"
+              )
+            : ""
+        }
+
+      </div>
+
+    `;
+
+
+    bubble.innerHTML =
+      content;
+
+
+    /*
+      DELETE ONLY OWN MESSAGE.
+
+      It is a real Firestore delete.
+      It won't randomly disappear.
+    */
+
+    if(mine){
+
+      const deleteBtn =
+        document.createElement(
+          "button"
+        );
+
+
+      deleteBtn.textContent =
+        "Delete";
+
+
+      deleteBtn.style.cssText = `
+        border:0;
+        background:none;
+        color:#a0a4ad;
+        font-size:8px;
+        cursor:pointer;
+        float:right;
+        margin-left:8px;
+        margin-top:5px;
+      `;
+
+
+      deleteBtn.onclick =
+        async(event)=>{
+
+          event.stopPropagation();
+
+          await deleteMessage(
+            message
+          );
+
+        };
+
+
+      bubble.appendChild(
+        deleteBtn
+      );
+
+    }
+
+
+    row.appendChild(
+      bubble
+    );
+
+
+    container.appendChild(
+      row
+    );
+
+  });
+
+
+  /*
+    Keep newest messages visible.
+  */
+
+  requestAnimationFrame(()=>{
+
+    container.scrollTop =
+      container.scrollHeight;
+
+  });
+
+}
+
+
+/* ================= SEND TEXT ================= */
+
+async function sendText(){
+
+  if(!selectedUser){
+
+    showToast(
+      "Select a builder first."
+    );
+
+    return;
+
+  }
+
+
+  const input =
+    document.getElementById(
+      "messageInput"
+    );
+
+
+  const text =
+    input.value.trim();
+
+
+  if(!text){
+    return;
+  }
+
+
+  input.value = "";
+
+
+  try{
+
+    await addDoc(
+      collection(db,"messages"),
+      {
+
+        senderId:
+          currentUser.uid,
+
+        senderName:
+          currentUserData.name ||
+          currentUser.displayName ||
+          "Spark Builder",
+
+        receiverId:
+          selectedUser.uid,
+
+        receiverName:
+          selectedUser.name ||
+          "Spark Builder",
+
+        text,
+
+        type:"text",
+
+        mediaUrl:"",
+
+        fileName:"",
+
+        participants:[
+          currentUser.uid,
+          selectedUser.uid
+        ],
+
+        read:false,
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(
+      "Send message:",
+      error
+    );
+
+
+    /*
+      Put text back if sending failed.
+    */
+
+    input.value =
+      text;
+
+
+    showToast(
+      error.message ||
+      "Message couldn't be sent."
+    );
+
+  }
+
+}
+
+
+/* ================= FILE MESSAGE ================= */
+
+async function sendMedia(file){
+
+  if(!selectedUser){
+
+    showToast(
+      "Select a builder first."
+    );
+
+    return;
+
+  }
+
+
+  if(!file){
+    return;
+  }
+
+
+  /*
+    Safety limits:
+    images: 15MB
+    videos: 50MB
+  */
+
+  const isVideo =
+    file.type.startsWith(
+      "video/"
+    );
+
+
+  const maxSize =
+    isVideo
+      ? 50 * 1024 * 1024
+      : 15 * 1024 * 1024;
+
+
+  if(file.size > maxSize){
+
+    showToast(
+      isVideo
+        ? "Video must be under 50MB."
+        : "Image must be under 15MB."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !file.type.startsWith("image/") &&
+    !file.type.startsWith("video/")
+  ){
+
+    showToast(
+      "Only images and videos are supported."
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    "Uploading media..."
+  );
+
+
+  try{
+
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+
+    const path =
+      `messages/${currentUser.uid}/${Date.now()}_${safeName}`;
+
+
+    const storageRef =
+      ref(
+        storage,
+        path
+      );
+
+
+    await uploadBytes(
+      storageRef,
+      file,
+      {
+        contentType:file.type
+      }
+    );
+
+
+    const url =
+      await getDownloadURL(
+        storageRef
+      );
+
+
+    await addDoc(
+      collection(db,"messages"),
+      {
+
+        senderId:
+          currentUser.uid,
+
+        senderName:
+          currentUserData.name ||
+          currentUser.displayName ||
+          "Spark Builder",
+
+        receiverId:
+          selectedUser.uid,
+
+        receiverName:
+          selectedUser.name ||
+          "Spark Builder",
+
+        text:"",
+
+        type:
+          isVideo
+            ? "video"
+            : "image",
+
+        mediaUrl:url,
+
+        fileName:file.name,
+
+        storagePath:path,
+
+        participants:[
+          currentUser.uid,
+          selectedUser.uid
+        ],
+
+        read:false,
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    showToast(
+      isVideo
+        ? "Video sent!"
+        : "Photo sent!"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Media upload:",
+      error
+    );
+
+
+    showToast(
+      error.message ||
+      "Media couldn't be sent."
+    );
+
+  }
+
+}
+
+
+/* ================= DELETE ================= */
+
+async function deleteMessage(message){
+
+  if(
+    !currentUser ||
+    message.senderId !==
+    currentUser.uid
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    /*
+      Firestore document is actually deleted.
+    */
+
+    await deleteDoc(
+      doc(
+        db,
+        "messages",
+        message.id
+      )
+    );
+
+
+    /*
+      Storage cleanup is intentionally not
+      attempted from client-side here.
+      The message itself is permanently removed.
+    */
+
+    showToast(
+      "Message deleted."
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Delete:",
+      error
+    );
+
+
+    showToast(
+      error.message ||
+      "Couldn't delete message."
+    );
+
+  }
+
+}
+
+
+/* ================= MARK READ ================= */
+
+async function markConversationRead(){
+
+  if(!selectedUser){
+    return;
+  }
+
+
+  const unread =
+    allMessages.filter(m=>
+
+      m.senderId ===
+      selectedUser.uid &&
+
+      m.receiverId ===
+      currentUser.uid &&
+
+      m.read !== true
+
+    );
+
+
+  /*
+    Small batch-less updates.
+    Fine for normal conversation sizes.
+  */
+
+  for(const message of unread){
+
+    try{
+
+      await updateDoc(
+        doc(
+          db,
+          "messages",
+          message.id
+        ),
+        {
+          read:true
+        }
+      );
+
+    }catch(error){
+
+      console.error(
+        "Read update:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+/* ================= SEARCH ================= */
+
+document
+  .getElementById(
+    "userSearch"
+  )
+  .addEventListener(
+    "input",
+    renderConversations
+  );
+
+
+/* ================= SEND BUTTON ================= */
+
+document
+  .getElementById(
+    "sendBtn"
+  )
+  .addEventListener(
+    "click",
+    sendText
+  );
+
+
+document
+  .getElementById(
+    "messageInput"
+  )
+  .addEventListener(
+    "keydown",
+    event=>{
+
+      if(
+        event.key === "Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        sendText();
+
+      }
+
+    }
+  );
+
+
+/* ================= FILE BUTTON ================= */
+
+document
+  .getElementById(
+    "fileBtn"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+      document
+        .getElementById(
+          "fileInput"
+        )
+        .click();
+    }
+  );
+
+
+document
+  .getElementById(
+    "fileInput"
+  )
+  .addEventListener(
+    "change",
+    async event=>{
+
+      const file =
+        event.target.files[0];
+
+      if(file){
+
+        await sendMedia(
+          file
+        );
+
+      }
+
+      event.target.value = "";
+
+    }
+  );
+
+
+/* ================= EMOJI ================= */
+
+const emojis = [
+  "😀","😂","🤣","😊","😍","🤩","😎","🥳",
+  "🔥","⚡","🚀","💡","🤖","🛠️","❤️","💯",
+  "👍","👎","👏","🙌","🙏","🎉","✨","💪",
+  "🧠","💻","🔧","🌎","🏆","🎯","😅","🤔"
+];
+
+
+const emojiPanel =
+  document.getElementById(
+    "emojiPanel"
+  );
+
+
+emojis.forEach(emoji=>{
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+  button.textContent =
+    emoji;
+
+
+  button.onclick = ()=>{
+
+    const input =
+      document.getElementById(
+        "messageInput"
+      );
+
+
+    input.value += emoji;
+
+    input.focus();
+
+  };
+
+
+  emojiPanel.appendChild(
+    button
+  );
+
+});
+
+
+document
+  .getElementById(
+    "emojiBtn"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+      emojiPanel.classList.toggle(
+        "show"
+      );
+    }
+  );
+
+
+/* ================= MOBILE BACK ================= */
+
+document
+  .getElementById(
+    "mobileBack"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+
+      document
+        .getElementById(
+          "messagesShell"
+        )
+        .classList.remove(
+          "mobile-chat"
+        );
+
+      selectedUser = null;
+
+    }
+  );
+
+
+/* ================= STORIES ================= */
+
+async function loadStories(){
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"stories")
+      );
+
+
+    const now =
+      Date.now();
+
+
+    stories = [];
+
+
+    snap.forEach(d=>{
+
+      const story =
+        {
+          id:d.id,
+          ...d.data()
+        };
+
+
+      const expiry =
+        story.expiresAt?.toMillis
+          ? story.expiresAt.toMillis()
+          : 0;
+
+
+      if(
+        expiry &&
+        expiry <= now
+      ){
+
+        return;
+
+      }
+
+
+      stories.push(
+        story
+      );
+
+    });
+
+
+    stories.sort(
+      (a,b)=>
+        dateValue(b.createdAt) -
+        dateValue(a.createdAt)
+    );
+
+
+    renderStories();
+
+  }catch(error){
+
+    console.error(
+      "Stories:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ================= RENDER STORIES ================= */
+
+function renderStories(){
+
+  const list =
+    document.getElementById(
+      "storyList"
+    );
+
+
+  list.innerHTML = "";
+
+
+  /* YOUR STORY */
+
+  const add =
+    document.createElement(
+      "div"
+    );
+
+
+  add.className =
+    "story add-story";
+
+
+  add.innerHTML = `
+
+    <div class="story-ring">
+
+      <div class="story-inner">
+
+        <div class="story-avatar">
+          ＋
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="story-name">
+      Your story
+    </div>
+
+  `;
+
+
+  add.onclick =
+    ()=>{
+      document
+        .getElementById(
+          "storyUpload"
+        )
+        .classList.add(
+          "show"
+        );
+    };
+
+
+  list.appendChild(
+    add
+  );
+
+
+  /*
+    One story bubble per user.
+    Latest story represents that user.
+  */
+
+  const uniqueUsers =
+    new Map();
+
+
+  stories.forEach(story=>{
+
+    if(
+      !uniqueUsers.has(
+        story.userId
+      )
+    ){
+
+      uniqueUsers.set(
+        story.userId,
+        story
+      );
+
+    }
+
+  });
+
+
+  uniqueUsers.forEach(
+    story=>{
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "story";
+
+
+      const name =
+        story.userName ||
+        "Builder";
+
+
+      item.innerHTML = `
+
+        <div class="story-ring">
+
+          <div class="story-inner">
+
+            ${
+              story.mediaType === "video"
+
+                ? `
+                  <video
+                    src="${escapeHTML(
+                      story.mediaUrl
+                    )}"
+                    muted
+                  ></video>
+                `
+
+                : `
+                  <img
+                    src="${escapeHTML(
+                      story.mediaUrl
+                    )}"
+                    alt=""
+                  >
+                `
+            }
+
+          </div>
+
+        </div>
+
+        <div class="story-name">
+          ${escapeHTML(name)}
+        </div>
+
+      `;
+
+
+      item.onclick =
+        ()=>{
+          openStory(story);
+        };
+
+
+      list.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* ================= OPEN STORY ================= */
+
+function openStory(story){
+
+  document.getElementById(
+    "storyViewerName"
+  ).textContent =
+    story.userName ||
+    "Spark Builder";
+
+
+  document.getElementById(
+    "storyViewerCaption"
+  ).textContent =
+    story.caption ||
+    "";
+
+
+  const media =
+    document.getElementById(
+      "storyViewerMedia"
+    );
+
+
+  if(
+    story.mediaType ===
+    "video"
+  ){
+
+    media.innerHTML = `
+
+      <video
+        src="${escapeHTML(
+          story.mediaUrl
+        )}"
+        autoplay
+        controls
+        playsinline
+      ></video>
+
+    `;
+
+  }else{
+
+    media.innerHTML = `
+
+      <img
+        src="${escapeHTML(
+          story.mediaUrl
+        )}"
+        alt="Story"
+      >
+
+    `;
+
+  }
+
+
+  document
+    .getElementById(
+      "storyModal"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+/* ================= CLOSE STORY ================= */
+
+document
+  .getElementById(
+    "closeStory"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+      document
+        .getElementById(
+          "storyModal"
+        )
+        .classList.remove(
+          "show"
+        );
+    }
+  );
+
+
+/* ================= PUBLISH STORY ================= */
+
+document
+  .getElementById(
+    "cancelStory"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+      document
+        .getElementById(
+          "storyUpload"
+        )
+        .classList.remove(
+          "show"
+        );
+    }
+  );
+
+
+document
+  .getElementById(
+    "publishStory"
+  )
+  .addEventListener(
+    "click",
+    publishStory
+  );
+
+
+async function publishStory(){
+
+  const file =
+    document.getElementById(
+      "storyFile"
+    ).files[0];
+
+
+  const caption =
+    document.getElementById(
+      "storyCaption"
+    ).value.trim();
+
+
+  if(!file){
+
+    showToast(
+      "Choose a photo or video first."
+    );
+
+    return;
+
+  }
+
+
+  const isVideo =
+    file.type.startsWith(
+      "video/"
+    );
+
+
+  const maxSize =
+    isVideo
+      ? 50 * 1024 * 1024
+      : 15 * 1024 * 1024;
+
+
+  if(file.size > maxSize){
+
+    showToast(
+      isVideo
+        ? "Video must be under 50MB."
+        : "Image must be under 15MB."
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "publishStory"
+    );
+
+
+  button.disabled = true;
+  button.textContent =
+    "Uploading...";
+
+
+  try{
+
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+
+    const path =
+      `stories/${currentUser.uid}/${Date.now()}_${safeName}`;
+
+
+    const storageRef =
+      ref(
+        storage,
+        path
+      );
+
+
+    await uploadBytes(
+      storageRef,
+      file,
+      {
+        contentType:file.type
+      }
+    );
+
+
+    const url =
+      await getDownloadURL(
+        storageRef
+      );
+
+
+    const expiresAt =
+      Timestamp.fromDate(
+        new Date(
+          Date.now() +
+          24 * 60 * 60 * 1000
+        )
+      );
+
+
+    await addDoc(
+      collection(db,"stories"),
+      {
+
+        userId:
+          currentUser.uid,
+
+        userName:
+          currentUserData.name ||
+          currentUser.displayName ||
+          "Spark Builder",
+
+        mediaUrl:url,
+
+        mediaType:
+          isVideo
+            ? "video"
+            : "image",
+
+        storagePath:path,
+
+        caption,
+
+        createdAt:
+          serverTimestamp(),
+
+        expiresAt
+
+      }
+    );
+
+
+    document.getElementById(
+      "storyFile"
+    ).value = "";
+
+
+    document.getElementById(
+      "storyCaption"
+    ).value = "";
+
+
+    document
+      .getElementById(
+        "storyUpload"
+      )
+      .classList.remove(
+        "show"
+      );
+
+
+    showToast(
+      "Story published!"
+    );
+
+
+    await loadStories();
+
+
+  }catch(error){
+
+    console.error(
+      "Story upload:",
+      error
+    );
+
+
+    showToast(
+      error.message ||
+      "Couldn't publish story."
+    );
+
+  }
+
+
+  button.disabled = false;
+  button.textContent =
+    "Publish Story";
+
+}
+
+
+/* ================= URL OPEN CHAT ================= */
+
+function setupInitialChat(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const uid =
+    params.get("uid");
+
+
+  if(!uid){
+    return;
+  }
+
+
+  const user =
+    users.find(
+      x => x.uid === uid
+    );
+
+
+  if(user){
+
+    openConversation(
+      user
+    );
+
+  }
+
+}
+
+
+/* ================= START MESSAGE LISTENER ================= */
+
+startMessageListener();
+
+
+/* ================= LOGOUT ================= */
+
+document
+  .getElementById(
+    "logoutBtn"
+  )
+  .addEventListener(
+    "click",
+    async()=>{
+
+      if(unsubscribeMessages){
+        unsubscribeMessages();
+      }
+
+      await signOut(auth);
+
+      window.location.href =
+        "login.html";
+
+    }
+  );
+
+</script>
+
+</body>
+</html>

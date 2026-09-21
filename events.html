@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Events | Spark Labs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: #f8f6ef;
+      color: #171717;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :root {
+      --ink: #171717;
+      --purple: #7c3aed;
+      --yellow: #ffd84d;
+      --pink: #ff8fab;
+      --green: #a7e8bd;
+      --paper: #f8f6ef;
+      --white: #fffdf8;
+      --border: 2px solid #171717;
+      --shadow: 5px 5px 0 #171717;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      width: 100%;
+      background: rgba(248, 246, 239, 0.94);
+      backdrop-filter: blur(12px);
+
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .nav-inner {
+      max-width: 1250px;
+      margin: auto;
+      padding: 16px 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-star {
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--yellow);
+      border: var(--border);
+      border-radius: 50%;
+
+      transform: rotate(-8deg);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a {
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0;
+      height: 2px;
+      background: var(--purple);
+      transition: 0.25s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border: var(--border);
+      padding: 10px 17px;
+      border-radius: 10px;
+      font-weight: 800;
+      background: var(--white);
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: white;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      border: var(--border);
+      background: var(--white);
+      width: 42px;
+      height: 42px;
+      border-radius: 9px;
+      font-size: 20px;
+    }
+
+    /* HERO */
+
+    .hero {
+      max-width: 1250px;
+      margin: auto;
+      padding: 75px 24px 55px;
+
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: "Patrick Hand", cursive;
+      font-size: 23px;
+      color: var(--purple);
+      transform: rotate(-2deg);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 6vw, 78px);
+      line-height: 0.95;
+      letter-spacing: -4px;
+      max-width: 750px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 span {
+      position: relative;
+      display: inline-block;
+      z-index: 1;
+    }
+
+    .hero h1 span::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: -4px;
+      right: -4px;
+      bottom: 2px;
+      height: 18px;
+      background: var(--yellow);
+      transform: rotate(-2deg);
+    }
+
+    .hero p {
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 650px;
+      color: #4d4d4d;
+      margin-bottom: 30px;
+    }
+
+    /* DOODLE ART */
+
+    .hero-art {
+      position: relative;
+      min-height: 390px;
+    }
+
+    .event-paper {
+      position: absolute;
+      width: 340px;
+      min-height: 270px;
+
+      left: 50%;
+      top: 45px;
+      transform: translateX(-50%) rotate(3deg);
+
+      background: white;
+      border: var(--border);
+      padding: 35px 30px;
+
+      box-shadow: 9px 9px 0 var(--ink);
+
+      clip-path: polygon(
+        1% 2%, 97% 0%, 100% 97%,
+        3% 100%, 0% 65%
+      );
+    }
+
+    .event-paper h3 {
+      font-family: "Patrick Hand", cursive;
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    .event-line {
+      height: 13px;
+      background: #ece9df;
+      margin: 13px 0;
+      border-radius: 10px;
+    }
+
+    .event-line.short {
+      width: 60%;
+    }
+
+    .calendar-doodle {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+
+      width: 110px;
+      height: 110px;
+
+      background: var(--pink);
+      border: var(--border);
+      border-radius: 20px;
+
+      transform: rotate(8deg);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 48px;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .star-doodle {
+      position: absolute;
+      left: 15px;
+      bottom: 25px;
+      font-size: 65px;
+      transform: rotate(-15deg);
+    }
+
+    .arrow-doodle {
+      position: absolute;
+      right: 30px;
+      bottom: 25px;
+      font-family: "Patrick Hand", cursive;
+      font-size: 24px;
+      transform: rotate(-8deg);
+    }
+
+    /* EVENTS */
+
+    .events-section {
+      max-width: 1250px;
+      margin: auto;
+      padding: 40px 24px 100px;
+    }
+
+    .section-heading {
+      margin-bottom: 35px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(36px, 5vw, 55px);
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+    }
+
+    .section-heading p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .event-card {
+      background: var(--white);
+      border: var(--border);
+      border-radius: 18px;
+      padding: 25px;
+
+      min-height: 360px;
+
+      display: flex;
+      flex-direction: column;
+
+      box-shadow: var(--shadow);
+
+      transition: 0.25s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-7px) rotate(-0.5deg);
+      box-shadow: 8px 12px 0 var(--ink);
+    }
+
+    .event-card:nth-child(2) {
+      transform: rotate(1deg);
+    }
+
+    .event-card:nth-child(2):hover {
+      transform: translateY(-7px) rotate(1deg);
+    }
+
+    .event-card:nth-child(3) {
+      transform: rotate(-1deg);
+    }
+
+    .event-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      font-size: 13px;
+      font-weight: 800;
+
+      padding: 7px 11px;
+
+      width: fit-content;
+
+      border: 2px solid var(--ink);
+      border-radius: 20px;
+
+      background: var(--yellow);
+
+      margin-bottom: 20px;
+    }
+
+    .event-card h3 {
+      font-size: 25px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .event-card p {
+      color: #606060;
+      line-height: 1.65;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .meta-tag {
+      border: 1.5px solid var(--ink);
+      border-radius: 20px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #f1efe7;
+    }
+
+    .event-card .btn {
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .event-card:nth-child(2) .event-date {
+      background: var(--green);
+    }
+
+    .event-card:nth-child(3) .event-date {
+      background: var(--pink);
+    }
+
+    /* EMPTY / LOADING */
+
+    .state-box {
+      border: var(--border);
+      border-radius: 18px;
+      background: var(--white);
+      padding: 45px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      grid-column: 1 / -1;
+    }
+
+    .state-box .emoji {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .state-box h3 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .state-box p {
+      color: #666;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 2px solid var(--ink);
+      padding: 35px 24px;
+      background: #fffdf8;
+    }
+
+    .footer-inner {
+      max-width: 1250px;
+      margin: auto;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .footer-text {
+      font-family: "Patrick Hand", cursive;
+      font-size: 20px;
+      color: #666;
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      z-index: 9999;
+
+      background: var(--ink);
+      color: white;
+
+      padding: 15px 19px;
+
+      border-radius: 12px;
+      border: 2px solid var(--ink);
+
+      font-weight: 700;
+      font-size: 14px;
+
+      max-width: 330px;
+
+      transform: translateY(130px);
+      opacity: 0;
+
+      transition: 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: #207a45;
+    }
+
+    .toast.error {
+      background: #b42318;
+    }
+
+    /* SPINNER */
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+
+      border-radius: 50%;
+
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-actions .btn:first-child {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 55px;
+      }
+
+      .hero-art {
+        min-height: 340px;
+      }
+
+      .events-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .nav-inner {
+        padding: 12px 16px;
+      }
+
+      .logo {
+        font-size: 21px;
+      }
+
+      .logo-star {
+        width: 28px;
+        height: 28px;
+      }
+
+      .hero {
+        padding: 45px 18px 25px;
+        gap: 20px;
+      }
+
+      .hero h1 {
+        font-size: 50px;
+        letter-spacing: -3px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .hero-art {
+        min-height: 300px;
+        transform: scale(0.88);
+        transform-origin: center top;
+        margin-bottom: -35px;
+      }
+
+      .event-paper {
+        width: 300px;
+      }
+
+      .calendar-doodle {
+        right: 0;
+      }
+
+      .events-section {
+        padding: 30px 18px 70px;
+      }
+
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .event-card,
+      .event-card:nth-child(2),
+      .event-card:nth-child(3) {
+        transform: none;
+      }
+
+      .event-card:hover,
+      .event-card:nth-child(2):hover,
+      .event-card:nth-child(3):hover {
+        transform: translateY(-5px);
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .toast {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        max-width: none;
+      }
+    }
+
+    /* MOBILE MENU */
+
+    .mobile-menu {
+      display: none;
+      padding: 15px 18px 20px;
+      border-top: 1px solid #ddd;
+      background: var(--paper);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 13px 0;
+      font-weight: 700;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar">
+
+    <div class="nav-inner">
+
+      <a href="index.html" class="logo">
+        <span class="logo-star">✦</span>
+        Spark Labs
+      </a>
+
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="projects.html">Projects</a>
+        <a href="events.html">Events</a>
+        <a href="challenges.html">Challenges</a>
+        <a href="community.html">Community</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn">Home</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      </div>
+
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="events.html">Events</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="community.html">Community</a>
+      <a href="index.html">Home</a>
+    </div>
+
+  </nav>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div>
+
+      <div class="eyebrow">learn something. build something. ✦</div>
+
+      <h1>
+        Events that make
+        <span>ideas happen.</span>
+      </h1>
+
+      <p>
+        Workshops, build sessions, idea jams and community meetups
+        designed to help you learn, build and actually ship something.
+      </p>
+
+      <a href="#upcoming" class="btn btn-primary">
+        Explore events →
+      </a>
+
+    </div>
+
+
+    <div class="hero-art">
+
+      <div class="event-paper">
+
+        <h3>Today's plan ✎</h3>
+
+        <div class="event-line"></div>
+        <div class="event-line"></div>
+        <div class="event-line short"></div>
+
+        <br>
+
+        <div class="event-line"></div>
+        <div class="event-line short"></div>
+
+      </div>
+
+      <div class="calendar-doodle">
+        📅
+      </div>
+
+      <div class="star-doodle">
+        ✦
+      </div>
+
+      <div class="arrow-doodle">
+        don't miss it →
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- EVENTS -->
+
+  <section class="events-section" id="upcoming">
+
+    <div class="section-heading">
+
+      <h2>Upcoming events ✦</h2>
+
+      <p>
+        Find something useful, join in and make something cool.
+      </p>
+
+    </div>
+
+    <div class="events-grid" id="eventsGrid">
+
+      <div class="state-box">
+
+        <div class="emoji">⏳</div>
+
+        <h3>Loading events...</h3>
+
+        <p>
+          Fetching the good stuff from Firebase.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        ✦ Spark Labs
+      </div>
+
+      <div class="footer-text">
+        Ideas deserve a place to grow.
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- TOAST -->
+
+  <div class="toast" id="toast"></div>
+
+
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* FIREBASE CONFIG */
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+      authDomain: "spark-labs-b726e.firebaseapp.com",
+
+      projectId: "spark-labs-b726e",
+
+      storageBucket: "spark-labs-b726e.firebasestorage.app",
+
+      messagingSenderId: "185422979084",
+
+      appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+
+      measurementId: "G-28KBFT44VE"
+
+    };
+
+
+    /* INITIALIZE */
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    let currentUser = null;
+
+    let allEvents = [];
+
+
+    /* DOM */
+
+    const eventsGrid = document.getElementById("eventsGrid");
+
+    const toast = document.getElementById("toast");
+
+
+    /* TOAST */
+
+    function showToast(message, type = "") {
+
+      toast.textContent = message;
+
+      toast.className = "toast show " + type;
+
+      setTimeout(() => {
+
+        toast.className = "toast";
+
+      }, 3200);
+
+    }
+
+
+    /* FORMAT DATE */
+
+    function formatDate(timestamp) {
+
+      if (!timestamp) {
+        return "Date TBA";
+      }
+
+      let date;
+
+      try {
+
+        date = timestamp.toDate();
+
+      } catch {
+
+        date = new Date(timestamp);
+
+      }
+
+      return date.toLocaleDateString("en-IN", {
+
+        day: "numeric",
+
+        month: "short",
+
+        year: "numeric"
+
+      });
+
+    }
+
+
+    /* LOAD EVENTS */
+
+    async function loadEvents() {
+
+      eventsGrid.innerHTML = `
+
+        <div class="state-box">
+
+          <div class="emoji">⏳</div>
+
+          <h3>Loading events...</h3>
+
+          <p>
+            Getting upcoming Spark Labs events.
+          </p>
+
+        </div>
+
+      `;
+
+
+      try {
+
+        const eventsRef = collection(db, "events");
+
+        let snapshot;
+
+
+        try {
+
+          const q = query(
+            eventsRef,
+            orderBy("date", "asc")
+          );
+
+          snapshot = await getDocs(q);
+
+        } catch {
+
+          snapshot = await getDocs(eventsRef);
+
+        }
+
+
+        allEvents = [];
+
+        snapshot.forEach(doc => {
+
+          allEvents.push({
+
+            id: doc.id,
+
+            ...doc.data()
+
+          });
+
+        });
+
+
+        renderEvents();
+
+      } catch (error) {
+
+        console.error("Events error:", error);
+
+        eventsGrid.innerHTML = `
+
+          <div class="state-box">
+
+            <div class="emoji">⚠️</div>
+
+            <h3>Couldn't load events</h3>
+
+            <p>
+              Check your Firestore setup and rules.
+            </p>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /* RENDER EVENTS */
+
+    function renderEvents() {
+
+      if (allEvents.length === 0) {
+
+        eventsGrid.innerHTML = `
+
+          <div class="state-box">
+
+            <div class="emoji">🗓️</div>
+
+            <h3>No events yet</h3>
+
+            <p>
+              New Spark Labs events will appear here.
+            </p>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      eventsGrid.innerHTML = "";
+
+
+      allEvents.forEach((event, index) => {
+
+        const card = document.createElement("article");
+
+        card.className = "event-card";
+
+
+        const date = document.createElement("div");
+
+        date.className = "event-date";
+
+        date.textContent = "📅 " + formatDate(event.date);
+
+
+        const title = document.createElement("h3");
+
+        title.textContent =
+          event.title || "Spark Labs Event";
+
+
+        const description = document.createElement("p");
+
+        description.textContent =
+          event.description ||
+          "Join the Spark Labs community for a useful learning and building session.";
+
+
+        const meta = document.createElement("div");
+
+        meta.className = "event-meta";
+
+
+        if (event.type) {
+
+          const tag = document.createElement("span");
+
+          tag.className = "meta-tag";
+
+          tag.textContent = event.type;
+
+          meta.appendChild(tag);
+
+        }
+
+
+        if (event.duration) {
+
+          const tag = document.createElement("span");
+
+          tag.className = "meta-tag";
+
+          tag.textContent = event.duration;
+
+          meta.appendChild(tag);
+
+        }
+
+
+        if (event.mode) {
+
+          const tag = document.createElement("span");
+
+          tag.className = "meta-tag";
+
+          tag.textContent = event.mode;
+
+          meta.appendChild(tag);
+
+        }
+
+
+        const button = document.createElement("button");
+
+        button.className = "btn btn-primary";
+
+        button.textContent = "Join Event →";
+
+
+        button.addEventListener("click", () => {
+
+          joinEvent(event.id, event.title, button);
+
+        });
+
+
+        card.appendChild(date);
+
+        card.appendChild(title);
+
+        card.appendChild(description);
+
+        card.appendChild(meta);
+
+        card.appendChild(button);
+
+
+        eventsGrid.appendChild(card);
+
+      });
+
+    }
+
+
+    /* JOIN EVENT */
+
+    async function joinEvent(eventId, eventTitle, button) {
+
+      if (!currentUser) {
+
+        showToast(
+          "Please log in before joining an event.",
+          "error"
+        );
+
+        setTimeout(() => {
+
+          window.location.href =
+            "login.html?redirect=events.html";
+
+        }, 900);
+
+        return;
+
+      }
+
+
+      button.disabled = true;
+
+      button.innerHTML = `
+        <span class="spinner"></span>
+        Joining...
+      `;
+
+
+      try {
+
+        /*
+          We first check whether this user
+          already registered for this event.
+        */
+
+        const registrationsRef =
+          collection(db, "eventRegistrations");
+
+        const snapshot =
+          await getDocs(registrationsRef);
+
+
+        let alreadyJoined = false;
+
+
+        snapshot.forEach(doc => {
+
+          const data = doc.data();
+
+
+          if (
+            data.userId === currentUser.uid &&
+            data.eventId === eventId
+          ) {
+
+            alreadyJoined = true;
+
+          }
+
+        });
+
+
+        if (alreadyJoined) {
+
+          button.disabled = true;
+
+          button.textContent = "Joined ✓";
+
+          showToast(
+            "You're already registered for this event.",
+            "success"
+          );
+
+          return;
+
+        }
+
+
+        await addDoc(
+          collection(db, "eventRegistrations"),
+          {
+
+            userId: currentUser.uid,
+
+            eventId: eventId,
+
+            eventTitle: eventTitle || "Spark Labs Event",
+
+            joinedAt: serverTimestamp()
+
+          }
+        );
+
+
+        button.disabled = true;
+
+        button.textContent = "Joined ✓";
+
+
+        showToast(
+          "You're in! Event registration confirmed 🎉",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Registration error:",
+          error
+        );
+
+
+        button.disabled = false;
+
+        button.textContent = "Join Event →";
+
+
+        showToast(
+          "Couldn't join the event. Check your Firestore rules.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* AUTH */
+
+    onAuthStateChanged(auth, user => {
+
+      currentUser = user;
+
+    });
+
+
+    /* MOBILE MENU */
+
+    const mobileMenuBtn =
+      document.getElementById("mobileMenuBtn");
+
+    const mobileMenu =
+      document.getElementById("mobileMenu");
+
+
+    mobileMenuBtn.addEventListener("click", () => {
+
+      mobileMenu.classList.toggle("open");
+
+    });
+
+
+    /* START */
+
+    loadEvents();
+
+  </script>
+
+</body>
+</html>

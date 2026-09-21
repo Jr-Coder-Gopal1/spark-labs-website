@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Spark Labs Kits | Robotics & STEM Kits</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#f7f7f4;
+  --paper:#fff;
+  --ink:#171717;
+  --muted:#707070;
+  --line:#e7e4dc;
+  --yellow:#ffd84d;
+  --purple:#6c5ce7;
+  --green:#249b68;
+  --red:#df5757;
+  --shadow:0 12px 35px rgba(25,25,25,.07);
+}
+
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(#ddd 1px,transparent 1px) 0 0/24px 24px,
+    var(--bg);
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav-inner{
+  max-width:1250px;
+  margin:auto;
+  min-height:72px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:900;
+  margin-right:auto;
+}
+
+.logo span{
+  background:var(--yellow);
+  padding:5px 9px;
+  border-radius:7px;
+  display:inline-block;
+  transform:rotate(-3deg);
+}
+
+.nav-links{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:var(--ink);
+  padding:9px 10px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.nav-links a:hover{
+  background:#f1f0eb;
+}
+
+.profile-btn{
+  border:0;
+  background:#181818;
+  color:white;
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:800;
+}
+
+.hero{
+  max-width:1250px;
+  margin:35px auto 25px;
+  padding:20px 25px;
+}
+
+.hero-box{
+  position:relative;
+  overflow:hidden;
+  background:var(--yellow);
+  border:3px solid var(--ink);
+  border-radius:27px;
+  padding:45px;
+  box-shadow:8px 9px 0 var(--ink);
+}
+
+.hero h1{
+  margin:0;
+  max-width:700px;
+  font-size:52px;
+  line-height:1;
+  letter-spacing:-3px;
+}
+
+.hero p{
+  max-width:650px;
+  margin:18px 0 0;
+  font-size:17px;
+  line-height:1.6;
+}
+
+.hero-doodle{
+  position:absolute;
+  right:55px;
+  bottom:18px;
+  font-size:110px;
+  transform:rotate(8deg);
+}
+
+.container{
+  max-width:1250px;
+  margin:auto;
+  padding:0 25px 80px;
+}
+
+.section{
+  margin-top:60px;
+}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:15px;
+  margin-bottom:18px;
+}
+
+.section-heading h2{
+  margin:0;
+  font-size:31px;
+  letter-spacing:-1px;
+}
+
+.section-heading p{
+  color:var(--muted);
+  margin:5px 0 0;
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:22px;
+}
+
+.search{
+  flex:1;
+  min-width:220px;
+}
+
+input,select{
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:13px;
+  padding:13px 14px;
+  outline:none;
+}
+
+input:focus,select:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(108,92,231,.1);
+}
+
+.kit-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.kit-card{
+  background:white;
+  border:1.5px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:.25s;
+}
+
+.kit-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 45px rgba(25,25,25,.11);
+}
+
+.kit-image{
+  height:230px;
+  background:#f1f1ed;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.kit-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.no-image{
+  font-size:60px;
+}
+
+.kit-body{
+  padding:20px;
+}
+
+.category{
+  display:inline-block;
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  background:#eeeaff;
+  color:#5145bd;
+  padding:6px 9px;
+  border-radius:99px;
+}
+
+.kit-body h3{
+  margin:11px 0 7px;
+  font-size:21px;
+}
+
+.desc{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+  min-height:60px;
+}
+
+.price-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:17px;
+}
+
+.price{
+  font-size:22px;
+  font-weight:900;
+}
+
+.stock{
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+}
+
+.stock.out{
+  color:var(--red);
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+
+.btn{
+  border:1.5px solid var(--line);
+  background:white;
+  padding:11px 14px;
+  border-radius:12px;
+  font-weight:800;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:#181818;
+  color:white;
+  border-color:#181818;
+}
+
+.btn-buy{
+  background:var(--green);
+  color:white;
+  border-color:var(--green);
+  flex:1;
+}
+
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.empty{
+  padding:50px 20px;
+  text-align:center;
+  color:var(--muted);
+  background:white;
+  border:1.5px dashed #d8d5cd;
+  border-radius:20px;
+}
+
+.loading{
+  padding:55px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.orders{
+  display:grid;
+  gap:16px;
+}
+
+.order-card{
+  background:white;
+  border:1.5px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.order-head{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.order-id{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.order-name{
+  font-size:19px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.order-price{
+  font-size:21px;
+  font-weight:900;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:99px;
+  margin-top:7px;
+  font-size:10px;
+  font-weight:900;
+  text-transform:capitalize;
+}
+
+.badge.pending{
+  background:#fff0d1;
+  color:#986000;
+}
+
+.badge.verified{
+  background:#e5f1ff;
+  color:#17609f;
+}
+
+.badge.processing{
+  background:#e5f1ff;
+  color:#17609f;
+}
+
+.badge.shipped{
+  background:#eee7ff;
+  color:#6946bd;
+}
+
+.badge.delivered{
+  background:#e2f7eb;
+  color:#117149;
+}
+
+.badge.cancelled{
+  background:#ffe7e7;
+  color:#ae3535;
+}
+
+.progress{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+  margin-top:22px;
+}
+
+.step{
+  text-align:center;
+}
+
+.step-dot{
+  width:22px;
+  height:22px;
+  margin:auto;
+  border-radius:50%;
+  background:#e1e1dd;
+  border:4px solid #f7f7f4;
+  box-shadow:0 0 0 1px #d5d3cb;
+}
+
+.step.active .step-dot{
+  background:var(--green);
+  box-shadow:0 0 0 1px var(--green);
+}
+
+.step-label{
+  margin-top:8px;
+  font-size:9px;
+  font-weight:800;
+  color:#888;
+}
+
+.step.active .step-label{
+  color:#222;
+}
+
+.order-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  margin-top:17px;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:12px;
+}
+
+.tracking{
+  margin-top:13px;
+  padding:13px;
+  background:#f2efff;
+  border-radius:12px;
+  font-size:12px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(0,0,0,.5);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  background:white;
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border-radius:24px;
+  padding:25px;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-head h2{
+  margin:0;
+}
+
+.close{
+  border:0;
+  background:#f1f1ee;
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  font-size:20px;
+}
+
+@media(max-width:950px){
+
+  .kit-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .hero-doodle{
+    opacity:.25;
+  }
+}
+
+@media(max-width:650px){
+
+  .hero{
+    padding:15px;
+    margin-top:20px;
+  }
+
+  .hero-box{
+    padding:30px 22px;
+  }
+
+  .hero h1{
+    font-size:39px;
+  }
+
+  .hero-doodle{
+    display:none;
+  }
+
+  .container{
+    padding:0 15px 60px;
+  }
+
+  .toolbar{
+    flex-direction:column;
+  }
+
+  .kit-grid{
+    grid-template-columns:1fr;
+  }
+
+  .order-head{
+    flex-direction:column;
+  }
+
+  .progress{
+    gap:2px;
+  }
+
+  .step-label{
+    font-size:8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+
+<div class="nav-inner">
+
+<div class="logo">
+⚡ <span>Spark Labs</span>
+</div>
+
+<div class="nav-links">
+<a href="dashboard.html">Dashboard</a>
+<a href="projects.html">Projects</a>
+<a href="events.html">Events</a>
+<a href="challenges.html">Challenges</a>
+<a href="team.html">Team</a>
+<a href="community.html">Community</a>
+<a href="kits.html">Kits</a>
+<a href="profile.html">Profile</a>
+</div>
+
+<button
+class="profile-btn"
+onclick="location.href='profile.html'">
+Profile
+</button>
+
+</div>
+</nav>
+
+
+<section class="hero">
+
+<div class="hero-box">
+
+<h1>
+Build it.<br>
+Code it.<br>
+Spark it. ⚡
+</h1>
+
+<p>
+Hands-on robotics, electronics and STEM kits made for students who'd rather build something than watch another tutorial.
+</p>
+
+<div class="hero-doodle">
+🤖
+</div>
+
+</div>
+
+</section>
+
+
+<main class="container">
+
+
+<!-- ================= KITS ================= -->
+
+<section>
+
+<div class="section-heading">
+
+<div>
+<h2>🛠️ Spark Kits</h2>
+<p>Choose a kit and order it directly.</p>
+</div>
+
+<div id="kitCount"></div>
+
+</div>
+
+
+<div class="toolbar">
+
+<input
+id="search"
+class="search"
+placeholder="🔎 Search kits..."
+>
+
+<select id="category">
+
+<option value="all">All Categories</option>
+<option value="Robotics">Robotics</option>
+<option value="Arduino">Arduino</option>
+<option value="AI & IoT">AI & IoT</option>
+<option value="Smart Car">Smart Car</option>
+<option value="Electronics">Electronics</option>
+<option value="STEM">STEM</option>
+<option value="Other">Other</option>
+
+</select>
+
+
+<select id="sort">
+
+<option value="latest">Latest</option>
+<option value="low">Price: Low → High</option>
+<option value="high">Price: High → Low</option>
+<option value="name">Name A → Z</option>
+
+</select>
+
+</div>
+
+
+<div id="kitGrid" class="kit-grid">
+
+<div class="loading">
+Loading Spark Kits...
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= MY ORDERS ================= -->
+
+<section class="section">
+
+<div class="section-heading">
+
+<div>
+
+<h2>📦 My Orders</h2>
+
+<p>
+Track the kits you've ordered from Spark Labs.
+</p>
+
+</div>
+
+<button
+id="refreshOrders"
+class="btn">
+↻ Refresh
+</button>
+
+</div>
+
+
+<div id="orders" class="orders">
+
+<div class="loading">
+Loading your orders...
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+
+<!-- ================= DETAILS MODAL ================= -->
+
+<div id="kitModal" class="modal">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h2 id="modalTitle">
+Kit Details
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<div id="modalContent"></div>
+
+</div>
+
+</div>
+
+
+
+<script type="module">
+
+import {
+  initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig={
+
+  apiKey:
+  "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+  authDomain:
+  "spark-labs-b726e.firebaseapp.com",
+
+  projectId:
+  "spark-labs-b726e",
+
+  storageBucket:
+  "spark-labs-b726e.firebasestorage.app",
+
+  messagingSenderId:
+  "185422979084",
+
+  appId:
+  "1:185422979084:web:9d11d83ac7650533c48e29",
+
+  measurementId:
+  "G-28KBFT44VE"
+
+};
+
+
+const app=
+initializeApp(firebaseConfig);
+
+const auth=
+getAuth(app);
+
+const db=
+getFirestore(app);
+
+
+await setPersistence(
+  auth,
+  browserLocalPersistence
+);
+
+
+let currentUser=null;
+
+let kits=[];
+
+let orders=[];
+
+
+const $=
+id=>document.getElementById(id);
+
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function esc(value){
+
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function money(value){
+
+  return "₹"+
+    Number(value||0)
+    .toLocaleString(
+      "en-IN",
+      {
+        maximumFractionDigits:2
+      }
+    );
+
+}
+
+
+function getPrice(kit){
+
+  const possible=[
+    kit.price,
+    kit.sellingPrice,
+    kit.salePrice,
+    kit.amount,
+    kit.mrp
+  ];
+
+  for(const value of possible){
+
+    const n=Number(value);
+
+    if(
+      Number.isFinite(n) &&
+      n>0
+    ){
+      return n;
+    }
+
+  }
+
+  return 0;
+
+}
+
+
+function getImage(kit){
+
+  return (
+    kit.imageUrl ||
+    kit.image ||
+    ""
+  );
+
+}
+
+
+function formatDate(value){
+
+  if(!value)
+    return "—";
+
+  try{
+
+    if(
+      typeof value.toDate==="function"
+    ){
+
+      return value
+        .toDate()
+        .toLocaleDateString(
+          "en-IN",
+          {
+            day:"numeric",
+            month:"short",
+            year:"numeric"
+          }
+        );
+
+    }
+
+    return new Date(value)
+      .toLocaleDateString(
+        "en-IN",
+        {
+          day:"numeric",
+          month:"short",
+          year:"numeric"
+        }
+      );
+
+  }catch{
+
+    return "—";
+
+  }
+
+}
+
+
+
+/* =========================
+   AUTH
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async user=>{
+
+    if(!user){
+
+      location.href=
+        "login.html";
+
+      return;
+
+    }
+
+    currentUser=user;
+
+    await loadKits();
+
+    await loadOrders();
+
+  }
+);
+
+
+
+/* =========================
+   LOAD KITS
+========================= */
+
+async function loadKits(){
+
+  try{
+
+    const snap=
+      await getDocs(
+        collection(db,"kits")
+      );
+
+
+    kits=
+      snap.docs
+        .map(doc=>({
+
+          id:doc.id,
+
+          ...doc.data()
+
+        }))
+        .filter(
+          kit=>kit.active!==false
+        );
+
+
+    renderKits();
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    $("kitGrid").innerHTML=`
+
+      <div
+        class="empty"
+        style="grid-column:1/-1">
+
+        <div style="font-size:45px">
+          ⚠️
+        </div>
+
+        <h3>
+          Could not load kits
+        </h3>
+
+        <small>
+          ${esc(error.message)}
+        </small>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =========================
+   RENDER KITS
+========================= */
+
+function renderKits(){
+
+  const search=
+    $("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const category=
+    $("category").value;
+
+
+  const sort=
+    $("sort").value;
+
+
+  let data=
+    kits.filter(kit=>{
+
+      const name=
+        String(
+          kit.name||""
+        )
+        .toLowerCase();
+
+
+      const description=
+        String(
+          kit.description||""
+        )
+        .toLowerCase();
+
+
+      const searchMatch=
+        !search ||
+        name.includes(search) ||
+        description.includes(search);
+
+
+      const categoryMatch=
+        category==="all" ||
+        kit.category===category;
+
+
+      return (
+        searchMatch &&
+        categoryMatch
+      );
+
+    });
+
+
+
+  if(sort==="low"){
+
+    data.sort(
+      (a,b)=>
+        getPrice(a)-getPrice(b)
+    );
+
+  }
+
+
+  if(sort==="high"){
+
+    data.sort(
+      (a,b)=>
+        getPrice(b)-getPrice(a)
+    );
+
+  }
+
+
+  if(sort==="name"){
+
+    data.sort(
+      (a,b)=>
+        String(a.name||"")
+        .localeCompare(
+          String(b.name||"")
+        )
+    );
+
+  }
+
+
+  if(sort==="latest"){
+
+    data.sort(
+      (a,b)=>
+        (
+          b.createdAt
+            ?.toMillis?.()||0
+        )
+        -
+        (
+          a.createdAt
+            ?.toMillis?.()||0
+        )
+    );
+
+  }
+
+
+  $("kitCount").textContent=
+    `${data.length} ${
+      data.length===1
+      ?"kit"
+      :"kits"
+    }`;
+
+
+  $("kitGrid").innerHTML=
+    data.length
+    ?
+    data
+      .map(renderKit)
+      .join("")
+    :
+    `
+
+      <div
+        class="empty"
+        style="grid-column:1/-1">
+
+        <div style="font-size:45px">
+          🔎
+        </div>
+
+        <h3>
+          No kits found
+        </h3>
+
+        <p>
+          Try another search or category.
+        </p>
+
+      </div>
+
+    `;
+
+}
+
+
+
+function renderKit(kit){
+
+  const image=
+    getImage(kit);
+
+
+  const price=
+    getPrice(kit);
+
+
+  const stock=
+    Number(kit.stock||0);
+
+
+  return `
+
+    <article class="kit-card">
+
+
+      <div class="kit-image">
+
+        ${
+          image
+          ?
+
+          `
+
+          <img
+            src="${esc(image)}"
+            alt="${esc(
+              kit.name||
+              "Spark Kit"
+            )}"
+            loading="lazy"
+            onerror="
+              this.style.display='none';
+              this.nextElementSibling.style.display='block';
+            "
+          >
+
+          <div
+            class="no-image"
+            style="display:none">
+
+            🤖
+
+          </div>
+
+          `
+
+          :
+
+          `
+
+          <div class="no-image">
+            🤖
+          </div>
+
+          `
+        }
+
+      </div>
+
+
+      <div class="kit-body">
+
+
+        <span class="category">
+          ${esc(
+            kit.category||
+            "STEM"
+          )}
+        </span>
+
+
+        <h3>
+          ${esc(
+            kit.name||
+            "Spark Kit"
+          )}
+        </h3>
+
+
+        <div class="desc">
+
+          ${esc(
+            kit.description||
+            "Hands-on Spark Labs STEM kit."
+          )}
+
+        </div>
+
+
+        <div class="price-row">
+
+          <div class="price">
+            ${money(price)}
+          </div>
+
+
+          <div
+            class="stock ${
+              stock<=0?"out":""
+            }">
+
+            ${
+              stock>0
+              ?
+              `${stock} in stock`
+              :
+              "Out of stock"
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+
+          <button
+            class="btn"
+            onclick="
+              showKit('${esc(kit.id)}')
+            ">
+
+            Details
+
+          </button>
+
+
+          <button
+            class="btn btn-buy"
+            onclick="
+              orderKit('${esc(kit.id)}')
+            "
+            ${stock<=0?"disabled":""}>
+
+            ${
+              stock>0
+              ?
+              "🛒 Order Now"
+              :
+              "Out of Stock"
+            }
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+
+/* =========================
+   SEARCH / FILTER
+========================= */
+
+$("search")
+  .addEventListener(
+    "input",
+    renderKits
+  );
+
+
+$("category")
+  .addEventListener(
+    "change",
+    renderKits
+  );
+
+
+$("sort")
+  .addEventListener(
+    "change",
+    renderKits
+  );
+
+
+
+/* =========================
+   KIT DETAILS
+========================= */
+
+window.showKit=
+function(id){
+
+  const kit=
+    kits.find(
+      item=>item.id===id
+    );
+
+
+  if(!kit)
+    return;
+
+
+  const image=
+    getImage(kit);
+
+
+  const price=
+    getPrice(kit);
+
+
+  const stock=
+    Number(kit.stock||0);
+
+
+  $("modalTitle").textContent=
+    kit.name||
+    "Kit Details";
+
+
+  $("modalContent").innerHTML=`
+
+    ${
+      image
+      ?
+
+      `
+
+      <img
+        src="${esc(image)}"
+        alt="${esc(
+          kit.name||""
+        )}"
+        style="
+          width:100%;
+          height:280px;
+          object-fit:cover;
+          border-radius:16px;
+          background:#f1f1ed;
+        "
+      >
+
+      `
+
+      :
+
+      ""
+    }
+
+
+    <div style="margin-top:18px">
+
+      <span class="category">
+        ${esc(
+          kit.category||
+          "STEM"
+        )}
+      </span>
+
+
+      <h2
+        style="
+          margin:12px 0 7px
+        ">
+
+        ${esc(
+          kit.name||
+          ""
+        )}
+
+      </h2>
+
+
+      <p
+        style="
+          color:var(--muted);
+          line-height:1.7;
+        ">
+
+        ${esc(
+          kit.description||
+          ""
+        )}
+
+      </p>
+
+
+      <div
+        style="
+          font-size:28px;
+          font-weight:900;
+          margin-top:15px;
+        ">
+
+        ${money(price)}
+
+      </div>
+
+
+      <div
+        style="
+          margin-top:7px;
+          font-size:12px;
+          color:var(--muted);
+        ">
+
+        ${
+          stock>0
+          ?
+          `${stock} units available`
+          :
+          "Currently out of stock"
+        }
+
+      </div>
+
+
+      <button
+        class="btn btn-buy"
+        style="
+          width:100%;
+          margin-top:18px;
+        "
+        onclick="
+          orderKit('${esc(kit.id)}')
+        "
+        ${stock<=0?"disabled":""}>
+
+        🛒 Order Now
+
+      </button>
+
+
+    </div>
+
+  `;
+
+
+  openModal();
+
+};
+
+
+
+function openModal(){
+
+  $("kitModal")
+    .classList
+    .add("show");
+
+}
+
+
+window.closeModal=
+function(){
+
+  $("kitModal")
+    .classList
+    .remove("show");
+
+};
+
+
+
+/* =========================
+   ORDER NOW
+========================= */
+
+window.orderKit=
+function(id){
+
+  const kit=
+    kits.find(
+      item=>item.id===id
+    );
+
+
+  if(!kit){
+
+    alert(
+      "Kit not found."
+    );
+
+    return;
+
+  }
+
+
+  const stock=
+    Number(kit.stock||0);
+
+
+  if(stock<=0){
+
+    alert(
+      "This kit is currently out of stock."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    IMPORTANT
+
+    kit-checkout.html expects
+    the query parameter "id".
+
+    DO NOT change this to ?kit=
+  */
+
+  location.href=
+    "kit-checkout.html?id="+
+    encodeURIComponent(
+      kit.id
+    );
+
+};
+
+
+
+/* =========================
+   LOAD MY ORDERS
+========================= */
+
+async function loadOrders(){
+
+  if(!currentUser)
+    return;
+
+
+  $("orders").innerHTML=`
+
+    <div class="loading">
+      Loading your orders...
+    </div>
+
+  `;
+
+
+  try{
+
+    const orderQuery=
+      query(
+        collection(
+          db,
+          "kitOrders"
+        ),
+
+        where(
+          "userId",
+          "==",
+          currentUser.uid
+        )
+      );
+
+
+    const snap=
+      await getDocs(
+        orderQuery
+      );
+
+
+    orders=
+      snap.docs.map(doc=>({
+
+        id:doc.id,
+
+        ...doc.data()
+
+      }));
+
+
+    orders.sort(
+      (a,b)=>
+        (
+          b.createdAt
+            ?.toMillis?.()||0
+        )
+        -
+        (
+          a.createdAt
+            ?.toMillis?.()||0
+        )
+    );
+
+
+    renderOrders();
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    $("orders").innerHTML=`
+
+      <div class="empty">
+
+        <div style="font-size:45px">
+          ⚠️
+        </div>
+
+        <h3>
+          Could not load orders
+        </h3>
+
+        <small>
+          ${esc(error.message)}
+        </small>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =========================
+   ORDER STATUS
+========================= */
+
+function getOrderStatus(order){
+
+  let status=
+    String(
+      order.orderStatus ??
+      order.status ??
+      "pending"
+    )
+    .toLowerCase()
+    .trim();
+
+
+  if(
+    [
+      "pending",
+      "pending_payment",
+      "payment_pending",
+      "payment_verification_pending",
+      "pending_verification"
+    ]
+    .includes(status)
+  ){
+
+    return "pending";
+
+  }
+
+
+  if(
+    [
+      "verified",
+      "confirmed",
+      "payment_verified"
+    ]
+    .includes(status)
+  ){
+
+    return "verified";
+
+  }
+
+
+  if(
+    status==="processing"
+  ){
+
+    return "processing";
+
+  }
+
+
+  if(
+    [
+      "shipped",
+      "out_for_delivery"
+    ]
+    .includes(status)
+  ){
+
+    return "shipped";
+
+  }
+
+
+  if(
+    status==="delivered"
+  ){
+
+    return "delivered";
+
+  }
+
+
+  if(
+    [
+      "cancelled",
+      "canceled"
+    ]
+    .includes(status)
+  ){
+
+    return "cancelled";
+
+  }
+
+
+  return "pending";
+
+}
+
+
+
+function statusIndex(status){
+
+  const list=[
+    "pending",
+    "verified",
+    "processing",
+    "shipped",
+    "delivered"
+  ];
+
+
+  return list.indexOf(
+    status
+  );
+
+}
+
+
+
+/* =========================
+   RENDER ORDERS
+========================= */
+
+function renderOrders(){
+
+  if(!orders.length){
+
+    $("orders").innerHTML=`
+
+      <div class="empty">
+
+        <div style="font-size:50px">
+          📦
+        </div>
+
+        <h3>
+          No orders yet
+        </h3>
+
+        <p>
+          Your actual Spark Kit orders will appear here after checkout.
+        </p>
+
+
+        <button
+          class="btn btn-primary"
+          style="margin-top:10px"
+          onclick="
+            window.scrollTo({
+              top:0,
+              behavior:'smooth'
+            })
+          ">
+
+          Browse Kits
+
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  $("orders").innerHTML=
+    orders
+      .map(renderOrder)
+      .join("");
+
+}
+
+
+
+function renderOrder(order){
+
+  const status=
+    getOrderStatus(order);
+
+
+  const index=
+    statusIndex(status);
+
+
+  const kitName=
+    order.kitName ||
+    order.kitTitle ||
+    order.name ||
+    "Spark Kit";
+
+
+  const amount=
+    Number(
+      order.totalAmount ??
+      order.total ??
+      order.amount ??
+      0
+    );
+
+
+  const paymentStatus=
+    order.paymentStatus ||
+    order.payment ||
+    "";
+
+
+  const trackingId=
+    order.trackingId ||
+    order.trackingNumber ||
+    order.awb ||
+    "";
+
+
+  const stages=[
+
+    [
+      "pending",
+      "Payment Verification"
+    ],
+
+    [
+      "verified",
+      "Verified"
+    ],
+
+    [
+      "processing",
+      "Processing"
+    ],
+
+    [
+      "shipped",
+      "Shipped"
+    ],
+
+    [
+      "delivered",
+      "Delivered"
+    ]
+
+  ];
+
+
+  return `
+
+    <div class="order-card">
+
+
+      <div class="order-head">
+
+
+        <div>
+
+          <div class="order-id">
+
+            ORDER #
+
+            ${esc(
+              order.id
+                .slice(-8)
+                .toUpperCase()
+            )}
+
+          </div>
+
+
+          <div class="order-name">
+
+            ${esc(kitName)}
+
+          </div>
+
+        </div>
+
+
+        <div
+          style="
+            text-align:right
+          ">
+
+          <div class="order-price">
+
+            ${money(amount)}
+
+          </div>
+
+
+          <span
+            class="badge ${status}">
+
+            ${esc(status)}
+
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+
+      ${
+        status==="cancelled"
+
+        ?
+
+        `
+
+        <div
+          style="
+            margin-top:18px;
+            padding:14px;
+            background:#ffeaea;
+            color:#a33131;
+            border-radius:13px;
+            font-size:13px;
+            font-weight:700;
+          ">
+
+          ❌ This order has been cancelled.
+
+        </div>
+
+        `
+
+        :
+
+        `
+
+        <div class="progress">
+
+          ${
+            stages
+              .map(
+                (stage,i)=>`
+
+                  <div
+                    class="
+                      step
+                      ${
+                        index>=i
+                        ?"active"
+                        :""
+                      }
+                    ">
+
+                    <div
+                      class="step-dot">
+                    </div>
+
+                    <div
+                      class="step-label">
+
+                      ${stage[1]}
+
+                    </div>
+
+                  </div>
+
+                `
+              )
+              .join("")
+          }
+
+        </div>
+
+        `
+      }
+
+
+
+      <div class="order-meta">
+
+
+        <span>
+          📅 ${formatDate(
+            order.createdAt
+          )}
+        </span>
+
+
+        ${
+          paymentStatus
+          ?
+
+          `
+
+          <span>
+
+            💳 Payment:
+
+            ${esc(
+              String(
+                paymentStatus
+              )
+              .replaceAll(
+                "_",
+                " "
+              )
+            )}
+
+          </span>
+
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          order.shippingAmount!==undefined
+          ?
+
+          `
+
+          <span>
+
+            🚚 Shipping:
+
+            ${money(
+              order.shippingAmount
+            )}
+
+          </span>
+
+          `
+
+          :
+
+          order.shippingCharge!==undefined
+          ?
+
+          `
+
+          <span>
+
+            🚚 Shipping:
+
+            ${money(
+              order.shippingCharge
+            )}
+
+          </span>
+
+          `
+
+          :
+
+          ""
+        }
+
+
+        ${
+          Number(
+            order.discountAmount||0
+          )>0
+
+          ?
+
+          `
+
+          <span>
+
+            🏷️ Discount:
+
+            -${money(
+              order.discountAmount
+            )}
+
+          </span>
+
+          `
+
+          :
+
+          ""
+        }
+
+
+      </div>
+
+
+
+      ${
+        trackingId
+
+        ?
+
+        `
+
+        <div class="tracking">
+
+          📍 Tracking ID:
+
+          <strong>
+            ${esc(trackingId)}
+          </strong>
+
+        </div>
+
+        `
+
+        :
+
+        ""
+      }
+
+
+
+      ${
+        order.adminNote
+
+        ?
+
+        `
+
+        <div
+          style="
+            margin-top:12px;
+            padding:13px;
+            background:#fff9dd;
+            border-radius:12px;
+            font-size:12px;
+          ">
+
+          📝 <strong>Update:</strong>
+
+          ${esc(
+            order.adminNote
+          )}
+
+        </div>
+
+        `
+
+        :
+
+        ""
+      }
+
+
+    </div>
+
+  `;
+
+}
+
+
+
+/* =========================
+   REFRESH ORDERS
+========================= */
+
+$("refreshOrders")
+  .addEventListener(
+    "click",
+    async()=>{
+
+      const btn=
+        $("refreshOrders");
+
+
+      btn.disabled=true;
+
+      btn.textContent=
+        "Refreshing...";
+
+
+      await loadOrders();
+
+
+      btn.disabled=false;
+
+      btn.textContent=
+        "↻ Refresh";
+
+    }
+  );
+
+
+
+/* =========================
+   MODAL
+========================= */
+
+$("kitModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target===
+        $("kitModal")
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Spark Labs | Dashboard</title>
+
+<meta name="description"
+content="Your Spark Labs workspace. Build projects, join events, find teammates, explore challenges and Spark Kits.">
+
+<style>
+:root{
+  --bg:#f6f7f3;
+  --paper:#fff;
+  --ink:#17191d;
+  --muted:#777d88;
+  --line:#e7e8e3;
+  --yellow:#ffd84d;
+  --yellow2:#ffe990;
+  --blue:#6575f5;
+  --green:#35b878;
+  --red:#ef6868;
+  --shadow:0 14px 45px rgba(25,28,35,.07);
+  --radius:26px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 8% 8%,rgba(255,216,77,.14),transparent 25%),
+    radial-gradient(circle at 90% 20%,rgba(101,117,245,.08),transparent 25%),
+    var(--bg);
+  color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.20;
+  background-image:radial-gradient(#bfc3c8 1px,transparent 1px);
+  background-size:24px 24px;
+  mask-image:linear-gradient(to bottom,#000,transparent 80%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav-inner{
+  height:100%;
+  max-width:1450px;
+  margin:auto;
+  padding:0 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.8px;
+  white-space:nowrap;
+}
+
+.logo-box{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  background:var(--yellow);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 var(--ink);
+  display:grid;
+  place-items:center;
+  font-size:19px;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.nav-links a{
+  padding:10px 11px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:800;
+  color:#666c77;
+  transition:.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  background:#f0f1ee;
+  color:var(--ink);
+}
+
+.nav-profile{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:5px 10px 5px 5px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:15px;
+}
+
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:var(--yellow);
+  border:1.5px solid var(--ink);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:900;
+}
+
+.nav-name{
+  max-width:100px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:850;
+}
+
+.menu-btn{
+  display:none;
+  width:43px;
+  height:43px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:13px;
+  font-size:20px;
+}
+
+.mobile-menu{
+  display:none;
+  position:absolute;
+  top:76px;
+  left:12px;
+  right:12px;
+  padding:9px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.14);
+}
+
+.mobile-menu.open{
+  display:block;
+}
+
+.mobile-menu a,
+.mobile-menu button{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:14px;
+  border:0;
+  background:white;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.mobile-menu a:hover{
+  background:#f4f5f3;
+}
+
+.mobile-menu .logout{
+  color:#d85454;
+  background:#fff1f1;
+  margin-top:5px;
+}
+
+/* ================= PAGE ================= */
+
+.page{
+  max-width:1450px;
+  margin:auto;
+  padding:30px 28px 80px;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+  min-height:310px;
+  position:relative;
+  overflow:hidden;
+  padding:43px;
+  border:1px solid #e7e2cc;
+  border-radius:32px;
+  background:
+    linear-gradient(125deg,#fffdf2,#fff 72%);
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
+}
+
+.hero-content{
+  position:relative;
+  z-index:4;
+  max-width:700px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 11px;
+  background:#fff1a8;
+  border:1px solid #e5cd65;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-size:clamp(38px,5vw,67px);
+  line-height:.95;
+  letter-spacing:-3.5px;
+  margin-bottom:17px;
+}
+
+.hero h1 span{
+  position:relative;
+  color:#d59d00;
+}
+
+.hero p{
+  max-width:600px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:14px;
+}
+
+.hero-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:25px;
+}
+
+.btn{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  padding:12px 17px;
+  border-radius:13px;
+  font-size:12px;
+  font-weight:900;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn-dark{
+  background:var(--ink);
+  color:#fff;
+}
+
+.btn-light{
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.doodle{
+  position:absolute;
+  user-select:none;
+  pointer-events:none;
+}
+
+.doodle.bulb{
+  right:9%;
+  top:42px;
+  font-size:100px;
+  transform:rotate(8deg);
+  filter:drop-shadow(5px 7px 0 rgba(23,25,29,.07));
+}
+
+.doodle.arrow{
+  right:27%;
+  bottom:38px;
+  font-size:55px;
+  transform:rotate(-18deg);
+}
+
+.doodle.star{
+  right:5%;
+  bottom:25px;
+  font-size:120px;
+  color:rgba(255,216,77,.28);
+  transform:rotate(15deg);
+}
+
+/* ================= QUICK TILES ================= */
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+  margin-bottom:20px;
+}
+
+.quick-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  transition:.2s;
+  position:relative;
+  overflow:hidden;
+}
+
+.quick-card:hover{
+  transform:translateY(-4px);
+}
+
+.quick-icon{
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#f5f5f2;
+  font-size:18px;
+  margin-bottom:13px;
+}
+
+.quick-card h3{
+  font-size:13px;
+  margin-bottom:4px;
+}
+
+.quick-card p{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.5;
+}
+
+.quick-arrow{
+  position:absolute;
+  right:16px;
+  top:18px;
+  color:#b2b5bc;
+}
+
+/* ================= STATS ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+  margin-bottom:20px;
+}
+
+.stat{
+  padding:21px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+
+.stat-label{
+  color:#898e97;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+
+.stat-value{
+  font-size:31px;
+  font-weight:950;
+  letter-spacing:-1.5px;
+}
+
+.stat-sub{
+  margin-top:5px;
+  color:#a2a6ae;
+  font-size:10px;
+}
+
+/* ================= MAIN GRID ================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(300px,.8fr);
+  gap:20px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.card-head{
+  padding:23px 24px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.card-head h2{
+  font-size:19px;
+  letter-spacing:-.6px;
+}
+
+.card-head p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.view{
+  color:var(--blue);
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+/* ================= CONTINUE BUILDING ================= */
+
+.continue{
+  margin:0 14px 14px;
+  padding:23px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,#181a1e,#25282e);
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+
+.continue:after{
+  content:"✦";
+  position:absolute;
+  right:20px;
+  top:-15px;
+  font-size:90px;
+  color:rgba(255,216,77,.10);
+}
+
+.continue-label{
+  color:#ffd84d;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.continue h3{
+  font-size:21px;
+  margin-bottom:5px;
+}
+
+.continue p{
+  color:#b7bbc2;
+  font-size:11px;
+  max-width:500px;
+  line-height:1.6;
+}
+
+.progress{
+  height:8px;
+  background:#3b3e44;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:18px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0;
+  background:var(--yellow);
+  border-radius:99px;
+  transition:1s;
+}
+
+.continue-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:13px;
+}
+
+.continue-percent{
+  color:#c9ccd2;
+  font-size:10px;
+}
+
+.open-project{
+  padding:9px 13px;
+  border-radius:10px;
+  background:var(--yellow);
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
+}
+
+/* ================= PROJECTS ================= */
+
+.projects{
+  padding:0 14px 14px;
+}
+
+.project{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:15px 10px;
+  border-top:1px solid #f0f1ee;
+  transition:.2s;
+}
+
+.project:hover{
+  background:#fafbf9;
+  border-radius:14px;
+}
+
+.project-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.project-icon{
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+  border-radius:13px;
+  background:#fff5c5;
+  border:1px solid #ead777;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+}
+
+.project-info{
+  min-width:0;
+}
+
+.project-title{
+  font-size:13px;
+  font-weight:900;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.project-meta{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:5px;
+}
+
+.tag,
+.status{
+  padding:4px 8px;
+  border-radius:99px;
+  font-size:9px;
+  font-weight:850;
+}
+
+.tag{
+  background:#f0f1f3;
+  color:#727782;
+}
+
+.status{
+  background:#fff1cb;
+  color:#9b6c00;
+}
+
+.status.building{
+  background:#e8f2ff;
+  color:#3576b2;
+}
+
+.status.testing{
+  background:#fff0f0;
+  color:#bd5b5b;
+}
+
+.status.launched{
+  background:#e7f8ed;
+  color:#258253;
+}
+
+.status.planning{
+  background:#f1edff;
+  color:#6c57b7;
+}
+
+.project-arrow{
+  color:#b3b7be;
+  font-size:17px;
+}
+
+/* ================= PROFILE / XP ================= */
+
+.profile{
+  padding:23px;
+}
+
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.profile-avatar{
+  width:57px;
+  height:57px;
+  border-radius:18px;
+  background:var(--yellow);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 var(--ink);
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  font-weight:950;
+}
+
+.profile-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.profile-email{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+  max-width:190px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.level-box{
+  margin-top:21px;
+  padding:16px;
+  background:#fafaf7;
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.level-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.level{
+  font-size:11px;
+  font-weight:900;
+}
+
+.xp{
+  color:#a18a22;
+  font-size:10px;
+  font-weight:850;
+}
+
+.xp-bar{
+  height:9px;
+  background:#e7e8e4;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.xp-fill{
+  width:0;
+  height:100%;
+  background:var(--yellow);
+  border-radius:99px;
+  transition:1s;
+}
+
+.profile-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.profile-buttons a{
+  text-align:center;
+  padding:10px;
+  background:#f5f6f4;
+  border-radius:11px;
+  font-size:10px;
+  font-weight:850;
+}
+
+/* ================= EVENTS ================= */
+
+.events{
+  padding:0 14px 14px;
+}
+
+.event{
+  display:flex;
+  gap:11px;
+  padding:13px 10px;
+  border-top:1px solid #f0f1ee;
+}
+
+.event-date{
+  width:43px;
+  height:46px;
+  flex:0 0 43px;
+  border-radius:12px;
+  background:#fff5c2;
+  border:1px solid #e8d578;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.event-day{
+  font-size:15px;
+  font-weight:950;
+}
+
+.event-month{
+  font-size:8px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.event-info{
+  min-width:0;
+}
+
+.event-title{
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.event-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+/* ================= IDEA CARD ================= */
+
+.idea{
+  margin:0 23px 23px;
+  padding:21px;
+  background:#fff9db;
+  border:1px dashed #ddca6b;
+  border-radius:19px;
+  position:relative;
+}
+
+.idea-pin{
+  position:absolute;
+  right:18px;
+  top:12px;
+  font-size:20px;
+  transform:rotate(12deg);
+}
+
+.idea-label{
+  font-size:9px;
+  color:#9a7b00;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.idea h3{
+  font-size:16px;
+  margin-top:7px;
+  line-height:1.3;
+}
+
+.idea p{
+  color:#81764c;
+  font-size:10px;
+  line-height:1.6;
+  margin-top:6px;
+}
+
+/* ================= KIT ================= */
+
+.kit{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 23px;
+  border-top:1px solid #f0f1ee;
+  gap:10px;
+}
+
+.kit-left{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:0;
+}
+
+.kit-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#f4f5f2;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+}
+
+.kit-name{
+  font-size:12px;
+  font-weight:900;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.kit-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+.kit-arrow{
+  color:#aeb2b8;
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.big-action{
+  padding:25px;
+  min-height:170px;
+  position:relative;
+}
+
+.big-action h2{
+  font-size:21px;
+  letter-spacing:-.7px;
+  margin-bottom:7px;
+}
+
+.big-action p{
+  color:var(--muted);
+  max-width:390px;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.big-action a{
+  display:inline-flex;
+  margin-top:18px;
+  padding:10px 14px;
+  border-radius:11px;
+  background:var(--ink);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+
+.big-action .emoji{
+  position:absolute;
+  right:25px;
+  bottom:15px;
+  font-size:65px;
+  opacity:.13;
+}
+
+/* ================= STATES ================= */
+
+.loading{
+  min-height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#90959e;
+  font-size:11px;
+}
+
+.spinner{
+  width:17px;
+  height:17px;
+  border:2px solid #e3e4e0;
+  border-top-color:var(--ink);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.empty{
+  padding:35px 20px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.empty-icon{
+  width:50px;
+  height:50px;
+  margin:0 auto 10px;
+  border-radius:15px;
+  background:#fff7c9;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+}
+
+.empty h3{
+  color:#555b65;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.empty p{
+  font-size:10px;
+  line-height:1.6;
+}
+
+.error{
+  padding:30px 20px;
+  text-align:center;
+}
+
+.error-icon{
+  font-size:28px;
+  margin-bottom:7px;
+}
+
+.error h3{
+  font-size:13px;
+}
+
+.error p{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+  line-height:1.5;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translate(-50%,20px);
+  background:#17191d;
+  color:white;
+  padding:12px 17px;
+  border-radius:12px;
+  font-size:11px;
+  font-weight:750;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:5000;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1180px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .quick{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:900px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .bottom-grid{
+    grid-template-columns:1fr;
+  }
+
+  .doodle.bulb{
+    right:4%;
+    font-size:75px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .navbar{
+    height:68px;
+  }
+
+  .nav-inner{
+    padding:0 14px;
+  }
+
+  .mobile-menu{
+    top:68px;
+  }
+
+  .nav-name{
+    display:none;
+  }
+
+  .nav-profile{
+    padding:4px;
+  }
+
+  .page{
+    padding:15px 12px 55px;
+  }
+
+  .hero{
+    padding:28px 21px;
+    border-radius:23px;
+    min-height:380px;
+  }
+
+  .hero h1{
+    font-size:41px;
+    letter-spacing:-2.3px;
+  }
+
+  .hero p{
+    font-size:12px;
+  }
+
+  .hero-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .btn{
+    padding:11px 7px;
+    font-size:10px;
+  }
+
+  .doodle.bulb{
+    right:-3px;
+    top:185px;
+    font-size:67px;
+    opacity:.55;
+  }
+
+  .doodle.arrow{
+    right:14%;
+    bottom:19px;
+    font-size:38px;
+  }
+
+  .doodle.star{
+    right:-10px;
+    bottom:-10px;
+    font-size:90px;
+  }
+
+  .quick{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .quick-card{
+    padding:15px;
+    border-radius:17px;
+  }
+
+  .quick-card p{
+    font-size:9px;
+  }
+
+  .stats{
+    gap:9px;
+  }
+
+  .stat{
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .stat-value{
+    font-size:25px;
+  }
+
+  .card{
+    border-radius:21px;
+  }
+
+  .card-head{
+    padding:19px 18px 14px;
+  }
+
+  .card-head h2{
+    font-size:17px;
+  }
+
+  .continue{
+    margin:0 10px 10px;
+    padding:19px;
+  }
+
+  .project{
+    padding:13px 6px;
+  }
+
+  .project-arrow{
+    display:none;
+  }
+
+  .profile{
+    padding:19px;
+  }
+
+  .big-action{
+    min-height:155px;
+  }
+}
+
+@media(max-width:380px){
+
+  .hero-buttons{
+    grid-template-columns:1fr;
+  }
+
+  .quick{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:36px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+  <div class="nav-inner">
+
+    <a href="dashboard.html" class="logo">
+      <span class="logo-box">⚡</span>
+      <span>Spark Labs</span>
+    </a>
+
+    <div class="nav-links">
+
+      <a class="active" href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="events.html">Events</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="team.html">Find Your Team</a>
+      <a href="community.html">Community</a>
+      <a href="kits.html">Kits</a>
+      <a href="messages.html">Messages</a>
+
+    </div>
+
+    <div style="display:flex;align-items:center;gap:9px">
+
+      <a href="profile.html" class="nav-profile">
+        <span class="avatar" id="navAvatar">?</span>
+        <span class="nav-name" id="navName">Loading...</span>
+      </a>
+
+      <button class="menu-btn" id="menuBtn">☰</button>
+
+    </div>
+
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="projects.html">🚀 Projects</a>
+    <a href="events.html">📅 Events</a>
+    <a href="challenges.html">🏆 Challenges</a>
+    <a href="team.html">👥 Find Your Team</a>
+    <a href="community.html">💬 Community</a>
+    <a href="kits.html">🤖 Spark Kits</a>
+    <a href="messages.html">✉️ Messages</a>
+    <a href="profile.html">👤 Profile</a>
+
+    <button class="logout" id="logoutBtn">
+      ↪ Logout
+    </button>
+
+  </div>
+
+</nav>
+
+
+<main class="page">
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="badge">
+      ⚡ Your Spark Workspace
+    </div>
+
+    <h1>
+      Hey <span id="firstName">Builder</span>,<br>
+      let's make it real.
+    </h1>
+
+    <p>
+      Your ideas, projects and experiments live here.
+      Pick something to build, find people to build it with,
+      or just start something slightly unreasonable.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a class="btn btn-dark" href="projects.html">
+        🚀 New Project
+      </a>
+
+      <a class="btn btn-light" href="builder.html">
+        🛠 Build With Spark
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="doodle bulb">💡</div>
+  <div class="doodle arrow">↗</div>
+  <div class="doodle star">✦</div>
+
+</section>
+
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<section class="quick">
+
+  <a href="projects.html" class="quick-card">
+
+    <div class="quick-icon">🚀</div>
+
+    <h3>Your Projects</h3>
+
+    <p>
+      Build, track and launch your ideas.
+    </p>
+
+    <span class="quick-arrow">↗</span>
+
+  </a>
+
+
+  <a href="team.html" class="quick-card">
+
+    <div class="quick-icon">👥</div>
+
+    <h3>Find Your Team</h3>
+
+    <p>
+      Find people with skills that complement yours.
+    </p>
+
+    <span class="quick-arrow">↗</span>
+
+  </a>
+
+
+  <a href="challenges.html" class="quick-card">
+
+    <div class="quick-icon">🏆</div>
+
+    <h3>Challenges</h3>
+
+    <p>
+      Turn problems into things worth building.
+    </p>
+
+    <span class="quick-arrow">↗</span>
+
+  </a>
+
+
+  <a href="kits.html" class="quick-card">
+
+    <div class="quick-icon">🤖</div>
+
+    <h3>Spark Kits</h3>
+
+    <p>
+      Hardware, robotics and STEM kits.
+    </p>
+
+    <span class="quick-arrow">↗</span>
+
+  </a>
+
+</section>
+
+
+<!-- ================= STATS ================= -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-label">
+      PROJECTS
+    </div>
+
+    <div class="stat-value" id="projectCount">
+      —
+    </div>
+
+    <div class="stat-sub">
+      Ideas you've started
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      SPARK XP
+    </div>
+
+    <div class="stat-value" id="xpValue">
+      —
+    </div>
+
+    <div class="stat-sub">
+      Keep building
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      BUILDS
+    </div>
+
+    <div class="stat-value" id="buildCount">
+      —
+    </div>
+
+    <div class="stat-sub">
+      Build requests
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      KITS
+    </div>
+
+    <div class="stat-value" id="kitCount">
+      —
+    </div>
+
+    <div class="stat-sub">
+      Currently available
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= MAIN GRID ================= -->
+
+<div class="grid">
+
+
+<!-- ================= LEFT ================= -->
+
+<div>
+
+
+  <!-- CONTINUE BUILDING -->
+
+  <section class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h2>Continue building</h2>
+        <p>Your latest project is waiting.</p>
+      </div>
+
+      <a href="projects.html" class="view">
+        All projects →
+      </a>
+
+    </div>
+
+    <div id="continueBox">
+
+      <div class="loading">
+        <span class="spinner"></span>
+        Finding your latest project...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PROJECTS -->
+
+  <section class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h2>Your projects</h2>
+        <p>Things you've actually started.</p>
+      </div>
+
+      <a href="projects.html" class="view">
+        View all →
+      </a>
+
+    </div>
+
+    <div class="projects" id="projectsList">
+
+      <div class="loading">
+        <span class="spinner"></span>
+        Loading projects...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- IDEA -->
+
+  <section class="card">
+
+    <div class="idea">
+
+      <span class="idea-pin">📌</span>
+
+      <div class="idea-label">
+        Spark thought
+      </div>
+
+      <h3 id="ideaTitle">
+        Every big project starts as a slightly stupid idea.
+      </h3>
+
+      <p id="ideaText">
+        The trick isn't having perfect ideas.
+        It's actually building enough of them to discover which ones matter.
+      </p>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- ================= RIGHT ================= -->
+
+<div>
+
+
+  <!-- PROFILE -->
+
+  <section class="card">
+
+    <div class="profile">
+
+      <div class="profile-top">
+
+        <div class="profile-avatar" id="profileAvatar">
+          ?
+        </div>
+
+        <div>
+
+          <div class="profile-name" id="profileName">
+            Loading...
+          </div>
+
+          <div class="profile-email" id="profileEmail">
+            Loading...
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="level-box">
+
+        <div class="level-top">
+
+          <span class="level" id="levelText">
+            Spark Level 1
+          </span>
+
+          <span class="xp" id="xpText">
+            0 XP
+          </span>
+
+        </div>
+
+        <div class="xp-bar">
+
+          <div
+            class="xp-fill"
+            id="xpFill"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <div class="profile-buttons">
+
+        <a href="profile.html">
+          Edit Profile
+        </a>
+
+        <a href="team-requests.html">
+          Team Requests
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- EVENTS -->
+
+  <section class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h2>Upcoming events</h2>
+        <p>What's happening at Spark.</p>
+      </div>
+
+      <a href="events.html" class="view">
+        View all →
+      </a>
+
+    </div>
+
+    <div class="events" id="eventsList">
+
+      <div class="loading">
+        <span class="spinner"></span>
+        Loading events...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- KITS -->
+
+  <section class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h2>Spark Kits</h2>
+        <p>Build something physical.</p>
+      </div>
+
+      <a href="kits.html" class="view">
+        Explore →
+      </a>
+
+    </div>
+
+    <div id="kitList">
+
+      <div class="loading">
+        <span class="spinner"></span>
+        Loading kits...
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+</div>
+
+
+<!-- ================= BOTTOM ================= -->
+
+<div class="bottom-grid">
+
+  <section class="card">
+
+    <div class="big-action">
+
+      <span class="emoji">👥</span>
+
+      <h2>
+        Don't build alone.
+      </h2>
+
+      <p>
+        Find students interested in coding, AI,
+        hardware, design, research and business.
+      </p>
+
+      <a href="team.html">
+        Find teammates →
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="big-action">
+
+      <span class="emoji">💬</span>
+
+      <h2>
+        Your Spark community.
+      </h2>
+
+      <p>
+        Share ideas, talk to builders and see
+        what everyone else is creating.
+      </p>
+
+      <a href="community.html">
+        Open Community →
+      </a>
+
+    </div>
+
+  </section>
+
+</div>
+
+</main>
+
+
+<div class="toast" id="toast"></div>
+
+
+<!-- ================= FIREBASE ================= -->
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* ================= FIREBASE CONFIG ================= */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+  authDomain:
+    "spark-labs-b726e.firebaseapp.com",
+
+  projectId:
+    "spark-labs-b726e",
+
+  storageBucket:
+    "spark-labs-b726e.firebasestorage.app",
+
+  messagingSenderId:
+    "185422979084",
+
+  appId:
+    "1:185422979084:web:9d11d83ac7650533c48e29",
+
+  measurementId:
+    "G-28KBFT44VE"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* ================= DOM ================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* ================= MOBILE MENU ================= */
+
+$("menuBtn").addEventListener("click",()=>{
+
+  const menu = $("mobileMenu");
+
+  menu.classList.toggle("open");
+
+  $("menuBtn").textContent =
+    menu.classList.contains("open")
+      ? "✕"
+      : "☰";
+
+});
+
+
+document.addEventListener("click",e=>{
+
+  if(
+    !$("mobileMenu").contains(e.target) &&
+    !$("menuBtn").contains(e.target)
+  ){
+
+    $("mobileMenu").classList.remove("open");
+
+    $("menuBtn").textContent="☰";
+
+  }
+
+});
+
+
+/* ================= HELPERS ================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function initials(name){
+
+  if(!name) return "?";
+
+  const p =
+    name.trim().split(/\s+/);
+
+  if(p.length===1){
+
+    return p[0]
+      .substring(0,2)
+      .toUpperCase();
+
+  }
+
+  return (
+    p[0][0] +
+    p[p.length-1][0]
+  ).toUpperCase();
+
+}
+
+
+function getDate(value){
+
+  if(!value) return null;
+
+  if(typeof value.toDate==="function")
+    return value.toDate();
+
+  const d = new Date(value);
+
+  return Number.isNaN(d.getTime())
+    ? null
+    : d;
+
+}
+
+
+function dateText(value){
+
+  const d = getDate(value);
+
+  if(!d) return "Recently";
+
+  return d.toLocaleDateString(
+    "en-IN",
+    {
+      day:"numeric",
+      month:"short",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+function projectIcon(type){
+
+  const icons={
+
+    App:"📱",
+    Web:"🌐",
+    AI:"🧠",
+    Hardware:"🤖",
+    Research:"🔬",
+    Startup:"🚀",
+    Other:"💡"
+
+  };
+
+  return icons[type] || "💡";
+
+}
+
+
+function statusClass(status){
+
+  if(!status) return "";
+
+  return status
+    .toLowerCase()
+    .replace(/\s+/g,"-");
+
+}
+
+
+function showToast(text){
+
+  const toast=$("toast");
+
+  toast.textContent=text;
+
+  toast.classList.add("show");
+
+  setTimeout(
+    ()=>toast.classList.remove("show"),
+    2500
+  );
+
+}
+
+
+/* ================= AUTH PERSISTENCE ================= */
+
+try{
+
+  await setPersistence(
+    auth,
+    browserLocalPersistence
+  );
+
+}catch(error){
+
+  console.error(
+    "Persistence error:",
+    error
+  );
+
+}
+
+
+/* ================= AUTH ================= */
+
+onAuthStateChanged(
+  auth,
+  async user=>{
+
+    if(!user){
+
+      window.location.href="login.html";
+
+      return;
+
+    }
+
+    try{
+
+      await loadDashboard(user);
+
+    }catch(error){
+
+      console.error(error);
+
+      showToast(
+        "Couldn't load your dashboard."
+      );
+
+    }
+
+  }
+);
+
+
+/* ================= DASHBOARD ================= */
+
+async function loadDashboard(user){
+
+  let userData={};
+
+  try{
+
+    const snap =
+      await getDoc(
+        doc(db,"users",user.uid)
+      );
+
+    if(snap.exists()){
+
+      userData=snap.data();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "User error:",
+      error
+    );
+
+  }
+
+
+  const name =
+    userData.name ||
+    user.displayName ||
+    user.email?.split("@")[0] ||
+    "Builder";
+
+  const xp =
+    Number(userData.xp || 0);
+
+
+  $("firstName").textContent =
+    name.split(" ")[0];
+
+  $("navName").textContent =
+    name;
+
+  $("navAvatar").textContent =
+    initials(name);
+
+  $("profileAvatar").textContent =
+    initials(name);
+
+  $("profileName").textContent =
+    name;
+
+  $("profileEmail").textContent =
+    user.email || "Spark Labs member";
+
+  $("xpValue").textContent =
+    xp;
+
+  $("xpText").textContent =
+    xp+" XP";
+
+
+  /* LEVEL */
+
+  const level =
+    Math.floor(xp/100)+1;
+
+  const levelXP =
+    xp % 100;
+
+  $("levelText").textContent =
+    "Spark Level "+level;
+
+  setTimeout(()=>{
+
+    $("xpFill").style.width =
+      levelXP+"%";
+
+  },100);
+
+
+  await Promise.all([
+
+    loadProjects(user),
+
+    loadEvents(),
+
+    loadBuilds(user),
+
+    loadKits()
+
+  ]);
+
+}
+
+
+/* ================= PROJECTS ================= */
+
+async function loadProjects(user){
+
+  const container=$("projectsList");
+
+  try{
+
+    /*
+      IMPORTANT:
+      Only ownerId query.
+      No orderBy().
+      Therefore no composite index required.
+    */
+
+    const q =
+      query(
+        collection(db,"projects"),
+        where(
+          "ownerId",
+          "==",
+          user.uid
+        )
+      );
+
+
+    const snap =
+      await getDocs(q);
+
+
+    const projects =
+      snap.docs.map(
+        d=>({
+          id:d.id,
+          ...d.data()
+        })
+      );
+
+
+    projects.sort(
+      (a,b)=>{
+
+        const at =
+          getDate(a.createdAt)?.getTime() || 0;
+
+        const bt =
+          getDate(b.createdAt)?.getTime() || 0;
+
+        return bt-at;
+
+      }
+    );
+
+
+    $("projectCount").textContent =
+      projects.length;
+
+
+    /* Continue building */
+
+    const latest =
+      projects[0];
+
+
+    if(latest){
+
+      const progressMap={
+
+        Idea:10,
+        Planning:25,
+        Building:60,
+        Testing:80,
+        Launched:100
+
+      };
+
+      const progress =
+        progressMap[latest.status] ?? 20;
+
+
+      $("continueBox").innerHTML=`
+
+        <div class="continue">
+
+          <div class="continue-label">
+            ⚡ Continue building
+          </div>
+
+          <h3>
+            ${escapeHTML(
+              latest.title ||
+              "Untitled Project"
+            )}
+          </h3>
+
+          <p>
+            ${escapeHTML(
+              latest.description ||
+              "Your project is waiting for its next step."
+            )}
+          </p>
+
+          <div class="progress">
+            <div
+              class="progress-fill"
+              style="width:${progress}%"
+            ></div>
+          </div>
+
+          <div class="continue-bottom">
+
+            <span class="continue-percent">
+              ${progress}% •
+              ${escapeHTML(
+                latest.status || "Idea"
+              )}
+            </span>
+
+            <a
+              class="open-project"
+              href="projects.html"
+            >
+              Open project →
+            </a>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }else{
+
+      $("continueBox").innerHTML=`
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            💡
+          </div>
+
+          <h3>
+            Your first build starts here.
+          </h3>
+
+          <p>
+            Create a project and it'll appear
+            on your dashboard.
+          </p>
+
+          <br>
+
+          <a
+            class="btn btn-dark"
+            href="projects.html"
+          >
+            Create Project →
+          </a>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* Project list */
+
+    if(projects.length===0){
+
+      container.innerHTML=`
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            🚀
+          </div>
+
+          <h3>
+            No projects yet
+          </h3>
+
+          <p>
+            Nothing here because you haven't built
+            anything yet. Humanity survives another day.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      projects
+        .slice(0,5)
+        .map(project=>`
+
+          <a
+            href="projects.html"
+            class="project"
+          >
+
+            <div class="project-left">
+
+              <div class="project-icon">
+                ${projectIcon(project.type)}
+              </div>
+
+              <div class="project-info">
+
+                <div class="project-title">
+                  ${escapeHTML(
+                    project.title ||
+                    "Untitled Project"
+                  )}
+                </div>
+
+                <div class="project-meta">
+
+                  ${
+                    project.type
+                      ? `
+                        <span class="tag">
+                          ${escapeHTML(project.type)}
+                        </span>
+                      `
+                      :""
+                  }
+
+                  <span
+                    class="status ${statusClass(
+                      project.status
+                    )}"
+                  >
+                    ${escapeHTML(
+                      project.status ||
+                      "Idea"
+                    )}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <span class="project-arrow">
+              →
+            </span>
+
+          </a>
+
+        `)
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Project loading error:",
+      error
+    );
+
+    $("projectCount").textContent="—";
+
+    container.innerHTML=`
+
+      <div class="error">
+
+        <div class="error-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Couldn't load projects
+        </h3>
+
+        <p>
+          ${
+            error.code==="permission-denied"
+              ? "Firestore denied access. Check that your Firestore rules are published."
+              : "Please refresh the page and try again."
+          }
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ================= EVENTS ================= */
+
+async function loadEvents(){
+
+  const container=$("eventsList");
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"events")
+      );
+
+
+    const events =
+      snap.docs.map(
+        d=>({
+          id:d.id,
+          ...d.data()
+        })
+      );
+
+
+    events.sort(
+      (a,b)=>{
+
+        const ad =
+          getDate(a.date || a.eventDate);
+
+        const bd =
+          getDate(b.date || b.eventDate);
+
+        return (
+          (ad?.getTime()||Infinity) -
+          (bd?.getTime()||Infinity)
+        );
+
+      }
+    );
+
+
+    const upcoming =
+      events
+        .filter(e=>{
+
+          const d =
+            getDate(e.date || e.eventDate);
+
+          return !d || d >= new Date();
+
+        })
+        .slice(0,3);
+
+
+    if(upcoming.length===0){
+
+      container.innerHTML=`
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            📅
+          </div>
+
+          <h3>
+            No upcoming events
+          </h3>
+
+          <p>
+            New Spark Labs events will appear here.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      upcoming
+        .map(event=>{
+
+          const d =
+            getDate(
+              event.date ||
+              event.eventDate
+            );
+
+
+          const day =
+            d
+              ? d.getDate()
+              : "—";
+
+
+          const month =
+            d
+              ? d.toLocaleDateString(
+                  "en-IN",
+                  {month:"short"}
+                )
+              : "";
+
+
+          return `
+
+            <a
+              href="events.html"
+              class="event"
+            >
+
+              <div class="event-date">
+
+                <span class="event-day">
+                  ${day}
+                </span>
+
+                <span class="event-month">
+                  ${month}
+                </span>
+
+              </div>
+
+              <div class="event-info">
+
+                <div class="event-title">
+                  ${escapeHTML(
+                    event.title ||
+                    "Spark Labs Event"
+                  )}
+                </div>
+
+                <div class="event-meta">
+
+                  ${
+                    event.type
+                      ? escapeHTML(event.type)
+                      : "Spark Labs Event"
+                  }
+
+                  ${
+                    event.mode
+                      ? " • "+escapeHTML(event.mode)
+                      :""
+                  }
+
+                </div>
+
+              </div>
+
+            </a>
+
+          `;
+
+        })
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Events error:",
+      error
+    );
+
+    container.innerHTML=`
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Couldn't load events
+        </h3>
+
+        <p>
+          Please refresh and try again.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ================= BUILDS ================= */
+
+async function loadBuilds(user){
+
+  try{
+
+    const q =
+      query(
+        collection(db,"buildRequests"),
+        where(
+          "userId",
+          "==",
+          user.uid
+        )
+      );
+
+
+    const snap =
+      await getDocs(q);
+
+
+    $("buildCount").textContent =
+      snap.size;
+
+
+  }catch(error){
+
+    console.error(
+      "Build error:",
+      error
+    );
+
+    $("buildCount").textContent="—";
+
+  }
+
+}
+
+
+/* ================= KITS ================= */
+
+async function loadKits(){
+
+  const container=$("kitList");
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"kits")
+      );
+
+
+    /*
+      REAL KITS ONLY.
+      No demo/fallback products.
+    */
+
+    const kits =
+      snap.docs
+        .map(
+          d=>({
+            id:d.id,
+            ...d.data()
+          })
+        )
+        .filter(
+          kit=>kit.visible !== false
+        );
+
+
+    $("kitCount").textContent =
+      kits.length;
+
+
+    if(kits.length===0){
+
+      container.innerHTML=`
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            🤖
+          </div>
+
+          <h3>
+            No kits available yet
+          </h3>
+
+          <p>
+            Spark Kits added by the admin
+            will appear here.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      kits
+        .slice(0,3)
+        .map(kit=>`
+
+          <a
+            href="kits.html"
+            class="kit"
+          >
+
+            <div class="kit-left">
+
+              <div class="kit-icon">
+                🤖
+              </div>
+
+              <div>
+
+                <div class="kit-name">
+                  ${escapeHTML(
+                    kit.name ||
+                    "Spark Kit"
+                  )}
+                </div>
+
+                <div class="kit-meta">
+
+                  ${
+                    kit.category
+                      ? escapeHTML(kit.category)
+                      : "STEM Kit"
+                  }
+
+                  ${
+                    kit.price !== undefined &&
+                    kit.price !== null
+                      ? " • ₹"+escapeHTML(
+                          String(kit.price)
+                        )
+                      :""
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <span class="kit-arrow">
+              →
+            </span>
+
+          </a>
+
+        `)
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Kits error:",
+      error
+    );
+
+    $("kitCount").textContent="—";
+
+    container.innerHTML=`
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Couldn't load kits
+        </h3>
+
+        <p>
+          Please refresh and try again.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+$("logoutBtn").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      await signOut(auth);
+
+      window.location.href="login.html";
+
+    }catch(error){
+
+      console.error(error);
+
+      showToast(
+        "Couldn't log out."
+      );
+
+    }
+
+  }
+);
+
+
+/* ================= ROTATING IDEA ================= */
+
+const ideas=[
+
+  [
+    "Build before you overthink.",
+    "A working prototype teaches you more than fifty tabs of research."
+  ],
+
+  [
+    "Small experiments become big projects.",
+    "Start with the smallest version that can actually work."
+  ],
+
+  [
+    "Your next idea might be the one.",
+    "You don't need certainty. You need a first prototype."
+  ],
+
+  [
+    "Make something people can touch.",
+    "Even a rough prototype can reveal problems that a presentation cannot."
+  ],
+
+  [
+    "Ideas are cheap. Builds aren't.",
+    "That is precisely why building is where the interesting part starts."
+  ]
+
+];
+
+
+const selected =
+  ideas[
+    Math.floor(
+      Math.random()*ideas.length
+    )
+  ];
+
+
+$("ideaTitle").textContent =
+  selected[0];
+
+$("ideaText").textContent =
+  selected[1];
+
+</script>
+
+</body>
+</html>

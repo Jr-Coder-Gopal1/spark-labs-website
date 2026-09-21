@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Challenges • Spark Labs</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:"DM Sans",sans-serif;
+  background:#fffdf7;
+  color:#171717;
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.15;
+  background-image:radial-gradient(#000 .7px,transparent .7px);
+  background-size:18px 18px;
+  z-index:-1;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,253,247,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:2px solid #171717;
+}
+
+.nav-inner{
+  max-width:1200px;
+  min-height:76px;
+  margin:auto;
+  padding:0 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:#7657e8;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:19px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.nav-links a{
+  transition:.2s;
+}
+
+.nav-links a:hover{
+  transform:translateY(-2px);
+}
+
+.menu-btn{
+  display:none;
+  border:2px solid #171717;
+  background:#fff;
+  border-radius:10px;
+  padding:8px 11px;
+}
+
+.page{
+  max-width:1150px;
+  margin:auto;
+  padding:60px 22px 100px;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.hand{
+  font-family:"Patrick Hand",cursive;
+}
+
+.eyebrow{
+  font-family:"Patrick Hand",cursive;
+  font-size:23px;
+  transform:rotate(-2deg);
+  display:inline-block;
+}
+
+.hero h1{
+  font-size:clamp(43px,7vw,72px);
+  line-height:.95;
+  letter-spacing:-4px;
+  margin-top:7px;
+}
+
+.hero h1 span{
+  color:#7657e8;
+}
+
+.hero p{
+  max-width:680px;
+  margin:18px auto 0;
+  color:#666;
+  line-height:1.7;
+}
+
+.challenge-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+}
+
+.challenge{
+  position:relative;
+  background:#fff;
+  border:3px solid #171717;
+  border-radius:24px;
+  padding:27px;
+  box-shadow:7px 7px 0 #171717;
+  transition:.2s;
+  animation:rise .5s ease both;
+}
+
+.challenge:hover{
+  transform:translateY(-7px) rotate(-.5deg);
+}
+
+.challenge:nth-child(even){
+  background:#fff8cf;
+}
+
+.challenge:nth-child(3n){
+  background:#e9ddff;
+}
+
+.challenge:nth-child(4n){
+  background:#d8f7e1;
+}
+
+.challenge-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.challenge-icon{
+  width:58px;
+  height:58px;
+  border:2px solid #171717;
+  border-radius:16px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  box-shadow:3px 3px 0 #171717;
+}
+
+.status{
+  padding:7px 11px;
+  border:2px solid #171717;
+  border-radius:999px;
+  background:#c9f7d5;
+  font-size:11px;
+  font-weight:800;
+}
+
+.status.closed{
+  background:#ffd2df;
+}
+
+.challenge h2{
+  font-size:25px;
+  letter-spacing:-1px;
+  margin-top:20px;
+}
+
+.description{
+  color:#555;
+  line-height:1.65;
+  font-size:14px;
+  margin-top:9px;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:18px;
+}
+
+.meta span{
+  border:2px solid #171717;
+  border-radius:999px;
+  background:#fff;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.challenge-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-top:23px;
+}
+
+.prize{
+  font-family:"Patrick Hand",cursive;
+  font-size:20px;
+}
+
+.btn{
+  border:2px solid #171717;
+  border-radius:12px;
+  padding:10px 15px;
+  background:#ffd84d;
+  font-weight:800;
+  box-shadow:4px 4px 0 #171717;
+  transition:.18s;
+}
+
+.btn:hover{
+  transform:translate(2px,2px);
+  box-shadow:2px 2px 0 #171717;
+}
+
+.btn.closed{
+  background:#eee;
+  cursor:not-allowed;
+}
+
+.loader{
+  text-align:center;
+  padding:70px;
+  font-family:"Patrick Hand",cursive;
+  font-size:30px;
+}
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:55px 20px;
+  border:2px dashed #777;
+  border-radius:20px;
+  color:#777;
+  background:#fff;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fffdf7;
+  border:3px solid #171717;
+  border-radius:25px;
+  padding:30px;
+  box-shadow:10px 10px 0 #171717;
+  position:relative;
+  animation:pop .25s ease;
+}
+
+.close{
+  position:absolute;
+  right:17px;
+  top:15px;
+  width:38px;
+  height:38px;
+  border:2px solid #171717;
+  border-radius:50%;
+  background:#ffd2df;
+  font-size:20px;
+  font-weight:900;
+}
+
+.modal-box h2{
+  font-size:29px;
+}
+
+.modal-box>p{
+  color:#666;
+  margin-top:7px;
+  line-height:1.5;
+}
+
+.form-group{
+  margin-top:20px;
+}
+
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.form-group textarea,
+.form-group input{
+  width:100%;
+  border:2px solid #171717;
+  border-radius:12px;
+  padding:12px;
+  outline:none;
+  background:#fff;
+}
+
+.form-group textarea{
+  min-height:130px;
+  resize:vertical;
+}
+
+.form-group textarea:focus,
+.form-group input:focus{
+  box-shadow:4px 4px 0 #7657e8;
+}
+
+.submit-row{
+  margin-top:22px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#171717;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:700;
+  transform:translateY(120px);
+  opacity:0;
+  transition:.3s;
+  z-index:1000;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.hidden{
+  display:none!important;
+}
+
+@keyframes rise{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:scale(.94);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@media(max-width:800px){
+
+  .nav-links{
+    display:none;
+    position:absolute;
+    top:76px;
+    left:12px;
+    right:12px;
+    background:#fffdf7;
+    border:2px solid #171717;
+    border-radius:16px;
+    padding:18px;
+    flex-direction:column;
+    align-items:stretch;
+    box-shadow:5px 5px 0 #171717;
+  }
+
+  .nav-links.open{
+    display:flex;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .challenge-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:550px){
+
+  .page{
+    padding-top:42px;
+  }
+
+  .hero h1{
+    letter-spacing:-2px;
+  }
+
+  .challenge{
+    padding:21px;
+  }
+
+  .challenge-bottom{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .challenge-bottom .btn{
+    width:100%;
+  }
+
+  .modal-box{
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+  <div class="nav-inner">
+
+    <a href="index.html" class="logo">
+      Spark<span>Labs</span> ✦
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="builder.html">Build</a>
+      <a href="events.html">Events</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="community.html">Community</a>
+      <a href="team.html">Find Your Team</a>
+      <a href="team-requests.html">Team Requests</a>
+    </div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+
+  </div>
+
+</nav>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      ✦ solve something that matters
+    </div>
+
+    <h1>
+      Spark <span>Challenges</span> 🏆
+    </h1>
+
+    <p>
+      Pick a problem, build a solution, and show the world what you made.
+      Because apparently making useful things is still a thing.
+    </p>
+
+  </section>
+
+
+  <div id="loader" class="loader">
+    Loading challenges...
+  </div>
+
+
+  <section
+    id="challengeGrid"
+    class="challenge-grid hidden"
+  ></section>
+
+</main>
+
+
+<!-- SUBMISSION MODAL -->
+
+<div class="modal" id="submissionModal">
+
+  <div class="modal-box">
+
+    <button class="close" id="closeModal">
+      ×
+    </button>
+
+    <h2>
+      Submit your solution 🚀
+    </h2>
+
+    <p id="modalChallenge">
+      Challenge
+    </p>
+
+    <form id="submissionForm">
+
+      <div class="form-group">
+
+        <label>
+          Project / Solution Name
+        </label>
+
+        <input
+          id="solutionName"
+          required
+          maxlength="100"
+          placeholder="My amazing solution"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          What did you build?
+        </label>
+
+        <textarea
+          id="solutionDescription"
+          required
+          maxlength="1000"
+          placeholder="Explain your solution..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Project Link
+        </label>
+
+        <input
+          id="solutionLink"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
+      <div class="submit-row">
+
+        <button
+          class="btn"
+          id="submitBtn"
+          type="submit"
+        >
+          🚀 Submit Solution
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+  authDomain: "spark-labs-b726e.firebaseapp.com",
+  projectId: "spark-labs-b726e",
+  storageBucket: "spark-labs-b726e.firebasestorage.app",
+  messagingSenderId: "185422979084",
+  appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+  measurementId: "G-28KBFT44VE"
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
+
+const loader =
+  document.getElementById("loader");
+
+const grid =
+  document.getElementById("challengeGrid");
+
+const modal =
+  document.getElementById("submissionModal");
+
+const closeModal =
+  document.getElementById("closeModal");
+
+const modalChallenge =
+  document.getElementById("modalChallenge");
+
+const submissionForm =
+  document.getElementById("submissionForm");
+
+const solutionName =
+  document.getElementById("solutionName");
+
+const solutionDescription =
+  document.getElementById("solutionDescription");
+
+const solutionLink =
+  document.getElementById("solutionLink");
+
+const submitBtn =
+  document.getElementById("submitBtn");
+
+const toast =
+  document.getElementById("toast");
+
+const menuBtn =
+  document.getElementById("menuBtn");
+
+const navLinks =
+  document.getElementById("navLinks");
+
+
+let currentUser = null;
+let selectedChallenge = null;
+
+
+/* MOBILE MENU */
+
+menuBtn.addEventListener("click",() => {
+  navLinks.classList.toggle("open");
+});
+
+
+/* TOAST */
+
+function showToast(message){
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  },3000);
+
+}
+
+
+/* AUTH */
+
+onAuthStateChanged(auth,async user => {
+
+  if(!user){
+
+    window.location.href =
+      "login.html?redirect=challenges.html";
+
+    return;
+  }
+
+  currentUser = user;
+
+  await loadChallenges();
+
+});
+
+
+/* LOAD CHALLENGES */
+
+async function loadChallenges(){
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"challenges")
+      );
+
+    loader.classList.add("hidden");
+    grid.classList.remove("hidden");
+
+    grid.innerHTML = "";
+
+    if(snap.empty){
+
+      grid.innerHTML = `
+        <div class="empty">
+          <div style="font-size:45px">🏆</div>
+          <h2 style="margin-top:10px">
+            No challenges live yet
+          </h2>
+          <p style="margin-top:7px">
+            New challenges are coming soon.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    const challenges = [];
+
+    snap.forEach(item => {
+
+      challenges.push({
+        id:item.id,
+        ...item.data()
+      });
+
+    });
+
+
+    challenges.forEach((challenge,index) => {
+
+      renderChallenge(
+        challenge,
+        index
+      );
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    loader.textContent =
+      "Couldn't load challenges. Check Firestore rules.";
+
+  }
+
+}
+
+
+/* RENDER */
+
+function renderChallenge(challenge,index){
+
+  const card =
+    document.createElement("article");
+
+  card.className =
+    "challenge";
+
+  card.style.animationDelay =
+    `${index * .06}s`;
+
+
+  const top =
+    document.createElement("div");
+
+  top.className =
+    "challenge-top";
+
+
+  const icon =
+    document.createElement("div");
+
+  icon.className =
+    "challenge-icon";
+
+  icon.textContent =
+    challenge.icon || "🏆";
+
+
+  const status =
+    document.createElement("span");
+
+  const closed =
+    challenge.status === "closed";
+
+  status.className =
+    "status" +
+    (closed ? " closed" : "");
+
+  status.textContent =
+    closed ? "CLOSED" : "OPEN";
+
+
+  top.appendChild(icon);
+  top.appendChild(status);
+
+
+  const title =
+    document.createElement("h2");
+
+  title.textContent =
+    challenge.title ||
+    "Spark Challenge";
+
+
+  const description =
+    document.createElement("p");
+
+  description.className =
+    "description";
+
+  description.textContent =
+    challenge.description ||
+    "Build something awesome.";
+
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "meta";
+
+
+  addMeta(
+    meta,
+    challenge.category ||
+    "Innovation"
+  );
+
+  if(challenge.difficulty){
+    addMeta(
+      meta,
+      challenge.difficulty
+    );
+  }
+
+  if(challenge.deadline){
+    addMeta(
+      meta,
+      "Deadline: " +
+      formatDate(challenge.deadline)
+    );
+  }
+
+
+  const bottom =
+    document.createElement("div");
+
+  bottom.className =
+    "challenge-bottom";
+
+
+  const prize =
+    document.createElement("div");
+
+  prize.className =
+    "prize";
+
+  prize.textContent =
+    challenge.prize
+    ? `🏅 ${challenge.prize}`
+    : "🏅 Build & showcase";
+
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "btn" +
+    (closed ? " closed" : "");
+
+  button.textContent =
+    closed
+    ? "Challenge Closed"
+    : "Submit Solution →";
+
+
+  if(!closed){
+
+    button.addEventListener(
+      "click",
+      () => openSubmission(challenge)
+    );
+
+  }else{
+
+    button.disabled = true;
+
+  }
+
+
+  bottom.appendChild(prize);
+  bottom.appendChild(button);
+
+
+  card.appendChild(top);
+  card.appendChild(title);
+  card.appendChild(description);
+  card.appendChild(meta);
+  card.appendChild(bottom);
+
+
+  grid.appendChild(card);
+
+}
+
+
+/* META */
+
+function addMeta(container,text){
+
+  const span =
+    document.createElement("span");
+
+  span.textContent = text;
+
+  container.appendChild(span);
+
+}
+
+
+/* OPEN SUBMISSION */
+
+function openSubmission(challenge){
+
+  selectedChallenge =
+    challenge;
+
+  modalChallenge.textContent =
+    challenge.title ||
+    "Spark Challenge";
+
+  solutionName.value = "";
+  solutionDescription.value = "";
+  solutionLink.value = "";
+
+  modal.classList.add("show");
+
+}
+
+
+/* CLOSE */
+
+function closeSubmission(){
+
+  modal.classList.remove("show");
+
+  selectedChallenge = null;
+
+}
+
+closeModal.addEventListener(
+  "click",
+  closeSubmission
+);
+
+
+modal.addEventListener(
+  "click",
+  e => {
+
+    if(e.target === modal){
+      closeSubmission();
+    }
+
+  }
+);
+
+
+/* SUBMIT */
+
+submissionForm.addEventListener(
+  "submit",
+  async e => {
+
+    e.preventDefault();
+
+    if(!currentUser ||
+       !selectedChallenge){
+
+      return;
+    }
+
+
+    submitBtn.disabled = true;
+
+    submitBtn.textContent =
+      "Submitting...";
+
+
+    try{
+
+      await addDoc(
+        collection(db,"submissions"),
+        {
+
+          userId:
+            currentUser.uid,
+
+          userEmail:
+            currentUser.email || "",
+
+          challengeId:
+            selectedChallenge.id,
+
+          challengeTitle:
+            selectedChallenge.title ||
+            "Spark Challenge",
+
+          solutionName:
+            solutionName.value.trim(),
+
+          description:
+            solutionDescription.value.trim(),
+
+          projectLink:
+            solutionLink.value.trim(),
+
+          status:
+            "submitted",
+
+          createdAt:
+            serverTimestamp()
+
+        }
+      );
+
+
+      closeSubmission();
+
+      showToast(
+        "Solution submitted 🚀"
+      );
+
+
+    }catch(error){
+
+      console.error(error);
+
+      showToast(
+        "Couldn't submit. Check Firestore rules."
+      );
+
+    }finally{
+
+      submitBtn.disabled = false;
+
+      submitBtn.textContent =
+        "🚀 Submit Solution";
+
+    }
+
+  }
+);
+
+
+/* DATE */
+
+function formatDate(value){
+
+  try{
+
+    const date =
+      value?.toDate
+      ? value.toDate()
+      : new Date(value);
+
+    return date.toLocaleDateString(
+      "en-IN",
+      {
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+  }catch{
+
+    return "Soon";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

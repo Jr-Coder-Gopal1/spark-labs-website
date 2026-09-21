@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Profile | Spark Labs</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:#f8f6ef;
+  color:#202020;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.14;
+  background-image:radial-gradient(#777 .6px,transparent .6px);
+  background-size:18px 18px;
+}
+
+.nav{
+  height:72px;
+  background:#fffdf8;
+  border-bottom:2px solid #222;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.logo span{
+  display:inline-block;
+  transform:rotate(-3deg);
+}
+
+.navlinks{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.navlinks a{
+  color:#222;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+}
+
+.navlinks a:hover{text-decoration:underline}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border:2px solid #222;
+  border-radius:50%;
+  background:#ffd85a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.page{
+  width:min(1050px,94%);
+  margin:45px auto;
+}
+
+.profile{
+  background:#fffdf8;
+  border:2px solid #222;
+  border-radius:24px;
+  box-shadow:7px 7px 0 #222;
+  overflow:hidden;
+}
+
+.cover{
+  height:155px;
+  background:#ffe16b;
+  border-bottom:2px solid #222;
+  position:relative;
+}
+
+.cover:after{
+  content:"✦  ✎  ⚡  ◌  +  ⌁";
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:35px;
+  letter-spacing:30px;
+  opacity:.25;
+  transform:rotate(-3deg);
+}
+
+.profilemain{
+  padding:0 35px 35px;
+  position:relative;
+}
+
+.avatarbig{
+  width:115px;
+  height:115px;
+  border:3px solid #222;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:35px;
+  font-weight:900;
+  position:relative;
+  margin-top:-58px;
+  z-index:2;
+}
+
+.toprow{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+}
+
+.identity{
+  padding-top:12px;
+}
+
+.identity h1{
+  font-size:36px;
+  letter-spacing:-1.5px;
+}
+
+.identity .role{
+  color:#777;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:2px solid #222;
+  border-radius:10px;
+  padding:10px 15px;
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.btn:hover{
+  transform:translate(-1px,-1px);
+  box-shadow:3px 3px 0 #222;
+}
+
+.btn.primary{
+  background:#222;
+  color:#fff;
+}
+
+.btn.yellow{
+  background:#ffd85a;
+}
+
+.content{
+  margin-top:32px;
+  display:grid;
+  grid-template-columns:1.35fr .8fr;
+  gap:22px;
+}
+
+.box{
+  background:#fff;
+  border:2px solid #222;
+  border-radius:17px;
+  padding:22px;
+}
+
+.box h2{
+  font-size:18px;
+  margin-bottom:13px;
+}
+
+.bio{
+  color:#555;
+  line-height:1.65;
+  font-size:14px;
+}
+
+.section{
+  margin-top:22px;
+}
+
+.section:first-child{
+  margin-top:0;
+}
+
+.label{
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  margin-bottom:9px;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.tag{
+  background:#f0eee5;
+  border:1px solid #aaa;
+  border-radius:8px;
+  padding:6px 9px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.statgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stat{
+  border:2px solid #222;
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+  background:#fffdf8;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+}
+
+.stat span{
+  color:#777;
+  font-size:11px;
+  margin-top:3px;
+  display:block;
+}
+
+.info{
+  margin-top:18px;
+}
+
+.info p{
+  font-size:13px;
+  color:#555;
+  margin-top:6px;
+}
+
+.loading{
+  text-align:center;
+  padding:80px 20px;
+  color:#777;
+}
+
+.error{
+  max-width:600px;
+  margin:70px auto;
+  background:#fff;
+  border:2px solid #222;
+  border-radius:18px;
+  padding:30px;
+  text-align:center;
+  box-shadow:6px 6px 0 #222;
+}
+
+.editform{
+  display:none;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:2px solid #222;
+  border-radius:10px;
+  padding:11px;
+  outline:none;
+  font:inherit;
+  background:#fff;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.check input{
+  width:17px;
+  height:17px;
+}
+
+.editactions{
+  display:flex;
+  gap:9px;
+  margin-top:8px;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#222;
+  color:#fff;
+  padding:13px 18px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  transform:translateY(100px);
+  opacity:0;
+  transition:.25s;
+  z-index:100;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+@media(max-width:750px){
+
+  .nav{padding:0 4%}
+  .navlinks{display:none}
+
+  .page{
+    margin:25px auto;
+  }
+
+  .cover{
+    height:120px;
+  }
+
+  .profilemain{
+    padding:0 18px 25px;
+  }
+
+  .toprow{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .identity h1{
+    font-size:29px;
+  }
+
+  .actions{
+    width:100%;
+  }
+
+  .actions .btn{
+    flex:1;
+  }
+
+  .content{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+
+  <div class="logo">
+    <span>⚡ Spark Labs</span>
+  </div>
+
+  <div class="navlinks">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="projects.html">Projects</a>
+    <a href="team.html">Team</a>
+    <a href="messages.html">Messages</a>
+    <a href="kits.html">Kits</a>
+  </div>
+
+  <div class="avatar" id="navAvatar">?</div>
+
+</nav>
+
+
+<main class="page">
+
+  <div id="loading" class="loading">
+    Loading profile...
+  </div>
+
+  <div id="errorBox" class="error" style="display:none">
+    <h2>Profile not found</h2>
+    <p style="margin-top:8px;color:#777">
+      This profile doesn't exist or couldn't be loaded.
+    </p>
+  </div>
+
+
+  <section
+    class="profile"
+    id="profileCard"
+    style="display:none"
+  >
+
+    <div class="cover"></div>
+
+    <div class="profilemain">
+
+      <div class="avatarbig" id="profileAvatar">
+        ?
+      </div>
+
+      <div class="toprow">
+
+        <div class="identity">
+
+          <h1 id="profileName">
+            Student
+          </h1>
+
+          <div class="role" id="profileRole">
+            Spark Labs Student
+          </div>
+
+        </div>
+
+
+        <div
+          class="actions"
+          id="viewActions"
+        >
+
+          <button
+            class="btn yellow"
+            id="messageBtn"
+          >
+            💬 Message
+          </button>
+
+          <button
+            class="btn primary"
+            id="teamBtn"
+          >
+            🤝 Team Up
+          </button>
+
+        </div>
+
+
+        <div
+          class="actions"
+          id="ownerActions"
+          style="display:none"
+        >
+
+          <button
+            class="btn primary"
+            id="editBtn"
+          >
+            ✏️ Edit Profile
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="content">
+
+        <div>
+
+          <div class="box section">
+
+            <h2>About</h2>
+
+            <p
+              class="bio"
+              id="profileBio"
+            >
+              No bio added yet.
+            </p>
+
+          </div>
+
+
+          <div class="box section">
+
+            <h2>Skills</h2>
+
+            <div
+              class="tags"
+              id="skills"
+            ></div>
+
+          </div>
+
+
+          <div class="box section">
+
+            <h2>Interests</h2>
+
+            <div
+              class="tags"
+              id="interests"
+            ></div>
+
+          </div>
+
+
+          <div
+            class="box section"
+            id="editBox"
+            style="display:none"
+          >
+
+            <h2>Edit Profile</h2>
+
+            <div class="editform" id="editForm">
+
+              <div class="field">
+
+                <label>Name</label>
+
+                <input
+                  id="editName"
+                  maxlength="80"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>Bio</label>
+
+                <textarea
+                  id="editBio"
+                  maxlength="500"
+                ></textarea>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Skills
+                </label>
+
+                <input
+                  id="editSkills"
+                  placeholder="Coding, AI, Arduino, Design"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Interests
+                </label>
+
+                <input
+                  id="editInterests"
+                  placeholder="Robotics, startups, research"
+                >
+
+              </div>
+
+
+              <div class="check">
+
+                <input
+                  type="checkbox"
+                  id="editLooking"
+                >
+
+                <label for="editLooking">
+                  Show me in Find Your Team
+                </label>
+
+              </div>
+
+
+              <div class="editactions">
+
+                <button
+                  class="btn primary"
+                  id="saveBtn"
+                >
+                  Save Changes
+                </button>
+
+                <button
+                  class="btn"
+                  id="cancelBtn"
+                >
+                  Cancel
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="box">
+
+            <h2>✨ Spark Stats</h2>
+
+            <div class="statgrid">
+
+              <div class="stat">
+                <strong id="xp">
+                  0
+                </strong>
+                <span>XP</span>
+              </div>
+
+              <div class="stat">
+                <strong id="projectCount">
+                  0
+                </strong>
+                <span>Projects</span>
+              </div>
+
+              <div class="stat">
+                <strong id="buildCount">
+                  0
+                </strong>
+                <span>Build Requests</span>
+              </div>
+
+              <div class="stat">
+                <strong id="teamStatus">
+                  ✓
+                </strong>
+                <span>Team Status</span>
+              </div>
+
+            </div>
+
+
+            <div class="info">
+
+              <div class="label">
+                Role
+              </div>
+
+              <p id="roleInfo">
+                Student
+              </p>
+
+            </div>
+
+
+            <div class="info">
+
+              <div class="label">
+                Member Since
+              </div>
+
+              <p id="memberSince">
+                Spark Labs
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="box section"
+            id="emailBox"
+          >
+
+            <h2>📩 Contact</h2>
+
+            <p
+              style="font-size:13px;color:#555;line-height:1.5"
+            >
+              Use Spark Labs messaging to connect
+              privately with this member.
+            </p>
+
+            <button
+              class="btn yellow"
+              style="width:100%;margin-top:13px"
+              id="messageBtn2"
+            >
+              💬 Open Messages
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* =========================
+   FIREBASE
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+  authDomain: "spark-labs-b726e.firebaseapp.com",
+  projectId: "spark-labs-b726e",
+  storageBucket: "spark-labs-b726e.firebasestorage.app",
+  messagingSenderId: "185422979084",
+  appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+  measurementId: "G-28KBFT44VE"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* =========================
+   STATE
+========================= */
+
+let currentUser = null;
+let currentUserData = null;
+
+let profileUid = null;
+let profileData = null;
+
+let isOwner = false;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const loading =
+  document.getElementById("loading");
+
+const errorBox =
+  document.getElementById("errorBox");
+
+const profileCard =
+  document.getElementById("profileCard");
+
+const navAvatar =
+  document.getElementById("navAvatar");
+
+const profileAvatar =
+  document.getElementById("profileAvatar");
+
+const profileName =
+  document.getElementById("profileName");
+
+const profileRole =
+  document.getElementById("profileRole");
+
+const profileBio =
+  document.getElementById("profileBio");
+
+const skills =
+  document.getElementById("skills");
+
+const interests =
+  document.getElementById("interests");
+
+const xp =
+  document.getElementById("xp");
+
+const projectCount =
+  document.getElementById("projectCount");
+
+const buildCount =
+  document.getElementById("buildCount");
+
+const teamStatus =
+  document.getElementById("teamStatus");
+
+const roleInfo =
+  document.getElementById("roleInfo");
+
+const memberSince =
+  document.getElementById("memberSince");
+
+const viewActions =
+  document.getElementById("viewActions");
+
+const ownerActions =
+  document.getElementById("ownerActions");
+
+const editBtn =
+  document.getElementById("editBtn");
+
+const editBox =
+  document.getElementById("editBox");
+
+const editForm =
+  document.getElementById("editForm");
+
+const editName =
+  document.getElementById("editName");
+
+const editBio =
+  document.getElementById("editBio");
+
+const editSkills =
+  document.getElementById("editSkills");
+
+const editInterests =
+  document.getElementById("editInterests");
+
+const editLooking =
+  document.getElementById("editLooking");
+
+const saveBtn =
+  document.getElementById("saveBtn");
+
+const cancelBtn =
+  document.getElementById("cancelBtn");
+
+const messageBtn =
+  document.getElementById("messageBtn");
+
+const messageBtn2 =
+  document.getElementById("messageBtn2");
+
+const teamBtn =
+  document.getElementById("teamBtn");
+
+const toast =
+  document.getElementById("toast");
+
+
+/* =========================
+   AUTH
+========================= */
+
+async function init(){
+
+  await setPersistence(
+    auth,
+    browserLocalPersistence
+  );
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      await loadCurrentUser();
+
+      await loadProfile();
+
+    }
+  );
+
+}
+
+init();
+
+
+/* =========================
+   CURRENT USER
+========================= */
+
+async function loadCurrentUser(){
+
+  try{
+
+    const snap =
+      await getDoc(
+        doc(db,"users",currentUser.uid)
+      );
+
+    if(snap.exists()){
+
+      currentUserData =
+        snap.data();
+
+      navAvatar.textContent =
+        initials(
+          currentUserData.name ||
+          currentUser.email
+        );
+
+    }else{
+
+      navAvatar.textContent =
+        initials(currentUser.email);
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   LOAD PROFILE
+========================= */
+
+async function loadProfile(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  profileUid =
+    params.get("uid") ||
+    currentUser.uid;
+
+  isOwner =
+    profileUid === currentUser.uid;
+
+
+  try{
+
+    const snap =
+      await getDoc(
+        doc(db,"users",profileUid)
+      );
+
+    if(!snap.exists()){
+
+      showError();
+      return;
+
+    }
+
+    profileData =
+      snap.data();
+
+    renderProfile();
+
+    await loadStats();
+
+  }catch(error){
+
+    console.error(error);
+
+    showError();
+
+  }
+
+}
+
+
+/* =========================
+   RENDER PROFILE
+========================= */
+
+function renderProfile(){
+
+  loading.style.display =
+    "none";
+
+  profileCard.style.display =
+    "block";
+
+  profileName.textContent =
+    profileData.name ||
+    "Spark Labs Student";
+
+  profileRole.textContent =
+    profileData.role === "admin"
+      ? "⚡ Spark Labs Admin"
+      : "🚀 Spark Labs Student";
+
+  profileAvatar.textContent =
+    initials(
+      profileData.name
+    );
+
+  profileBio.textContent =
+    profileData.bio ||
+    "This builder hasn't added a bio yet.";
+
+  renderTags(
+    skills,
+    normalizeList(profileData.skills),
+    "No skills added yet."
+  );
+
+  renderTags(
+    interests,
+    normalizeList(profileData.interests),
+    "No interests added yet."
+  );
+
+  xp.textContent =
+    Number(profileData.xp || 0);
+
+  roleInfo.textContent =
+    profileData.role || "student";
+
+  teamStatus.textContent =
+    profileData.lookingForTeam === false
+      ? "Hidden"
+      : "Open";
+
+
+  if(profileData.createdAt){
+
+    const date =
+      profileData.createdAt.toDate
+        ? profileData.createdAt.toDate()
+        : new Date(profileData.createdAt);
+
+    memberSince.textContent =
+      date.toLocaleDateString(
+        undefined,
+        {
+          month:"short",
+          year:"numeric"
+        }
+      );
+
+  }else{
+
+    memberSince.textContent =
+      "Spark Labs";
+
+  }
+
+
+  if(isOwner){
+
+    viewActions.style.display =
+      "none";
+
+    ownerActions.style.display =
+      "flex";
+
+    document.getElementById(
+      "emailBox"
+    ).style.display = "none";
+
+    setupEditForm();
+
+  }else{
+
+    viewActions.style.display =
+      "flex";
+
+    ownerActions.style.display =
+      "none";
+
+    document.getElementById(
+      "emailBox"
+    ).style.display = "block";
+
+  }
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+async function loadStats(){
+
+  try{
+
+    const projectQuery =
+      query(
+        collection(db,"projects"),
+        where(
+          "ownerId",
+          "==",
+          profileUid
+        )
+      );
+
+    const buildQuery =
+      query(
+        collection(db,"buildRequests"),
+        where(
+          "userId",
+          "==",
+          profileUid
+        )
+      );
+
+    const [
+      projectsSnap,
+      buildsSnap
+    ] = await Promise.all([
+      getDocs(projectQuery),
+      getDocs(buildQuery)
+    ]);
+
+    projectCount.textContent =
+      projectsSnap.size;
+
+    buildCount.textContent =
+      buildsSnap.size;
+
+  }catch(error){
+
+    console.error(
+      "Stats error:",
+      error
+    );
+
+    projectCount.textContent =
+      "0";
+
+    buildCount.textContent =
+      "0";
+
+  }
+
+}
+
+
+/* =========================
+   EDIT FORM
+========================= */
+
+function setupEditForm(){
+
+  editName.value =
+    profileData.name || "";
+
+  editBio.value =
+    profileData.bio || "";
+
+  editSkills.value =
+    normalizeList(
+      profileData.skills
+    ).join(", ");
+
+  editInterests.value =
+    normalizeList(
+      profileData.interests
+    ).join(", ");
+
+  editLooking.checked =
+    profileData.lookingForTeam !== false;
+
+}
+
+
+editBtn.onclick = () => {
+
+  editBox.style.display =
+    "block";
+
+  editForm.style.display =
+    "block";
+
+  editBox.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+};
+
+
+cancelBtn.onclick = () => {
+
+  setupEditForm();
+
+  editBox.style.display =
+    "none";
+
+};
+
+
+saveBtn.onclick =
+  saveProfile;
+
+
+async function saveProfile(){
+
+  const name =
+    editName.value.trim();
+
+  const bio =
+    editBio.value.trim();
+
+  const skillArray =
+    normalizeInput(editSkills.value);
+
+  const interestArray =
+    normalizeInput(editInterests.value);
+
+  if(!name){
+
+    showToast(
+      "Name cannot be empty."
+    );
+
+    return;
+
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent =
+    "Saving...";
+
+  try{
+
+    await updateDoc(
+      doc(db,"users",currentUser.uid),
+      {
+
+        name:name,
+
+        bio:bio,
+
+        skills:skillArray,
+
+        interests:interestArray,
+
+        lookingForTeam:
+          editLooking.checked
+
+      }
+    );
+
+
+    profileData.name =
+      name;
+
+    profileData.bio =
+      bio;
+
+    profileData.skills =
+      skillArray;
+
+    profileData.interests =
+      interestArray;
+
+    profileData.lookingForTeam =
+      editLooking.checked;
+
+
+    renderProfile();
+
+    editBox.style.display =
+      "none";
+
+    showToast(
+      "Profile updated! 🚀"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Couldn't update profile."
+    );
+
+  }
+
+  saveBtn.disabled = false;
+  saveBtn.textContent =
+    "Save Changes";
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function openMessages(){
+
+  if(!profileUid || isOwner)
+    return;
+
+  window.location.href =
+    `messages.html?uid=${encodeURIComponent(profileUid)}`;
+
+}
+
+
+messageBtn.onclick =
+  openMessages;
+
+messageBtn2.onclick =
+  openMessages;
+
+
+/* =========================
+   TEAM REQUEST
+========================= */
+
+teamBtn.onclick =
+  sendTeamRequest;
+
+
+async function sendTeamRequest(){
+
+  if(!currentUser || !profileUid)
+    return;
+
+  try{
+
+    const q1 =
+      query(
+        collection(db,"teamRequests"),
+        where(
+          "fromUserId",
+          "==",
+          currentUser.uid
+        ),
+        where(
+          "toUserId",
+          "==",
+          profileUid
+        ),
+        where(
+          "status",
+          "==",
+          "pending"
+        )
+      );
+
+    const q2 =
+      query(
+        collection(db,"teamRequests"),
+        where(
+          "fromUserId",
+          "==",
+          profileUid
+        ),
+        where(
+          "toUserId",
+          "==",
+          currentUser.uid
+        ),
+        where(
+          "status",
+          "==",
+          "pending"
+        )
+      );
+
+    const [
+      sent,
+      received
+    ] = await Promise.all([
+      getDocs(q1),
+      getDocs(q2)
+    ]);
+
+
+    if(
+      !sent.empty ||
+      !received.empty
+    ){
+
+      showToast(
+        "A team request is already pending."
+      );
+
+      return;
+
+    }
+
+
+    await addDoc(
+      collection(db,"teamRequests"),
+      {
+
+        fromUserId:
+          currentUser.uid,
+
+        fromUserName:
+          currentUserData?.name ||
+          currentUser.email,
+
+        toUserId:
+          profileUid,
+
+        toUserName:
+          profileData.name ||
+          "Student",
+
+        status:"pending",
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    showToast(
+      "Team request sent! 🤝"
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Couldn't send team request."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   NAV AVATAR
+========================= */
+
+navAvatar.onclick = () => {
+
+  window.location.href =
+    `profile.html?uid=${encodeURIComponent(currentUser.uid)}`;
+
+};
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function renderTags(element,list,emptyText){
+
+  element.innerHTML = "";
+
+  if(!list.length){
+
+    element.innerHTML =
+      `<span class="tag">
+        ${escapeHTML(emptyText)}
+      </span>`;
+
+    return;
+
+  }
+
+  list.forEach(item => {
+
+    const span =
+      document.createElement("span");
+
+    span.className =
+      "tag";
+
+    span.textContent =
+      item;
+
+    element.appendChild(span);
+
+  });
+
+}
+
+
+function normalizeList(value){
+
+  if(Array.isArray(value)){
+
+    return value
+      .map(x => String(x).trim())
+      .filter(Boolean);
+
+  }
+
+  if(!value)
+    return [];
+
+  return String(value)
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+function normalizeInput(value){
+
+  return String(value || "")
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+function initials(name){
+
+  if(!name)
+    return "?";
+
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x => x[0])
+    .join("")
+    .toUpperCase();
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function showError(){
+
+  loading.style.display =
+    "none";
+
+  profileCard.style.display =
+    "none";
+
+  errorBox.style.display =
+    "block";
+
+}
+
+
+function showToast(text){
+
+  toast.textContent =
+    text;
+
+  toast.classList.add("show");
+
+  setTimeout(
+    () => toast.classList.remove("show"),
+    2500
+  );
+
+}
+
+</script>
+
+</body>
+</html>

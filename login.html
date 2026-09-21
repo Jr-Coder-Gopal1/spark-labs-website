@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Log in | Spark Labs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "DM Sans", sans-serif;
+      color: #171717;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(255, 220, 90, 0.28), transparent 25%),
+        radial-gradient(circle at 92% 85%, rgba(199, 176, 255, 0.25), transparent 28%),
+        #faf8f2;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.17;
+      background-image:
+        radial-gradient(#111 0.7px, transparent 0.7px);
+      background-size: 15px 15px;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    /* =========================
+       DOODLES
+    ========================= */
+
+    .doodle {
+      position: fixed;
+      font-family: "Patrick Hand", cursive;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .star {
+      top: 8%;
+      left: 7%;
+      font-size: 60px;
+      transform: rotate(-15deg);
+    }
+
+    .bulb {
+      top: 10%;
+      right: 8%;
+      font-size: 65px;
+      transform: rotate(12deg);
+    }
+
+    .arrow {
+      bottom: 12%;
+      left: 9%;
+      font-size: 75px;
+      transform: rotate(15deg);
+    }
+
+    .spark {
+      bottom: 9%;
+      right: 9%;
+      font-size: 60px;
+      transform: rotate(-10deg);
+    }
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 35px 20px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1050px;
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 65px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================
+       LEFT
+    ========================= */
+
+    .intro {
+      padding: 15px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 55px;
+    }
+
+    .logo-mark {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border: 3px solid #171717;
+      border-radius: 12px;
+      background: #ffe36e;
+      font-family: "Patrick Hand", cursive;
+      font-size: 26px;
+      box-shadow: 4px 4px 0 #171717;
+      transform: rotate(-5deg);
+    }
+
+    .intro h1 {
+      font-size: clamp(50px, 6vw, 75px);
+      line-height: 0.98;
+      letter-spacing: -4px;
+      margin-bottom: 24px;
+    }
+
+    .intro h1 span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intro h1 span::after {
+      content: "";
+      position: absolute;
+      left: -4px;
+      right: -4px;
+      bottom: 4px;
+      height: 13px;
+      background: #c7b0ff;
+      transform: rotate(-2deg);
+      z-index: -1;
+    }
+
+    .intro p {
+      max-width: 480px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #5c5c5c;
+    }
+
+    .scribble {
+      margin-top: 25px;
+      font-family: "Patrick Hand", cursive;
+      font-size: 25px;
+      transform: rotate(-3deg);
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+      background: rgba(255,255,255,0.96);
+      border: 3px solid #171717;
+      border-radius: 28px;
+      padding: 38px;
+      box-shadow: 9px 9px 0 #171717;
+      position: relative;
+      animation: cardIn 0.6s ease both;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px) rotate(1deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+      }
+    }
+
+    .tape {
+      position: absolute;
+      width: 95px;
+      height: 25px;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: #ffe36e;
+    }
+
+    .card h2 {
+      font-size: 35px;
+      letter-spacing: -1.5px;
+      margin-bottom: 7px;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-group {
+      margin-bottom: 19px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 54px;
+      padding: 0 15px;
+      border: 2px solid #222;
+      border-radius: 13px;
+      outline: none;
+      background: #fff;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #6d4aff;
+      box-shadow: 4px 4px 0 #c7b0ff;
+      transform: translate(-1px, -1px);
+    }
+
+    input.error {
+      border-color: #df4141;
+      box-shadow: 3px 3px 0 #ffc5c5;
+    }
+
+    .password-input {
+      padding-right: 55px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .error-text {
+      min-height: 16px;
+      margin-top: 6px;
+      color: #d93636;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* =========================
+       FORGOT
+    ========================= */
+
+    .forgot {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -7px;
+      margin-bottom: 20px;
+    }
+
+    .forgot button {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .forgot button:hover {
+      color: #6d4aff;
+    }
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    .login-btn {
+      width: 100%;
+      height: 57px;
+      border: 3px solid #171717;
+      border-radius: 14px;
+      background: #171717;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 #ffe36e;
+      transition: 0.18s ease;
+    }
+
+    .login-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 #ffe36e;
+    }
+
+    .login-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #ffe36e;
+    }
+
+    .login-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      width: 19px;
+      height: 19px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 3px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       MESSAGE
+    ========================= */
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 13px 14px;
+      border: 2px solid #222;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #fff0f0;
+      border-color: #e34b4b;
+    }
+
+    .message.success {
+      background: #effff1;
+      border-color: #4ca75a;
+    }
+
+    /* =========================
+       BOTTOM LINKS
+    ========================= */
+
+    .signup-link {
+      text-align: center;
+      margin-top: 24px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .signup-link a {
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .signup-link a:hover {
+      color: #6d4aff;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 13px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .back-home a:hover {
+      color: #6d4aff;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      .page {
+        padding: 25px 16px;
+      }
+
+      .wrapper {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        gap: 28px;
+      }
+
+      .intro {
+        text-align: center;
+        padding: 5px;
+      }
+
+      .logo {
+        margin-bottom: 28px;
+      }
+
+      .intro h1 {
+        font-size: 52px;
+        letter-spacing: -3px;
+      }
+
+      .intro p {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+      }
+
+      .scribble {
+        font-size: 22px;
+      }
+
+      .doodle {
+        opacity: 0.45;
+      }
+    }
+
+    @media (max-width: 520px) {
+
+      .page {
+        padding: 18px 12px;
+      }
+
+      .intro h1 {
+        font-size: 43px;
+        letter-spacing: -2.5px;
+      }
+
+      .intro p {
+        font-size: 15px;
+      }
+
+      .card {
+        padding: 26px 18px;
+        border-radius: 21px;
+        box-shadow: 6px 6px 0 #171717;
+      }
+
+      .card h2 {
+        font-size: 29px;
+      }
+
+      .doodle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- DOODLES -->
+
+  <div class="doodle star">✦</div>
+  <div class="doodle bulb">💡</div>
+  <div class="doodle arrow">↗</div>
+  <div class="doodle spark">✦</div>
+
+
+  <main class="page">
+
+    <div class="wrapper">
+
+      <!-- =========================
+           INTRO
+      ========================== -->
+
+      <section class="intro">
+
+        <a href="index.html" class="logo">
+          <span class="logo-mark">S</span>
+          Spark Labs
+        </a>
+
+        <h1>
+          Welcome
+          <span>back.</span>
+        </h1>
+
+        <p>
+          Your ideas didn't disappear while you were gone.
+          They're still waiting for you to build them.
+        </p>
+
+        <div class="scribble">
+          ✎ Let's make something cool.
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           LOGIN CARD
+      ========================== -->
+
+      <section class="card">
+
+        <div class="tape"></div>
+
+        <h2>Log in 👋</h2>
+
+        <p class="subtitle">
+          Continue your Spark Labs journey.
+        </p>
+
+
+        <form id="loginForm">
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Email address
+            </label>
+
+            <div class="input-wrap">
+
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              >
+
+            </div>
+
+            <div
+              class="error-text"
+              id="emailError"
+            ></div>
+
+          </div>
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="password">
+              Password
+            </label>
+
+            <div class="input-wrap">
+
+              <input
+                type="password"
+                id="password"
+                class="password-input"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+              >
+                👁
+              </button>
+
+            </div>
+
+            <div
+              class="error-text"
+              id="passwordError"
+            ></div>
+
+          </div>
+
+
+          <!-- FORGOT -->
+
+          <div class="forgot">
+
+            <button
+              type="button"
+              id="forgotPassword"
+            >
+              Forgot password?
+            </button>
+
+          </div>
+
+
+          <!-- LOGIN -->
+
+          <button
+            type="submit"
+            class="login-btn"
+            id="loginBtn"
+          >
+            Log in to Spark Labs →
+          </button>
+
+
+          <!-- MESSAGE -->
+
+          <div
+            class="message"
+            id="message"
+          ></div>
+
+        </form>
+
+
+        <!-- SIGNUP -->
+
+        <div class="signup-link">
+
+          Don't have an account?
+
+          <a href="signup.html">
+            Create one
+          </a>
+
+        </div>
+
+
+        <!-- HOME -->
+
+        <div class="back-home">
+
+          <a href="index.html">
+            ← Back to Spark Labs
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================
+       FIREBASE
+  ====================================== -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    /* =====================================
+       FIREBASE CONFIG
+    ====================================== */
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCoN0JpmA4JPeFlJBMDOpIUbMVr-FrYHGA",
+
+      authDomain: "spark-labs-b726e.firebaseapp.com",
+
+      projectId: "spark-labs-b726e",
+
+      storageBucket: "spark-labs-b726e.firebasestorage.app",
+
+      messagingSenderId: "185422979084",
+
+      appId: "1:185422979084:web:9d11d83ac7650533c48e29",
+
+      measurementId: "G-28KBFT44VE"
+
+    };
+
+
+    /* =====================================
+       INITIALIZE
+    ====================================== */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+
+    /* =====================================
+       ELEMENTS
+    ====================================== */
+
+    const form =
+      document.getElementById("loginForm");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const message =
+      document.getElementById("message");
+
+
+    /* =====================================
+       PASSWORD VISIBILITY
+    ====================================== */
+
+    document
+      .getElementById("togglePassword")
+      .addEventListener("click", () => {
+
+        const hidden =
+          passwordInput.type === "password";
+
+        passwordInput.type =
+          hidden ? "text" : "password";
+
+        document
+          .getElementById("togglePassword")
+          .textContent =
+          hidden ? "🙈" : "👁";
+
+      });
+
+
+    /* =====================================
+       HELPERS
+    ====================================== */
+
+    function clearErrors() {
+
+      document
+        .querySelectorAll(".error-text")
+        .forEach(element => {
+
+          element.textContent = "";
+
+        });
+
+      document
+        .querySelectorAll("input")
+        .forEach(input => {
+
+          input.classList.remove("error");
+
+        });
+
+    }
+
+
+    function setError(
+      input,
+      errorElement,
+      text
+    ) {
+
+      input.classList.add("error");
+
+      errorElement.textContent = text;
+
+    }
+
+
+    function showMessage(
+      text,
+      type
+    ) {
+
+      message.textContent = text;
+
+      message.className =
+        "message show " + type;
+
+    }
+
+
+    function hideMessage() {
+
+      message.textContent = "";
+
+      message.className =
+        "message";
+
+    }
+
+
+    /* =====================================
+       FIREBASE ERROR MESSAGES
+    ====================================== */
+
+    function getLoginError(code) {
+
+      switch (code) {
+
+        case "auth/invalid-credential":
+          return "Email or password is incorrect.";
+
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+
+        case "auth/user-disabled":
+          return "This account has been disabled.";
+
+        case "auth/user-not-found":
+          return "No account was found with this email.";
+
+        case "auth/wrong-password":
+          return "Email or password is incorrect.";
+
+        case "auth/network-request-failed":
+          return "Network problem. Check your internet connection.";
+
+        case "auth/too-many-requests":
+          return "Too many attempts. Please wait a little before trying again.";
+
+        default:
+          return "Unable to log in right now. Please try again.";
+
+      }
+
+    }
+
+
+    /* =====================================
+       LOGIN
+    ====================================== */
+
+    form.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+        clearErrors();
+
+        hideMessage();
+
+
+        const email =
+          emailInput.value.trim();
+
+        const password =
+          passwordInput.value;
+
+
+        let valid = true;
+
+
+        /* EMAIL */
+
+        if (!email) {
+
+          setError(
+            emailInput,
+            document.getElementById("emailError"),
+            "Please enter your email."
+          );
+
+          valid = false;
+
+        }
+
+
+        /* PASSWORD */
+
+        if (!password) {
+
+          setError(
+            passwordInput,
+            document.getElementById("passwordError"),
+            "Please enter your password."
+          );
+
+          valid = false;
+
+        }
+
+
+        if (!valid) {
+
+          return;
+
+        }
+
+
+        /* LOADING */
+
+        loginBtn.disabled = true;
+
+        loginBtn.innerHTML =
+          '<span class="spinner"></span> Logging you in...';
+
+
+        try {
+
+          /* ===============================
+             FIREBASE LOGIN
+          =============================== */
+
+          const credential =
+            await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+
+          console.log(
+            "Logged in:",
+            credential.user.uid
+          );
+
+
+          /* ===============================
+             SUCCESS
+          =============================== */
+
+          showMessage(
+            "Welcome back! Opening your dashboard...",
+            "success"
+          );
+
+
+          loginBtn.innerHTML =
+            "Logged in ✓";
+
+
+          /*
+            Redirect ONLY after successful
+            Firebase authentication.
+          */
+
+          setTimeout(() => {
+
+            window.location.href =
+              "dashboard.html";
+
+          }, 700);
+
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "LOGIN ERROR:",
+            error
+          );
+
+
+          showMessage(
+            getLoginError(error.code),
+            "error"
+          );
+
+
+          loginBtn.disabled = false;
+
+          loginBtn.innerHTML =
+            "Log in to Spark Labs →";
+
+        }
+
+      }
+    );
+
+
+    /* =====================================
+       FORGOT PASSWORD
+    ====================================== */
+
+    document
+      .getElementById("forgotPassword")
+      .addEventListener("click", async () => {
+
+        clearErrors();
+
+        hideMessage();
+
+
+        const email =
+          emailInput.value.trim();
+
+
+        if (!email) {
+
+          setError(
+            emailInput,
+            document.getElementById("emailError"),
+            "Enter your email first."
+          );
+
+          emailInput.focus();
+
+          return;
+
+        }
+
+
+        try {
+
+          await sendPasswordResetEmail(
+            auth,
+            email
+          );
+
+
+          showMessage(
+            "Password reset email sent. Check your inbox.",
+            "success"
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "RESET ERROR:",
+            error
+          );
+
+
+          if (
+            error.code ===
+            "auth/invalid-email"
+          ) {
+
+            showMessage(
+              "Please enter a valid email address.",
+              "error"
+            );
+
+          }
+
+          else {
+
+            showMessage(
+              "We couldn't send the reset email. Please check the email and try again.",
+              "error"
+            );
+
+          }
+
+        }
+
+      });
+
+
+    /* =====================================
+       ENTER KEY EXPERIENCE
+    ====================================== */
+
+    emailInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+
+          passwordInput.focus();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
